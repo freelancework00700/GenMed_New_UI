@@ -76,8 +76,9 @@
                               <div class="s10"></div>
                               <div class="d-flex justify-content-between items-center mb-3 mt-4">
                                     <div class="section-heading">Sales</div>
-                                    <div class="subsection-heading">Total sales amount:  <span class="box-number">{{totalAmount | number}}</span></div>
+                                    <div class="subsection-heading">Total sales amount:  <span class="box-number">{{TotalSalesAmount | number}}</span></div>
                               </div>
+                              <my-widget></my-widget>
                               <div class="sales-dashboard-table">
                                     <div class="cDataTable">
                                           <table id="SalesTable" class="cell-border" width="100%">
@@ -125,44 +126,6 @@
                                     </div>
                               </div>
                               <div class="box-main-wrapper appointment-custom-height">
-                                    <div class="row flex-wrap" ng-if="!show">
-                                          <div class="col col-16">
-                                                <div class="date-box active">
-                                                      <div class="date">26</div>
-                                                      <div class="day">Today</div>
-                                                </div>
-                                          </div>
-                                          <div class="col col-16">
-                                                <div class="date-box ">
-                                                      <div class="date">27</div>
-                                                      <div class="day">Tuesday</div>
-                                                </div>
-                                          </div>
-                                          <div class="col col-16">
-                                                <div class="date-box ">
-                                                      <div class="date">28</div>
-                                                      <div class="day">Wednesday</div>
-                                                </div>
-                                          </div>
-                                          <div class="col col-16">
-                                                <div class="date-box ">
-                                                      <div class="date">29</div>
-                                                      <div class="day">Thursday</div>
-                                                </div>
-                                          </div>
-                                          <div class="col col-16">
-                                                <div class="date-box ">
-                                                      <div class="date">30</div>
-                                                      <div class="day">Friday</div>
-                                                </div>
-                                          </div>
-                                          <div class="col col-16">
-                                                <div class="date-box">
-                                                      <div class="date">31</div>
-                                                      <div class="day">Saturday</div>
-                                                </div>
-                                          </div>
-                                    </div>
                                     <div>
                                           <form name="appointment" class="cForm light" ng-submit="SaveAppointment()" ng-if="show">                                                       
                                                 <div class="row responsive-sm">
@@ -208,7 +171,7 @@
                                           </form>                                            
                                           <div ng-if="!show" >
                                                 <div class="cDataTable appointment-table-wrapper">
-                                                      <table id="ApplicationTable" class="cell-border" style="width:100%;">
+                                                      <table id="ApplicationTable123" class="cell-border" style="width:100%;">
                                                             <thead>
                                                                   <tr>
                                                                         <th class="all" width="4%">

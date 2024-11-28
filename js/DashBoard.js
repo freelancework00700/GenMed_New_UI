@@ -1,8 +1,7 @@
-app.controller('DashBoardCtrl', function ($scope, $http, $rootScope, $localstorage, $ionicPopup, $ionicLoading, $ionicModal) {
+app.controller('DashBoardCtrl', function ($scope, $http, $rootScope, $localstorage, $ionicPopup, $ionicLoading, $ionicModal, $compile) {
       $rootScope.BackButton = true;
 
       $scope.init = function () {
-
             //   $scope.getAllSales();
             // $scope.getAllCustomer();
             // $scope.getAllItemStock();
@@ -14,12 +13,176 @@ app.controller('DashBoardCtrl', function ($scope, $http, $rootScope, $localstora
             // $scope.GetDashboardCount();
             // $scope.GetTop5SalesPacked();
             $scope.show = false;
-            $scope.totalAmount = 0
+            $scope.TotalSalesAmount = 0
             $scope.GetFinalDashboardCount();
+            $scope.o = {
+                  RCHQDate: '',
+                  RCHQTime: '',
+                  name: '',
+                  appointmentType: 'consultation',
+                  description: '',
+            };
+            $scope.Searchmodel = {
+                  Search: '',
+            }
+            setTimeout(() => {
+                  $("#mytext").focus();
+            }, 1000);
+            $scope.ResetModel();
+            $scope.GetAllAppointment();
+            $scope.modelAdvanceSearch = null;
             InitDataTable();
 
       };
+      $scope.GetAllAppointment = async function () {
+            try {
+                  // Make the HTTP GET request
+                  const response = await $http.get($rootScope.RoutePath + 'appointment/GetAllApplication');
 
+                  // Set the data to $scope.lstAppointment
+                  $scope.lstAppointment = response.data.data;
+
+                  // Set the total record count
+                  $scope.TotalRecord = $scope.lstAppointment.length;
+
+                  // Initialize DataTable after a small delay
+                  $(document).ready(function () {
+                        $('#ApplicationTable123').dataTable().fnClearTable();
+                        $('#ApplicationTable123').dataTable().fnDestroy();
+
+                        setTimeout(() => {
+                              $('#ApplicationTable123').DataTable({
+                                    responsive: true,
+                                    "dom": 'rt<"bottom"<"left"<"length"l><"info"i>><"right"<"pagination"p>>>',
+                                    retrieve: true,
+                                    "lengthMenu": [
+                                          [10, 25, 50, -1],
+                                          [10, 25, 50, "All"]
+                                    ],
+                                    "pageLength": 10,
+                                    columnDefs: [{
+                                          bSortable: false,
+                                          aTargets: [-1]
+                                    }]
+                              });
+                              console.log("done...............");
+                        });
+
+                  }, 2000)
+            } catch (error) {
+                  console.error("Error fetching appointments:", error);
+            }
+      };
+
+
+      // Function to handle form submission
+      $scope.SaveAppointment = function (event) {
+            event.preventDefault()
+            if ($scope.o.RCHQDate == null || $scope.o.RCHQDate == '') {
+                  return $ionicPopup.alert({
+                        title: 'Error',
+                        template: 'Please select an Appointment date!'
+                  });
+            } else if ($scope.o.RCHQTime == null || $scope.o.RCHQTime == "") {
+                  return $ionicPopup.alert({
+                        title: 'Error',
+                        template: 'Please select an Appointment time!'
+                  });
+            } else if ($scope.o.name == null || $scope.o.name == "") {
+                  return $ionicPopup.alert({
+                        title: 'Error',
+                        template: 'Please enter your name!'
+                  });
+
+            } else if ($scope.o.description == null || $scope.o.description == "") {
+                  return $ionicPopup.alert({
+                        title: 'Error',
+                        template: 'Please enter description!'
+                  });
+            } else if ($scope.o.description != null && $scope.o.description.length < 50) {
+                  return $ionicPopup.alert({
+                        title: 'Error',
+                        template: 'Make sure your description must be have at least 50 characters!'
+                  });
+            } else if ($scope.o.description != null && $scope.o.description.length > 1000) {
+                  return $ionicPopup.alert({
+                        title: 'Error',
+                        template: `Make sure your description don't have more than 1000 characters!`
+                  });
+            }
+
+            const time = new Date($scope.o.RCHQTime);
+            const hours = time.getHours().toString().padStart(2, '0');
+            const minutes = time.getMinutes().toString().padStart(2, '0');
+            const seconds = time.getSeconds().toString().padStart(2, '0');
+
+            // Format the time as HH:mm:ss
+            const formattedTime = `${hours}:${minutes}:${seconds}`;
+            // Gather form data
+            const formData = {
+                  date: $scope.o.RCHQDate,
+                  time: formattedTime,
+                  name: $scope.o.name,
+                  appointmentType: $scope.o.appointmentType,
+                  description: $scope.o.description
+            };
+
+            // Log the collected data to verify
+            console.log("Form Data:", formData);
+
+            // You can now send this data to an API or further processing
+            // For example, sending data via HTTP POST:
+            $http.post($rootScope.RoutePath + 'appointment/SaveAppointment', formData).then(function (response) {
+                  // Handle the response here (success)
+                  console.log('Appointment saved successfully:', response);
+                  $scope.GetAllAppointment()
+                  $scope.ResetModel();
+                  // You can show a success message or redirect to another page
+                  $ionicPopup.alert({
+                        title: 'Success',
+                        template: 'Appointment saved successfully!'
+                  });
+            }).catch(function (error) {
+                  // Handle error
+                  console.error('Error saving appointment:', error);
+                  $ionicPopup.alert({
+                        title: 'Error',
+                        template: 'Failed to save appointment. Please try again.'
+                  });
+            });
+      };
+
+      $scope.ResetModel = function () {
+            $scope.o = {
+                  RCHQDate: '',
+                  RCHQTime: '',
+                  name: '',
+                  appointmentType: 'consultation',
+                  description: '',
+            };
+            $scope.Searchmodel = {
+                  Search: '',
+            }
+      }
+
+      $scope.FilterAdvanceData = function (o) {
+            $scope.modelAdvanceSearch = o;
+            // $('#SalesTable').dataTable().api().ajax.reload();
+            InitDataTable();
+      }
+      
+      $scope.GetAllInvoiceStatus = function (call) {
+            $http.get($rootScope.RoutePath + 'invoice/GetAllInvoiceStatus').then(function (res) {
+                  $scope.lstStatus = res.data.data;
+                  var objStatus = _.filter($scope.lstStatus, function (status) {
+                        if (status.Order != '' && status.Order != null) {
+                              return status;
+                        }
+                  })
+                  Initstatus = objStatus && objStatus.length > 0 ? objStatus[0].id : 1;
+                  return call();
+            });
+      }
 
       function InitDataTable() {
             if ($.fn.DataTable.isDataTable('#SalesTable')) {
@@ -34,6 +197,10 @@ app.controller('DashBoardCtrl', function ($scope, $http, $rootScope, $localstora
                   "ajax": {
                         url: $rootScope.RoutePath + 'invoice/GetAllInvoiceDynamic',
                         data: function (d) {
+                              if ($scope.Searchmodel.Search != undefined) {
+                                    d.search = $scope.Searchmodel.Search;
+                              }
+                              // d.search = $scope.Searchmodel.Search;
                               d.idLocations = $scope.IsAdmin ? "" : $localstorage.get('idLocations');
                               // d.idLocations = $scope.IsAdmin ? "" : $localstorage.get('CustomerGroup') == 'Genmed' ? "" : $localstorage.get('idLocations');
                               // d.CustomerCode = $scope.IsAdmin ? "" : $scope.Customer ? $scope.Customer.AccountNumbder : "";
@@ -55,8 +222,6 @@ app.controller('DashBoardCtrl', function ($scope, $http, $rootScope, $localstora
 
                                     }
 
-                                    $scope.totalAmount = json.TotalAmount
-
                                     return json.data;
                               } else {
                                     return [];
@@ -67,150 +232,151 @@ app.controller('DashBoardCtrl', function ($scope, $http, $rootScope, $localstora
                         $compile(angular.element(row).contents())($scope);
                   },
                   "columns": [{
-                              "data": "id",
-                              "sortable": false
-                        },
-                        {
-                              "data": "DocNo",
-                              "defaultContent": "N/A"
-                        },
-                        {
-                              "data": "InvoiceDate",
-                              "defaultContent": "N/A"
-                        },
-                        {
-                              "data": "CustomerCode",
-                              "defaultContent": "N/A"
-                        },
-                        {
-                              "data": "CustomerName",
-                              "defaultContent": "N/A"
-                        },
-                        // { "data": "Description", "defaultContent": "N/A" },
-                        {
-                              "data": "BranchCode",
-                              "defaultContent": "N/A"
-                        },
-                        // { "data": "idStatus", "defaultContent": "N/A" },
-                        {
-                              "data": "Total",
-                              "defaultContent": "N/A"
-                        },
-                        {
-                              "data": "Tax",
-                              "defaultContent": "N/A"
-                        },
-                        {
-                              "data": "FinalTotal",
-                              "defaultContent": "N/A"
-                        },
-                        {
-                              "data": "IsFavorite",
-                              "sortable": false,
-                        },
-                        {
-                              "data": null,
-                              "sortable": false,
-                        },
+                        "data": "id",
+                        "sortable": false
+                  },
+                  {
+                        "data": "DocNo",
+                        "defaultContent": "N/A"
+                  },
+                  {
+                        "data": "InvoiceDate",
+                        "defaultContent": "N/A"
+                  },
+                  {
+                        "data": "CustomerCode",
+                        "defaultContent": "N/A"
+                  },
+                  {
+                        "data": "CustomerName",
+                        "defaultContent": "N/A"
+                  },
+                  // { "data": "Description", "defaultContent": "N/A" },
+                  {
+                        "data": "BranchCode",
+                        "defaultContent": "N/A"
+                  },
+                  // { "data": "idStatus", "defaultContent": "N/A" },
+                  {
+                        "data": "Total",
+                        "defaultContent": "N/A"
+                  },
+                  {
+                        "data": "Tax",
+                        "defaultContent": "N/A"
+                  },
+                  {
+                        "data": "FinalTotal",
+                        "defaultContent": "N/A"
+                  },
+                  {
+                        "data": "IsFavorite",
+                        "sortable": false,
+                  },
+                  {
+                        "data": null,
+                        "sortable": false,
+                  },
                   ],
                   "columnDefs": [{
-                              "render": function (data, type, row, meta) {
-                                    return meta.row + meta.settings._iDisplayStart + 1;
-                              },
-                              "targets": 0,
+                        "render": function (data, type, row, meta) {
+                              return meta.row + meta.settings._iDisplayStart + 1;
                         },
-                        {
-                              "render": function (data, type, row) {
-                                    return moment(data).format('DD-MM-YYYY');
-                              },
-                              "targets": 2
-                        }, {
-                              "render": function (data, type, row) {
-                                    if (data != null && data != undefined && data != '') {
-                                          var val = parseFloat(data);
-                                          return val.toFixed(2);
-                                    } else {
-                                          return 0;
-                                    }
-                              },
-                              "targets": [6, 7, 8],
-                              className: "right-aligned-cell"
+                        "targets": 0,
+                  },
+                  {
+                        "render": function (data, type, row) {
+                              return moment(data).format('DD-MM-YYYY');
                         },
-                        // , {
-                        //     "render": function (data, type, row) {
-                        //         var Action = data;
-                        //         if (data != null && data != undefined && data != '') {
-                        //             Action = (data).toString();
-                        //             if (Action.length > 50) {
-                        //                 Action = '<span title="' + Action + '">' + data.substr(0, 50) + '...</span>';
-                        //             }
-                        //         }
-                        //         return Action;
-                        //     },
+                        "targets": 2
+                  }, {
+                        "render": function (data, type, row) {
+                              if (data != null && data != undefined && data != '') {
+                                    var val = parseFloat(data);
+                                    return val.toFixed(2);
+                              } else {
+                                    return 0;
+                              }
+                        },
+                        "targets": [6, 7, 8],
+                        className: "right-aligned-cell"
+                  },
+                  // , {
+                  //     "render": function (data, type, row) {
+                  //         var Action = data;
+                  //         if (data != null && data != undefined && data != '') {
+                  //             Action = (data).toString();
+                  //             if (Action.length > 50) {
+                  //                 Action = '<span title="' + Action + '">' + data.substr(0, 50) + '...</span>';
+                  //             }
+                  //         }
+                  //         return Action;
+                  //     },
 
-                        //     "targets": 5
-                        // },
-                        // {
-                        //     "render": function (data, type, row) {
-                        //         var Action = "";
-                        //         var findStatus = _.findWhere($scope.lstStatus, { id: row.idStatus });
-                        //         if (findStatus) {
-                        //             var FindNextStatus = _.findWhere($scope.lstStatus, { Order: findStatus.Order });
-                        //             if (FindNextStatus) {
-                        //                 Action = FindNextStatus.Status;
-                        //             }
-                        //         } else {
-                        //             return "N/A";
-                        //         }
-                        //         return Action;
-                        //     },
-                        //     "targets": 7
-                        // },
-                        {
-                              "render": function (data, type, row) {
-                                    var Action = '<div layout="row" layout-align="center center">';
-                                    if (row.IsFavorite == 1) {
-                                          Action += '<a class="btnAction btnAction-edit"><i class="ion-checkmark"></i></a>';
-                                    } else {
-                                          Action += '<a class="btnAction btnAction-error"><i class="ion-close"></i></a>';
-                                    }
-                                    Action += '</div>';
-                                    return Action;
-                              },
-                              "targets": 9,
+                  //     "targets": 5
+                  // },
+                  // {
+                  //     "render": function (data, type, row) {
+                  //         var Action = "";
+                  //         var findStatus = _.findWhere($scope.lstStatus, { id: row.idStatus });
+                  //         if (findStatus) {
+                  //             var FindNextStatus = _.findWhere($scope.lstStatus, { Order: findStatus.Order });
+                  //             if (FindNextStatus) {
+                  //                 Action = FindNextStatus.Status;
+                  //             }
+                  //         } else {
+                  //             return "N/A";
+                  //         }
+                  //         return Action;
+                  //     },
+                  //     "targets": 7
+                  // },
+                  {
+                        "render": function (data, type, row) {
+                              var Action = '<div layout="row" layout-align="center center">';
+                              if (row.IsFavorite == 1) {
+                                    Action += '<a class="btnAction btnAction-edit"><i class="ion-checkmark"></i></a>';
+                              } else {
+                                    Action += '<a class="btnAction btnAction-error"><i class="ion-close"></i></a>';
+                              }
+                              Action += '</div>';
+                              return Action;
                         },
-                        {
-                              "render": function (data, type, row) {
-                                    var Action = '<div layout="row" layout-align="center center">';
-                                    Action += '<a ng-click="CopyToModel(' + row.id + ')" class="btnAction btnAction-edit" style="cursor:pointer"><i class="ion-edit" title="Edit"></i></a>&nbsp;';
-                                    Action += '<a ng-click="DeleteItem(' + row.id + ')" class="btnAction btnAction-error" style="cursor:pointer"><i class="ion-trash-a" title="Delete"></i></a>&nbsp;';
-                                    if ($scope.CurrentCustomerGroup != 'Shop') {
-                                          Action += '<a ng-click="GenerateReport(' + row.id + ')" class="btnAction btnAction-info" style="cursor:pointer"><i class="ion-document-text" title="Document"></i></a>&nbsp;';
-                                          Action += '<a ng-click="StockTransfer(' + row.id + ')" class="btnAction btnAction-alert" style="cursor:pointer"><i class="ion-arrow-swap" title="Stock Transfer"></i></a>&nbsp;';
-                                          Action += '<a ng-click="CopySale(' + row.id + ')" class="btnAction btnAction-info" style="cursor:pointer"><i class="ion-ios-copy" title="Copy Sale"></i></a>&nbsp;';
-                                          Action += '<a ng-click="OpenDeliveryPackingSlip(' + row.id + ')" class="btnAction btnAction-alert" style="cursor:pointer"><i class="ion-ios-list" title="Generate Delivery Slip"></i></a>&nbsp;';
-                                          Action += '<a ng-click="Export(' + row.id + ')" class="btnAction btnAction-alert" style="cursor:pointer"><i class="ion-ios-list" title="Export"></i></a>&nbsp;';
-                                          var findStatus = _.findWhere($scope.lstStatus, {
-                                                id: row.idStatus
+                        "targets": 9,
+                  },
+                  {
+                        "render": function (data, type, row) {
+                              var Action = '<div layout="row" layout-align="center center">';
+                              Action += '<a ng-click="CopyToModel(' + row.id + ')" class="btnAction btnAction-edit" style="cursor:pointer"><i class="ion-edit" title="Edit"></i></a>&nbsp;';
+                              Action += '<a ng-click="DeleteItem(' + row.id + ')" class="btnAction btnAction-error" style="cursor:pointer"><i class="ion-trash-a" title="Delete"></i></a>&nbsp;';
+                              if ($scope.CurrentCustomerGroup != 'Shop') {
+                                    Action += '<a ng-click="GenerateReport(' + row.id + ')" class="btnAction btnAction-info" style="cursor:pointer"><i class="ion-document-text" title="Document"></i></a>&nbsp;';
+                                    Action += '<a ng-click="StockTransfer(' + row.id + ')" class="btnAction btnAction-alert" style="cursor:pointer"><i class="ion-arrow-swap" title="Stock Transfer"></i></a>&nbsp;';
+                                    Action += '<a ng-click="CopySale(' + row.id + ')" class="btnAction btnAction-info" style="cursor:pointer"><i class="ion-ios-copy" title="Copy Sale"></i></a>&nbsp;';
+                                    Action += '<a ng-click="OpenDeliveryPackingSlip(' + row.id + ')" class="btnAction btnAction-alert" style="cursor:pointer"><i class="ion-ios-list" title="Generate Delivery Slip"></i></a>&nbsp;';
+                                    Action += '<a ng-click="Export(' + row.id + ')" class="btnAction btnAction-alert" style="cursor:pointer"><i class="ion-ios-list" title="Export"></i></a>&nbsp;';
+                                    console.log('$scope.lstStatus: ', $scope?.lstStatus);
+                                    if($scope.findStatus)
+                                    var findStatus = _.findWhere($scope?.lstStatus, {
+                                          id: row?.idStatus
+                                    });
+                                    if (findStatus && findStatus.Order != '' && findStatus.Order != null) {
+                                          var FindNextStatus = _.findWhere($scope.lstStatus, {
+                                                Order: findStatus.Order + 1
                                           });
-                                          if (findStatus && findStatus.Order != '' && findStatus.Order != null) {
-                                                var FindNextStatus = _.findWhere($scope.lstStatus, {
-                                                      Order: findStatus.Order + 1
-                                                });
-                                                if (FindNextStatus) {
-                                                      Action += ' <button type="button" class="btn btn-success" ng-click="UpdateSalesStatus(' + row.id + ',' + FindNextStatus.id + ')">' + FindNextStatus.Status + '</button>';
-                                                }
-                                                Action += '</div>';
+                                          if (FindNextStatus) {
+                                                Action += ' <button type="button" class="btn btn-success" ng-click="UpdateSalesStatus(' + row.id + ',' + FindNextStatus.id + ')">' + FindNextStatus.Status + '</button>';
                                           }
+                                          Action += '</div>';
                                     }
-                                    return Action;
-                              },
-                              "targets": 10
-                        }
+                              }
+                              return Action;
+                        },
+                        "targets": 10
+                  }
                   ]
             });
       }
-
       $scope.GetFinalDashboardCount = function () {
             var params = {
                   idLocations: $localstorage.get('idLocations')
@@ -225,11 +391,11 @@ app.controller('DashBoardCtrl', function ($scope, $http, $rootScope, $localstora
 
       $scope.getAllSales
 
-      $scope.ShowHideAppointment = function(){
+      $scope.ShowHideAppointment = function () {
             $scope.show = true
       }
 
-      $scope.BackToList = function(){
+      $scope.BackToList = function () {
             $scope.show = false
       }
 
