@@ -65,7 +65,6 @@ app.controller('DashBoardCtrl', function ($scope, $http, $rootScope, $localstora
                                           aTargets: [-1]
                                     }]
                               });
-                              console.log("done...............");
                         });
 
                   }, 2000)
