@@ -1,0 +1,143 @@
+<ion-view class="patternBg">
+    <ion-content>
+        <div class="container">
+            <form name="FormSetting" class="cForm light">
+                <div class="row responsive-sm">
+                    <div class="col">
+                        <div class="infoBox02">
+                            <div class="container">
+                                <div class="row responsive-sm">
+                                    <div class="col col-25">
+                                        <div>
+                                            <label for="Ac">Allow Comma </label>
+                                        </div>
+                                        <div>
+                                            <input type="checkbox" class="formControl_checkbox" id="Ac" ng-model="model.AllowComma">
+                                        </div>
+                                    </div>
+                                    <div class="col col-25">
+                                        <div>
+                                            <label for="ReferenceBy">Reference By </label>
+                                        </div>
+                                        <div>
+                                            <label for="ReferenceBy">
+                                                <input type="checkbox" class="formControl_checkbox" ng-true-value="1"
+                                                    ng-false-value="0" id="ReferenceBy" ng-model="model.ReferenceBy"></label>
+                                        </div>
+                                    </div>
+                                    <div class="col col-25">
+                                        <div>
+                                            <label for="IsReward">Reward </label>
+                                        </div>
+                                        <div>
+                                            <label for="IsReward">
+                                                <input type="checkbox" class="formControl_checkbox" ng-true-value="1"
+                                                    ng-false-value="0" id="IsReward" ng-model="model.IsReward"></label>
+                                        </div>
+                                    </div>
+                                    <div class="col col-25">
+                                        <div>
+                                            <label for="IsMLM">MLM </label>
+                                        </div>
+                                        <div>
+                                            <label for="IsMLM">
+                                                <input type="checkbox" class="formControl_checkbox" ng-true-value="1"
+                                                    ng-false-value="0" id="IsMLM" ng-model="model.IsMLM"></label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row responsive-sm">
+                                    <div class="col col-33">
+                                        <label for="FixedNumber">To Fixed Number*</label>
+                                        <input type="number" id="FixedNumber" class="formControl" name="FixedNumber"
+                                            ng-required="true" ng-model="model.ToFixedNumber">
+                                        <span class="errorMsg text-center" ng-show="formsubmit && (FormSetting.FixedNumber.$dirty || FormSetting.FixedNumber.$invalid)">
+                                            <span ng-show="FormSetting.FixedNumber.$error.required">
+                                                Please enter to fixed number
+                                            </span>
+                                        </span>
+                                    </div>
+                                    <div class="col col-33" ng-if="model.ReferenceBy == 1">
+                                        <label for="ReferenceLevel">Reference Level*</label>
+                                        <input type="number" id="ReferenceLevel" class="formControl" name="ReferenceLevel"
+                                            min="1" ng-model="model.ReferenceLevel" required>
+                                        <span class="errorMsg text-center" ng-show="formsubmit && (FormSetting.ReferenceLevel.$dirty || FormSetting.ReferenceLevel.$invalid)">
+                                            <span ng-show="FormSetting.ReferenceLevel.$error.required">
+                                                Please enter to reference level number
+                                            </span>
+                                            <span ng-show="FormSetting.ReferenceLevel.$error.min">
+                                                Minimum 1 level must be required
+                                            </span>
+                                        </span>
+                                    </div>
+                                    <div class="col col-33" ng-if="model.IsMLM == 1">
+                                        <label for="LevelCommission">Level Commission*</label>
+                                        <input type="number" id="LevelCommission" class="formControl" name="LevelCommission"
+                                            min="0" ng-model="model.LevelCommission" required>
+                                        <span class="errorMsg text-center" ng-show="formsubmit && (FormSetting.LevelCommission.$dirty || FormSetting.LevelCommission.$invalid)">
+                                            <span ng-show="FormSetting.LevelCommission.$error.required">
+                                                Please enter level commission
+                                            </span>
+                                            <span ng-show="FormSetting.LevelCommission.$error.min">
+                                                Value must be positive
+                                            </span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="row responsive-sm" ng-if="model.IsMLM == 1">
+                                    <div class="col col-33">
+                                        <label for="DPCommission">DP Commission*</label>
+                                        <input type="number" id="DPCommission" class="formControl" name="DPCommission"
+                                            min="0" ng-model="model.DPCommission" required>
+                                        <span class="errorMsg text-center" ng-show="formsubmit && (FormSetting.DPCommission.$dirty || FormSetting.DPCommission.$invalid)">
+                                            <span ng-show="FormSetting.DPCommission.$error.required">
+                                                Please enter DP commission
+                                            </span>
+                                            <span ng-show="FormSetting.DPCommission.$error.min">
+                                                Value must be positive
+                                            </span>
+                                        </span>
+                                    </div>
+                                    <div class="col col-33">
+                                        <label for="SponsorCommission">Sponsor Commission*</label>
+                                        <input type="number" id="SponsorCommission" class="formControl" name="SponsorCommission"
+                                            min="0" ng-model="model.SponsorCommission" required>
+                                        <span class="errorMsg text-center" ng-show="formsubmit && (FormSetting.SponsorCommission.$dirty || FormSetting.SponsorCommission.$invalid)">
+                                            <span ng-show="FormSetting.SponsorCommission.$error.required">
+                                                Please enter sponsor commission
+                                            </span>
+                                            <span ng-show="FormSetting.SponsorCommission.$error.min">
+                                                Value must be positive
+                                            </span>
+                                        </span>
+                                    </div>
+                                    <div class="col col-33">
+                                        <label for="SponsorCommissionLevel">Sponsor Commission Level*</label>
+                                        <input type="number" id="SponsorCommissionLevel" class="formControl" name="SponsorCommissionLevel"
+                                            min="0" ng-model="model.SponsorCommissionLevel" required>
+                                        <span class="errorMsg text-center" ng-show="formsubmit && (FormSetting.SponsorCommissionLevel.$dirty || FormSetting.SponsorCommissionLevel.$invalid)">
+                                            <span ng-show="FormSetting.SponsorCommissionLevel.$error.required">
+                                                Please enter sponsor commission level
+                                            </span>
+                                            <span ng-show="FormSetting.SponsorCommissionLevel.$error.min">
+                                                Value must be positive
+                                            </span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <button class="cBtn cBtn-green cBtn-block cBtn-shadow text-center" ng-click="SaveSettings(FormSetting,model)"
+                            type="submit"><i class="ion-document-text"></i>
+                            Save</button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </ion-content>
+</ion-view>

@@ -1,0 +1,145 @@
+<ion-view class="patternBg">
+    <ion-content>
+        <div class="container">
+            <div class="s10"></div>
+            <div class="row row-center">
+                <div class="col">
+                    <div class="searchBox">
+                        <input id="mytext" type="text" ng-model="Searchmodel.Search" class="formControl" ng-change="GetAllItemSearch(Searchmodel.Search)" placeholder="Filter by Item Name">
+                        <div class="list12">
+                            <ul class="list-group mainfont ulclass" style="margin: 43px 0px 0px 9px;font-size: 10px;max-height: 20em;overflow-y: auto;">
+                                <li class="item" style="border: 1px solid #a2a2a2;height: 0px;" ng-click="SelectItem(t1)" ng-repeat="t1 in lstItemsSearch" class="list-group-item mainfont">
+                                    {{t1.ItemName}}</li>
+                            </ul>
+                        </div>
+                        <button type="button" class="cBtn cBtn-blue" ng-click="FilterData()">
+                            <span>Search</span>
+                        </button>
+                        <a ng-click="Export()" class="cBtn cBtn-green cbtn-onlyicon" title="Export Excel">
+                            <i class="ion-ios-cloud-download-outline" title="Download Excel"></i>
+                        </a>
+                    </div>
+                    <div class="row responsive-sm cForm light px-0">
+                        <div class="col col-100 px-0">
+                            <div class="infoBox02">
+                                <div class="container">
+                                    <div class="row responsive-sm">
+                                        <div class="col">
+                                            <label>Sale / Purchase Type</label>
+                                            <select class="formControl" name="DocType" ng-required="true" ng-model="Filtermodel.DocType">
+                                                <option value="">All</option>
+                                                <option value="SI">Sale</option>
+                                                <option value="PI">Purchase</option>
+                                            </select>
+                                        </div>
+                                        <div class="col">
+                                            <label>Party</label>
+                                            <select class="formControl" name="PartyName" ng-required="true" ng-model="Filtermodel.PartyName">
+                                                <option value="">All</option>
+                                                <option value="{{o.Name}}"
+                                                    ng-repeat="o in lstCustomer | orderBy : 'Name'">
+                                                    {{o.Name}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="col">
+                                            <label>From Date</label>
+                                            <input ng-model="Filtermodel.StartDate" value="{{Filtermodel.StartDate | date: 'dd-MM-yyyy' }}" ng-required="true" name="StartDate" class="formControl" date ion-datetime-picker>
+                                        </div>
+                                        <div class="col">
+                                            <label>To Date</label>
+                                            <input ng-model="Filtermodel.EndDate" value="{{Filtermodel.EndDate  | date: 'dd-MM-yyyy'}}" ng-required="true" name="EndDate" class="formControl" date ion-datetime-picker>
+                                        </div>
+                                        <div class="col">
+                                            <label>Product Group</label>
+                                            <select class="formControl" name="ProductGroup" ng-required="true" ng-model="Filtermodel.ProductGroup" ng-change="GetAllSubItemCategory(Filtermodel.ProductGroup)">
+                                                <option value="">All</option>
+                                                <option value="{{o.id}}" ng-repeat="o in lstParentItemCategory">
+                                                    {{o.Name}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="col">
+                                            <div class="s20"></div>
+                                            <a class="cBtn cBtn-blue" ng-click="FilterTableData(Filtermodel)">
+                                                <i class="icon ion-search" title="Search"></i>
+                                            </a>
+                                            <a class="cBtn cBtn-green" ng-click="ResetFilterData(null)">
+                                                <i class="icon ion-refresh" title="Search"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="cDataTable">
+                        <table id="VoucherWiseProductSearchTable" class="cell-border" width="100%">
+                            <thead>
+                                <tr>
+                                    <th class="all">No</th>
+                                    <th style="white-space: normal;">Sales/Purchase Party</th>
+                                    <th style="white-space: normal;">Product Name</th>
+                                    <th>Bill Type</th>
+                                    <th style="white-space: normal;">Bill No</th>
+                                    <th>Date</th>
+                                    <th>Purchase</th>
+                                    <th>Sales</th>
+                                    <th style="white-space: normal;">Rate</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="row responsive-sm  cForm light">
+                <div class="col col-100">
+                    <div class="infoBox02">
+                        <div class="container">
+                            <div class="row responsive-sm">
+                                <div class="col col-33">
+                                    <div style="text-align: center;margin-bottom: 10px;">
+                                        <label for="InwardQty">Total Inward Qty</label>
+                                    </div>
+                                    <div style="text-align: center;">
+                                        <input ng-model="FinalTotalmodel.InwardQty" class="formControl" readonly>
+                                    </div>
+                                </div>
+                                <div class="col col-33">
+                                    <div style="text-align: center;margin-bottom: 10px;">
+                                        <label for="OutwardQty">Total Outward Qty</label>
+                                    </div>
+                                    <div style="text-align: center;">
+                                        <input ng-model="FinalTotalmodel.OutwardQty" class="formControl" readonly>
+                                    </div>
+                                </div>
+                                <div class="col col-33">
+                                    <div style="text-align: center;margin-bottom: 10px;">
+                                        <label for="Stock">Stock</label>
+                                    </div>
+                                    <div style="text-align: center;">
+                                        <input ng-model="FinalTotalmodel.Stock" class="formControl" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ion-content>
+    <style>
+        .list12 {
+            position: fixed;
+            z-index: 1;
+        }
+        
+        .list12:hover {
+            display: block;
+        }
+    </style>
+</ion-view>

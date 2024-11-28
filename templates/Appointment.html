@@ -1,0 +1,105 @@
+<ion-view class="patternBg" ng-controller="AppointmentController">
+    <ion-content scroll="true">
+        <form name="appointment" class="cForm light" ng-submit="SaveAppointment()">
+            <div class="infoBox02" style="margin: 10px;">
+                <div class="container">
+                    <div class="row responsive-sm">
+                        <div class="col col-25">
+                            <label for="date">Date</label>
+                            <input type="text" class="formControl" ng-model="o.RCHQDate" date ion-datetime-picker
+                                placeholder="Select Date" value="{{o.RCHQDate | date : 'dd-mm-yyyy'}}">
+                        </div>
+                        <div class="col col-25">
+                            <label for="time">Time</label>
+                            <input type="text" class="formControl" ng-model="o.RCHQTime" ion-datetime-picker time
+                                placeholder="Select Time" time-format="h:mm a" value="{{o.RCHQTime | date : 'h:mm a'}}">
+                        </div>
+                        <div class="col col-25">
+                            <label for="name">Name</label>
+                            <input class="formControl" type="text" ng-model="o.name" id="name" placeholder="Enter Name">
+                            <span class="errorMsg text-center" ng-show="formsubmit && (FormSales.CustomerName.$dirty || FormSales.CustomerName.$invalid)">
+                                <span ng-show="FormSales.CustomerName.$error.required">
+                                    Please Enter Name
+                                </span>
+                            </span>
+                        </div>
+                        <div class="col col-25">
+                            <label for="appointmentType">Appointment Type</label>
+                            <select id="appointmentType" class="formControl" ng-model="o.appointmentType"
+                                name="appointmentType">
+                                <option value="consultation">Consultation</option>
+                                <option value="follow-up">Follow-up</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div style="margin: 10px;margin-top: 0;">
+                        <label for="description">Description</label>
+                        <textarea id="description" name="description" class="formControl md-textarea"  placeholder="Enter Description" ng-model="o.description"></textarea>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <button class="cBtn cBtn-green cBtn-block cBtn-shadow" 
+                            ng-click="SaveAppointment($event)">Book Appointment</button>
+                        </div>
+                    </div>
+                    <div class="s10"></div>
+                </div>
+            </div>
+        </form>
+        <div class="container" >
+            <div class="cDataTable">
+                <table id="ApplicationTable" class="cell-border" style="width:100%;">
+                    <thead>
+                        <tr>
+                            <th class="all" width="4%">
+                                No
+                            </th>
+                            <th width="12%">
+                                Name
+                            </th>
+                            <th width="26%">
+                                Description
+                            </th>
+                            <th width="26%">
+                                Date
+                            </th>
+                            <th width="12%">
+                                Time
+                            </th width="10%">
+                            <th>
+                                Appointment type
+                            </th>
+                            <th width="4%">
+                                status
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-if="lstAppointment.length>0" ng-repeat="o in lstAppointment">
+                            <td>{{$index + 1}}</td>
+                            <td>{{o.name || "N/A"}}</td>
+                            <td>
+                                <span ng-if="o.description.length<=50">{{o.description|| "N/A"}}</span>
+                                <span ng-if="o.description.length>50" title="{{o.description}}">{{o.description |
+                                    limitTo:50}}...</span>
+                            </td>
+                            <td>
+                                {{o.date | date : 'dd-mm-yyyy'}}
+                            </td>
+                            <td>
+                                {{o.time | date : 'h:mm a'}}
+                            </td>
+                            <td>
+                                {{o.appointmentType}}
+                            </td>
+                            <td>
+                                {{o.status ? "Done" : "Pending"}}
+                            </td>
+                        </tr>
+                    </tbody>
+            </div>
+        </div>
+
+        </div>
+    </ion-content>
+</ion-view>

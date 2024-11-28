@@ -1,0 +1,225 @@
+<ion-view class="patternBg">
+    <ion-content>
+        <div ng-if="IsList">
+            <div class="container">
+                <div class="s10"></div>
+                <div class="row row-center">
+                    <div class="col">
+                        <div class="searchBox">
+                            <input id="mytext" type="text" ng-model="Searchmodel.Search" class="formControl"
+                                ng-model-options="{ debounce: 1500 }" ng-change="FilterData()" placeholder="Filter by User Name, Email, Phone Number,Location or Department">
+                            <button type="button" class="cBtn cBtn-blue" ng-click="FilterData()">
+                                <span>Search</span>
+                            </button>
+                            <a ng-click="Add()" class="cBtn cBtn-green cBtn-autoWidth d-flex items-center justify-center gap-2">
+                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                </svg>
+                                <span>Add Employee</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="cDataTable">
+                            <table id="EMPTable" class="cell-border" style="width:100%;">
+                                <thead>
+                                    <tr>
+                                        <th class="all">
+                                            No
+                                        </th>
+                                        <th>User Name </th>
+                                        <th>
+                                            Email
+                                        </th>
+                                        <th>
+                                            Phone Number
+                                        </th>
+                                        <th>
+                                            Location
+                                        </th>
+                                        <th>
+                                            Department
+                                        </th>
+                                        <th>
+                                            Is Active
+                                        </th>
+                                        <th class="all">
+                                            Action
+                                        </th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="container" ng-if="!IsList">
+            <form name="FormEMP" class="cForm light">
+                <div class="infoBox02">
+                    <div class="container">
+                        <div class="row responsive-sm">
+                            <div class="col col-33">
+                                <label for="">Username*</label>
+                                <input type="text" id="username" class="formControl" name="username" ng-required="true"
+                                    placeholder="User Name" maxlength="100" ng-maxlength="100" ng-model="model.username">
+                                <span class="errorMsg text-center" ng-show="formsubmit && (FormEMP.username.$dirty || FormEMP.username.$invalid)">
+                                    <span ng-show="FormEMP.username.$error.required">
+                                        Please Enter Username
+                                    </span>
+                                    <span ng-show="FormEMP.username.$error.maxlength">
+                                        Maximum length is 100.
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="col col-33" ng-if="model.id==0">
+                                <label for="">Password*</label>
+                                <input type="password" name="password" class="formControl" ng-required="true"
+                                    placeholder="Enter Password" maxlength="100" ng-maxlength="100" ng-model="model.password">
+                                <span class="errorMsg text-center" ng-show="formsubmit && (FormEMP.password.$dirty || FormEMP.password.$invalid)">
+                                    <span ng-show="FormEMP.password.$error.required">
+                                        Please Enter Password
+                                    </span>
+                                    <span ng-show="FormEMP.password.$error.maxlength">
+                                        Maximum length is 100.
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="col col-33" ng-if="model.id==0">
+                                <label for="">Confirm Password*</label>
+                                <input type="password" name="Cpassword" class="formControl" ng-required="true"
+                                    maxlength="100" ng-maxlength="100" placeholder="Enter Confirm Password" ng-model="model.ConfirmPassword">
+                                <span class="errorMsg text-center" ng-show="formsubmit && (FormEMP.Cpassword.$dirty || FormEMP.Cpassword.$invalid)">
+                                    <span ng-show="FormEMP.Cpassword.$error.required">
+                                        Please Enter Confirm Password
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row responsive-sm">
+                            <div class="col col-33">
+                                <label for="">Email Address*</label>
+                                <input type="email" name="EmailAddress" class="formControl" maxlength="100"
+                                    ng-maxlength="100" ng-required="true" placeholder="Enter Email Address" ng-model="model.EmailAddress">
+                                <span class="errorMsg text-center" ng-show="formsubmit && (FormEMP.EmailAddress.$dirty || FormEMP.EmailAddress.$invalid)">
+                                    <span ng-show="FormEMP.EmailAddress.$error.required">
+                                        Please Enter Email Address
+                                    </span>
+                                    <span ng-show="FormEMP.EmailAddress.$error.email">
+                                        Please Enter Valid Email Address
+                                    </span>
+                                    <span ng-show="FormEMP.EmailAddress.$error.maxlength">
+                                        Maximum length is 100.
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="col col-33">
+                                <label for="">Phone Number*</label>
+                                <input type="tel" id="PhoneNumber" class="formControl" name="PhoneNumber" ng-model="model.PhoneNumber"
+                                    placeholder="+11234567890" required>
+                                <span class="errorMsg text-center" ng-show="formsubmit && (FormEMP.PhoneNumber.$dirty || FormEMP.PhoneNumber.$invalid)">
+                                    <span ng-show="FormEMP.PhoneNumber.$error.required">
+                                        Please Enter Phone Number
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="col col-33">
+                                <label for="">Select Department*</label>
+                                <select name="DefaultDepartment" class="formControl" ng-required="true" ng-model="model.DefaultDepartment">
+                                    <option value="">Select Department</option>
+                                    <option ng-repeat="o in lstDepartment" value="{{o.id}}">{{o.Name}}</option>
+                                </select>
+                                <span class="errorMsg text-center" ng-show="formsubmit && (FormEMP.DefaultDepartment.$dirty || FormEMP.DefaultDepartment.$invalid)">
+                                    <span ng-show="FormEMP.DefaultDepartment.$error.required">
+                                        Please Select Department
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row responsive-sm">
+                            <div class="col">
+                                <label class="formCheck" for="Active"><input type="checkbox" id="Active" ng-model="model.isActive"><span>Active</span></label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <button class="cBtn cBtn-green cBtn-block cBtn-shadow" ng-click="SaveEmployeeMaster(FormEMP)"
+                                type="submit"><i class="ion-document-text"></i>
+                                Save</button>
+                            </div>
+                        </div>
+                        <div class="s10"></div>
+                    </div>
+                </div>                
+            </form>
+        </div>
+    </ion-content>
+    <script id="UserLocation.html" type="text/ng-template">
+        <ion-modal-view class="patternBg">
+            <ion-header-bar class="customPgHeader">
+                <div class="col01">
+                    <span class="pgTitle">Employee Location</span>
+                </div>
+                <div class="col02">
+                    <button class="cBtn cBtn-skyblue cBtn-block cBtn-shadow" ng-click="closeModal()" type="submit"><i class="ion-close-circled"></i>
+                      Cancel</button>
+                </div>
+            </ion-header-bar>
+            <ion-content padding="true">
+                <div class="container">
+                    <div class="s10"></div>
+                    <div class="row row-center">
+                        <div class="col 0">
+                            <div class="searchBox">
+                                <input type="text" ng-model="Searchmodel.SearchLocation" ng-enter="FilterDataLocation()" class="formControl" placeholder="Filter by Location">
+                                <button type="button" class="cBtn cBtn-blue" ng-click="FilterDataLocation()">
+                                    <span>Search</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="s20"></div>
+                    <div class="cDataTable">
+                        <table id="LocationTable" class="cell-border" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        No
+                                    </th>
+                                    <th>Location</th>
+                                    <th>
+                                        Action
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="o in lstLocation">
+                                    <td>{{$index + 1}}</td>
+                                    <td>{{o.Name}}</td>
+                                    <td>
+                                        <input type="checkbox" ng-model="o.isSelect" value="o.isSelect" ng-true-value="1" ng-false-value="0" ng-change="">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="s20"></div>
+                    <div class="row text-center">
+                        <div class="col">
+                            <button class="cBtn cBtn-green cBtn-block cBtn-shadow" ng-click="SaveAssignLocation(FormEMP)" type="submit"><i class="ion-document-text"></i>
+                  Save</button>
+                        </div>
+                        <!-- <div class="col col-50">
+                            <button class="cBtn cBtn-skyblue cBtn-block cBtn-shadow" ng-click="closeModal()" type="submit"><i class="ion-close-circled"></i>
+                  Cancel</button>
+                        </div> -->
+                    </div>
+                </div>
+
+            </ion-content>
+        </ion-modal-view>
+    </script>
+</ion-view>

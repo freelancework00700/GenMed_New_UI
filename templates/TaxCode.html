@@ -1,0 +1,142 @@
+<ion-view class="patternBg">
+    <ion-content>
+        <div ng-if="IsList">
+            <div class="container">
+                <div class="row row-center">
+                    <div class="col">
+                        <div class="searchBox">
+                            <input id="mytext" type="text" ng-model="Searchmodel.Search" class="formControl"
+                                placeholder="Filter by  Type or Rate" ng-model-options="{ debounce: 1500 }" ng-change="FilterData()">
+                            <button type="button" class="cBtn cBtn-blue" ng-click="FilterData()">
+                                <span>Search</span>
+                            </button>
+                            <a ng-click="Add()" class="cBtn cBtn-green cBtn-autoWidth d-flex items-center justify-center gap-2">
+                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                </svg> <span>Add Tax Code</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="cDataTable">
+                            <table id="TaxCodeTable" class="cell-border" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th class="all">
+                                            No
+                                        </th>
+                                        <th>Tax Type </th>
+                                        <th>
+                                            Description
+                                        </th>
+                                        <th>
+                                            Tax Rate
+                                        </th>
+                                        <th>
+                                            Inclusive
+                                        </th>
+                                        <th>
+                                            Is Active
+                                        </th>
+                                        <th class="all">
+                                            Action
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="o in lstTaxCode">
+                                        <td>{{$index + 1}}</td>
+                                        <td>
+                                            <span ng-if="o.TaxType.length<=50">{{o.TaxType || "N/A" }}</span>
+                                            <span ng-if="o.TaxType.length>50" title="{{o.TaxType}}">{{o.TaxType |
+                                                limitTo:50}}...</span>
+                                        </td>
+                                        <td>
+                                            <span ng-if="o.Description.length<=50">{{o.Description || "N/A"}}</span>
+                                            <span ng-if="o.Description.length>50" title=" {{o.Description}}">{{o.Description |
+                                                limitTo:50}}...</span>
+                                        </td>
+                                        <td>{{o.TaxRate | number:0}}</td>
+                                        <td><span style="font-size: 20px;color: green" ng-if="o.Inclusive==1" class="ng-scope">✔</span>
+                                            <span style="font-size: 20px;color: red" ng-if="o.Inclusive==0" class="ng-scope">✖</span>
+                                        </td>
+                                        <td><span style="font-size: 20px;color: green" ng-if="o.IsActive==1" class="ng-scope">✔</span>
+                                            <span style="font-size: 20px;color: red" ng-if="o.IsActive==0" class="ng-scope">✖</span>
+                                        </td>
+                                        <td>
+                                            <a ng-click="CopyToModel(o)" class="btnAction btnAction-edit">
+                                                <i class="ion-edit" title="Edit">
+                                                </i>
+                                            </a>
+                                            <a ng-click="DeleteTaxCode(o.id)" class="btnAction btnAction-error">
+                                                <i class="ion-trash-a" title="Delete">
+                                                </i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+ 
+        <div class="container" ng-if="!IsList">
+            <form name="FormTaxCode" class="cForm light">
+                <div class="infoBox02">
+                    <div class="container">
+                        <div class="row responsive-sm">
+                            <div class="col col-33">
+                                <label for="">Tax Type *</label>
+                                <input type="text" name="TaxType" maxlength="255" ng-maxlength="255" class="formControl"
+                                    ng-required="true" placeholder="Tax Type" ng-model="model.TaxType">
+                                <span class="errorMsg text-center" ng-show="formsubmit && (FormTaxCode.TaxType.$dirty || FormTaxCode.TaxType.$invalid)">
+                                    <span ng-show="FormTaxCode.TaxType.$error.required">
+                                        Please Enter Tax Type
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="col col-33">
+                                <label for="">Description</label>
+                                <input type="text" name="Description" maxlength="500" ng-maxlength="500" class="formControl"
+                                    placeholder="Description" ng-model="model.Description">
+                            </div>
+                            <div class="col col-33">
+                                <label for="Tax Rate">Tax Rate*</label>
+                                <input type="number" name="TaxRate" class="formControl" ng-required="true" placeholder="TaxRate"
+                                    ng-model="model.TaxRate">
+                                <span class="errorMsg text-center" ng-show="formsubmit && (FormTaxCode.TaxRate.$dirty || FormTaxCode.TaxRate.$invalid)">
+                                    <span ng-show="FormTaxCode.TaxRate.$error.required">
+                                        Please Enter Tax Rate
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row responsive-sm">
+                            <div class="col">
+                                <label class="formCheck" for="Inclusive"><input type="checkbox" id="Inclusive" ng-model="model.Inclusive"><span>Inclusive</span></label>
+                            </div>
+                        </div>
+                        <div class="row responsive-sm">
+                            <div class="col">
+                                <label class="formCheck" for="Active"><input type="checkbox" id="Active" ng-model="model.IsActive"><span>Active</span></label>
+                            </div>
+                        </div>                        
+                        <div class="row">
+                            <div class="col">
+                                <button class="cBtn cBtn-green cBtn-block cBtn-shadow" ng-click="SaveTaxCode(FormTaxCode)" type="submit"><i
+                                        class="ion-document-text"></i>
+                                    Save</button>
+                            </div>
+                        </div>
+                        <div class="s10"></div>
+                    </div>
+                </div>
+                
+            </form>
+        </div>
+    </ion-content>
+</ion-view>

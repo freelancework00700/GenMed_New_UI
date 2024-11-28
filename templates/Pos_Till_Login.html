@@ -1,0 +1,296 @@
+<ion-view hide-nav-bar="true">
+    <ion-content scroll="false">
+        <div class="partContainer partContainerlogin">
+            <div class="partA">
+                <header>
+                    <div class="col01">
+                        <span>Y-Pos -{{CurrentTime}}</span>
+                    </div>
+                    <div class="col02">
+                        <a href="" class="btnSupport">
+                            <span>Support</span>
+                        </a>
+                    </div>
+                </header>
+                <!-- header END -->
+                <section class="container_10 show-hide contentHeight">
+                    <div class="s20"></div>
+                    <div class="row">
+                        <div class="col-66">
+                            <div class="container_10">
+                                <div class="pgTitle">
+                                    <ul>
+                                        <li>Select Your Username</li>
+                                    </ul>
+                                </div>
+                                <div class="s30"></div>
+                                <ul class="usernameList">
+                                    <li ng-repeat="o in LstPosUser" ng-click="SelectUser(o)"><a href=""
+                                            class="{{o.classname}}"
+                                            ng-class="o.active==true ? 'active' :'' "><span>{{o.username}}</span></a>
+                                    </li>
+
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-33">
+                            <div class="container_10">
+                                <div class="pgTitle">
+                                    Login Details
+                                </div>
+                                <div class="s30"></div>
+                                <div class="passBox">
+                                    <input type="password" class="inputPass" placeholder="YOUR PASSCODE"
+                                        ng-model="UserModel.pospasscode" numbers-Only maxlength="6">
+                                    <ul>
+                                        <li ng-click="SetValuePasscode(1)">
+                                            <span>1</span>
+                                        </li>
+                                        <li ng-click="SetValuePasscode(2)">
+                                            <span>2</span>
+                                        </li>
+                                        <li ng-click="SetValuePasscode(3)">
+                                            <span>3</span>
+                                        </li>
+                                        <li ng-click="SetValuePasscode(4)">
+                                            <span>4</span>
+                                        </li>
+                                        <li ng-click="SetValuePasscode(5)">
+                                            <span>5</span>
+                                        </li>
+                                        <li ng-click="SetValuePasscode(6)">
+                                            <span>6</span>
+                                        </li>
+                                        <li ng-click="SetValuePasscode(7)">
+                                            <span>7</span>
+                                        </li>
+                                        <li ng-click="SetValuePasscode(8)">
+                                            <span>8</span>
+                                        </li>
+                                        <li ng-click="SetValuePasscode(9)">
+                                            <span>9</span>
+                                        </li>
+                                        <li>
+                                            <span></span>
+                                        </li>
+                                        <li ng-click="SetValuePasscode(0)">
+                                            <span>0</span>
+                                        </li>
+                                        <li ng-click="ClearPasscode()">
+                                            <span><img src="../img/icon-text-delete.png" alt=""></span>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="s20"></div>
+
+                                <div class="s20"></div>
+                                <div class="row row-no-padding-custom">
+                                    <div class="col">
+                                        <a href="" ng-click="LoginPosUser();" class="cpBtn cpBtn-block cpBtn-img blue">
+                                            <span>Punch In</span>
+                                            <img src="../img/icon-btn-punch.png" alt="">
+                                        </a>
+                                    </div>
+                                    <div class="col">
+                                        <a href="" class="cpBtn cpBtn-block cpBtn-img blueLight">
+                                            <span>Punch Out</span>
+                                            <img src="../img/icon-btn-punch-out.png" alt="">
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section class="container_10 hide-show contentHeight">
+                    <div class="s20"></div>
+                    <div class="row">
+                        <div class="col-33">
+                            <div class="container_10">
+                                <div class="pgTitle">
+                                    <ul>
+                                        <li>Select Username</li>
+                                    </ul>
+                                </div>
+                                <div class="s20"></div>
+                                <ul class="usernameList usernList">
+                                    <li ng-repeat="o in LstPosUser" ng-click="SelectUser(o)"><a href=""
+                                            class="{{o.classname}}"
+                                            ng-class="o.active==true ? 'active' :'' "><span>{{o.username}}</span></a>
+                                    </li>
+
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-66">
+                            <div class="container_10">
+                                <div class="pgTitle">
+                                    Login Details
+                                </div>
+                                <div class="s30"></div>
+                                <div class="passBox">
+                                    <input type="password" class="inputPass" placeholder="YOUR PASSCODE"
+                                        ng-model="UserModel.pospasscode" numbers-Only maxlength="6">
+                                    <ul>
+                                        <li ng-click="SetValuePasscode(1)">
+                                            <span>1</span>
+                                        </li>
+                                        <li ng-click="SetValuePasscode(2)">
+                                            <span>2</span>
+                                        </li>
+                                        <li ng-click="SetValuePasscode(3)">
+                                            <span>3</span>
+                                        </li>
+                                        <li ng-click="SetValuePasscode(4)">
+                                            <span>4</span>
+                                        </li>
+                                        <li ng-click="SetValuePasscode(5)">
+                                            <span>5</span>
+                                        </li>
+                                        <li ng-click="SetValuePasscode(6)">
+                                            <span>6</span>
+                                        </li>
+                                        <li ng-click="SetValuePasscode(7)">
+                                            <span>7</span>
+                                        </li>
+                                        <li ng-click="SetValuePasscode(8)">
+                                            <span>8</span>
+                                        </li>
+                                        <li ng-click="SetValuePasscode(9)">
+                                            <span>9</span>
+                                        </li>
+                                        <li>
+                                            <span></span>
+                                        </li>
+                                        <li ng-click="SetValuePasscode(0)">
+                                            <span>0</span>
+                                        </li>
+                                        <li ng-click="ClearPasscode()">
+                                            <span><img src="../img/icon-text-delete.png" alt=""></span>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="s20"></div>
+
+                                <div class="s20"></div>
+                                <div class="row row-no-padding-custom">
+                                    <div class="col col-50">
+                                        <a href="" ng-click="LoginPosUser();"
+                                            class="cpBtn cpBtnuser cpBtn-block cpBtn-img blue">
+                                            <span>Punch In</span>
+                                            <img src="../img/icon-btn-punch.png" alt="">
+                                        </a>
+                                    </div>
+                                    <div class="col col-50">
+                                        <a href="" class="cpBtn cpBtnuser cpBtn-block cpBtn-img blueLight">
+                                            <span>Punch Out</span>
+                                            <img src="../img/icon-btn-punch-out.png" alt="">
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <!-- END .partA -->
+
+        </div>
+        <!-- END .partContainer -->
+    </ion-content>
+
+    <script id="FloatPopupModal.html" type="text/ng-template">
+        <ion-modal-view class="patternBg floatpopup" style="width:40%;right:30%;left:30%;height: 550px;">
+                <!-- <ion-header-bar class="customPgHeader">
+                    <div class="col01">
+                        <span class="pgTitle">Float</span>
+                    </div>
+                    <div class="col02">
+                        <button class="cBtn cBtn-skyblue cBtn-block cBtn-shadow" ng-click="closeFloatPopupModal()" type="submit">
+                            <i class="ion-close-circled"></i>
+                            Cancel
+                        </button>
+                    </div>
+                </ion-header-bar> -->
+                <ion-header-bar class="customPgHeader " style="background: #3d55b8; display: flex !important;">
+                        <div class="col01">
+                            <span class="pgTitle">Float</span>
+                        </div>
+                        <div class="col01" style="margin-left:6%">
+                            <button class="cBtn cBtn-skyblue cBtn-block cBtn-shadow" style="border-radius:0px; height:43px" ng-click="closeFloatPopupModal()" type="submit">
+                                <i class="ion-close-circled"></i>
+                                Cancel
+                            </button>
+                        </div>
+                    </ion-header-bar>
+                <ion-content Style="top:44px;">
+                    <form name="FormFloat" class="cForm light">
+                        <div class="container">
+                            <div class="container_20">
+                                <div class="passBox popopCoxPass">
+                                    <input type="text" style="display: block;
+                                        padding-right: 10px;
+                                        width: 100%;
+                                        min-height: 75px;
+                                        text-align: right;
+                                        font-size: 1.2em;
+                                        letter-spacing: 2px;" placeholder="£"
+                                        ng-model="FloatModel.FloatCodeValue">
+                                        <ul>
+                                            <li ng-click="SetFloatValue(1)">
+                                                <span>1</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(2)">
+                                                <span>2</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(3)">
+                                                <span>3</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(4)">
+                                                <span>4</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(5)">
+                                                <span>5</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(6)">
+                                                <span>6</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(7)">
+                                                <span>7</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(8)">
+                                                <span>8</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(9)">
+                                                <span>9</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue('.')">
+                                                    <span>.</span>
+                                                </li>
+                                            <li ng-click="SetFloatValue(0)">
+                                                <span>0</span>
+                                            </li>
+                                            <li ng-click="ClearFloatValue()">
+                                                <span><img src="../img/icon-text-delete.png" alt=""></span>
+                                            </li>
+                                        </ul>
+                                </div>
+                                <div class="s10"></div>
+                                <div class="row row-no-padding-custom">
+                                    
+                                        <button class='cpBtn cpBtn-block-green' ng-click="SaveFloatCash()" align="center">Open Till
+                                        </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </ion-content>
+            </ion-modal-view>
+        </script>
+</ion-view>
+
+<style>
+    .pgTitle {
+        font-weight: bold;
+    }
+</style>

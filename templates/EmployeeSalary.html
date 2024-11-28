@@ -1,0 +1,222 @@
+<ion-view class="patternBg">
+    <ion-content>
+        <div ng-if="!flag">
+            <div class="container">
+                <div class="s10"></div>
+                <div class="row row-center">
+                    <div class="col">
+                        <div class="searchBox">
+                            <input type="text" ng-model="Searchmodel.Search" class="formControl" ng-model-options="{ debounce: 1500 }"
+                                ng-enter="FilterData()" placeholder="Filter by Employee, Date  or Time">
+                            <button type="button" class="cBtn cBtn-blue" ng-click="FilterData()">
+                                <span>Search</span>
+                            </button>
+                            <a ng-click="Reset()" class="cBtn cBtn-green cBtn-autoWidth d-flex items-center justify-center gap-2">
+                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                </svg>
+                                <span>Add Salary</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="s20"></div>
+                <div class="cDataTable">
+                    <table id="EMPSALARY" class="cell-border" style="width:100%;">
+                        <thead>
+                            <tr>
+                                <th class="all">
+                                    No
+                                </th>
+                                <th>Employee</th>
+                                <th>
+                                    Month - Year
+                                </th>
+                                <th>
+                                    Total Salary
+                                </th>
+                                <th>
+                                    Paid Salary
+                                </th>
+                                <th class="all">
+                                    Action
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="o in lstSalary | orderBy: '-CreatedDate'">
+                                <td>{{$index + 1}}</td>
+                                <td>{{o.username}}</td>
+                                <td>{{o.DisplaySalaryMonth}} - {{o.SalaryYear}}</td>
+                                <td>{{o.Amount}}</td>
+                                <td>{{o.TobePaidAmount}}</td>
+                                <td>
+                                    <a ng-click="EditEmpSalary(o)" class="btnAction btnAction-edit">
+                                        <i class="ion-edit" title="Edit">
+                                        </i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- END .container -->
+        </div>
+
+        <!-- ng-if="!IsList" -->
+        <div class="container" ng-if="flag">
+            <div class="s20"></div>
+            <form name="formempdetails" class="cForm light">
+                <div class="infoBox02">
+                    <div class="container">
+                        <div class="s25"></div>
+                        <div class="row responsive-sm">
+                            <div class="col col-33">
+                                <label for="">Employee*</label>
+                                <select Name="idUser" ng-disabled="model.id!=0" class="formControl" ng-disabled="flgEdit"
+                                    ng-model="model.idUser" ng-change="CalculateSalary()" required>
+                                    <option value="">Select Employee</option>
+                                    <option ng-repeat="e in lstEmployee" value="{{e.id}}" ng-selected="e.id==model.idUser">{{e.username}}</option>
+                                </select>
+                                <span class="errorMsg text-center" ng-show="FormEMPSubmit && (formempdetails.idUser.$dirty || formempdetails.idUser.$invalid)">
+                                    <span ng-show="formempdetails.idUser.$error.required">
+                                        Please Enter Employee
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="col col-33">
+                                <label for="">Month*</label>
+                                <select Name="Month" ng-disabled="model.id!=0" class="formControl" ng-disabled="flgEdit"
+                                    ng-model="model.SalaryMonth" ng-change="CalculateSalary()" required>
+                                    <option value="">Select Month</option>
+                                    <option value="{{o.id}}" ng-selected="o.id==model.SalaryMonth" ng-repeat="o in lstMonth">{{o.Month}}</option>
+                                </select>
+                                <span class="errorMsg text-center" ng-show="FormEMPSubmit && (formempdetails.Month.$dirty || formempdetails.Month.$invalid)">
+                                    <span ng-show="formempdetails.Month.$error.required">
+                                        Please Enter Month
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="col col-33">
+                                <label for="">Year*</label>
+                                <select Name="Year" ng-disabled="model.id!=0" class="formControl" ng-disabled="flgEdit"
+                                    ng-model="model.SalaryYear" ng-change="CalculateSalary()" required>
+                                    <option value="">Select Year</option>
+                                    <option value="{{o.id}}" ng-selected="o.id==model.SalaryYear" ng-repeat="o in lstyear | orderBy: 'Year'">{{o.Year}}</option>
+                                </select>
+                                <span class="errorMsg text-center" ng-show="FormEMPSubmit && (formempdetails.Year.$dirty || formempdetails.Year.$invalid)">
+                                    <span ng-show="formempdetails.Year.$error.required">
+                                        Please Enter Year
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row responsive-sm">
+                            <div class="col col-33">
+                                <label for="">Salary*</label>
+                                <input type="number" id="Amount" ng-blur="CalculateSalary()" class="formControl" name="Amount"
+                                    ng-required="true" ng-model="model.Amount">
+                                <span class="errorMsg text-center" ng-show="FormEMPSubmit && (formempdetails.Amount.$dirty || formempdetails.Amount.$invalid)">
+                                    <span ng-show="formempdetails.Amount.$error.required">
+                                        Please Enter Salary
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="col col-33">
+                                <label for="">Paid Salary*</label>
+                                <input type="text" id="PaidAmount" class="formControl" name="PaidAmount" ng-required="true"
+                                    ng-model="model.TobePaidAmount" disabled>
+                                <span class="errorMsg text-center" ng-show="FormEMPSubmit && (formempdetails.PaidAmount.$dirty || formempdetails.PaidAmount.$invalid)">
+                                    <span ng-show="formempdetails.PaidAmount.$error.required">
+                                        Please Enter Paid Salary
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="s20"></div>
+                <div class="row responsive-sm">
+                    <div class="col col-25">
+                        <div class="infoBox02">
+                            <div class="container">
+                                <div class="s20"></div>
+
+                                <h2 class="text-center">{{TotalDays}}</h2>
+                                <h3 class="text-center">Total Month Days</h3>
+                                <!-- END .dash2col -->
+                                <div class="s20"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col col-25">
+                        <div class="infoBox02">
+                            <div class="container">
+                                <div class="s20"></div>
+
+                                <h2 class="text-center">{{AbsentDays}}</h2>
+                                <h3 class="text-center">Absent Days</h3>
+                                <!-- END .dash2col -->
+                                <div class="s20"></div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="col col-25">
+                        <div class="infoBox02">
+                            <div class="container">
+                                <div class="s20"></div>
+
+                                <h2 class="text-center">{{PresentDays}}</h2>
+                                <h3 class="text-center">Present Days</h3>
+                                <!-- END .dash2col -->
+                                <div class="s20"></div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="col col-25">
+                        <div class="infoBox02">
+                            <div class="container">
+                                <div class="s20"></div>
+
+                                <h2 class="text-center">{{HalfDays}}</h2>
+                                <h3 class="text-center">Half Days</h3>
+                                <!-- END .dash2col -->
+                                <div class="s20"></div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                </div>
+                <div class="s20"></div>
+                <div class="row">
+                    <div class="col">
+                        <button class="cBtn cBtn-green cBtn-block cBtn-shadow" ng-click="SaveEmployeeSalary(formempdetails)"
+                            type="submit"><i class="ion-document-text"></i>
+                            Save</button>
+
+                    </div>
+                    <div class="col">
+                        <button class="cBtn cBtn-skyblue cBtn-block cBtn-shadow" ng-click="gotoList()" type="submit"><i
+                                class="ion-document-text"></i>
+                            Cancel</button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </ion-content>
+</ion-view>
+
+<style>
+    #TableDays {
+        color: #000000;
+    }
+</style>

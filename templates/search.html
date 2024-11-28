@@ -1,0 +1,65 @@
+<div class="row responsive-sm  cForm light px-0">
+    <div class="col col-100 px-0">
+        <div class="infoBox02">
+            <div class="container">
+                <div class="row responsive-sm">
+                    <div class="col col-10" ng-if="startdate!='false'">
+                        <label>Start Date</label>
+                        <input ng-model="modelSearch.StartDate" value="{{modelSearch.StartDate | date: 'dd-MM-yyyy' }}"
+                            ng-required="true" name="StartDate" class="formControl" date ion-datetime-picker>
+                    </div>
+                    <div class="col col-10" ng-if="enddate!='false'">
+                        <label>End Date</label>
+                        <input ng-model="modelSearch.EndDate" value="{{modelSearch.EndDate  | date: 'dd-MM-yyyy'}}"
+                            ng-required="true" name="EndDate" class="formControl" date ion-datetime-picker>
+                    </div>
+                    <div class="col col-20" ng-if="customercode!='false'">
+                        <label>Customer</label>
+                        <select class="formControl" name="CustomerCode" ng-required="true"
+                            ng-model="modelSearch.CustomerCode" ng-change="MainFilterAdvanceData(modelSearch)">
+                            <option value="">Select Customer</option>
+                            <option value="{{o.AccountNumbder}}" ng-repeat="o in AdvanceListCustomer">
+                                {{o.AccountNumbder}}-{{o.Name}}</option>
+                        </select>
+                    </div>
+                    <div class="col col-20" ng-if="branchcode!='false'">
+                        <label>Branch</label>
+                        <select class="formControl" name="BranchCode" ng-model="modelSearch.BranchCode"
+                            ng-change="MainFilterAdvanceData(modelSearch)" ng-disabled="flgBranchCode">
+                            <option value="">Select Branch</option>
+                            <option value="{{o.Name}}" ng-repeat="o in AdvanceListBranch">{{o.Name}}</option>
+                        </select>
+                    </div>
+                    <div class="col col-20" ng-if="idlocations!='false'">
+                        <label>Location</label>
+                        <select class="formControl" name="idLocations" ng-required="true"
+                            ng-model="modelSearch.idLocations" ng-change="MainFilterAdvanceData(modelSearch)"
+                            ng-disabled="flgLocation">
+                            <option value="">Select Location</option>
+                            <option value="{{o.id}}" ng-repeat="o in AdvanceListLocations">{{o.Name}}</option>
+                        </select>
+                    </div>
+
+                    <div class="col col-10" ng-if="status!='false'">
+                        <label>Status</label>
+                        <select class="formControl" name="idStatus" ng-required="true" ng-model="modelSearch.idStatus"
+                            ng-change="MainFilterAdvanceData(modelSearch)">
+                            <option value="">Select Status</option>
+                            <option value="{{o.id}}" ng-repeat="o in AdvanceListStatus">{{o.Status}}</option>
+                        </select>
+                    </div>
+                    <div class="col col-20">
+                        <div class="s20"></div>
+                        <a class="cBtn cBtn-blue" ng-click="MainFilterAdvanceData(modelSearch)">
+                            <i class="icon ion-search" title="Search"></i>
+                        </a>
+                        <a class="cBtn cBtn-green" ng-click="ResetFilterData(null)">
+                            <i class="icon ion-refresh" title="Search"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

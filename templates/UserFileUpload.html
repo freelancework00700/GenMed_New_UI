@@ -1,0 +1,109 @@
+<ion-view class="patternBg">
+    <ion-content>
+        <div ng-if="IsList">
+            <div class="container">
+                <div class="s10"></div>
+                <div class="row row-center">
+                    <div class="col">
+                        <div class="searchBox">
+                            <input type="text" ng-model="Searchmodel.Search" ng-model-options="{ debounce: 1500 }"
+                                class="formControl" placeholder="Filter by File Name, User, or Remark">
+                            <button type="button" class="cBtn cBtn-blue" ng-click="FilterData()">
+                                <span>Search</span>
+                            </button>
+                            <a ng-click="Add()" class="cBtn cBtn-green cBtn-autoWidth d-flex items-center justify-center gap-2">
+                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                </svg>
+                                 <span>Add Document</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="s20"></div>
+                <div class="cDataTable">
+                    <table id="DocTable" class="cell-border" width="100%">
+                        <thead>
+                            <tr>
+                                <th class="all">No</th>
+                                <th>User Name</th>
+                                <th>File Name</th>
+                                <th>Remark</th>
+                                <th>CreatedDate</th>
+                                <th class="all">Action</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="container" ng-if="!IsList">
+            <div class="s10"></div>
+            <form name="Form" class="cForm light">
+                <div class="infoBox02">
+                    <div class="container">
+                        <div class="s25"></div>
+                        <div class="row responsive-sm">
+                            <div class="col col-50">
+                                <label for="FileName">File Name*</label>
+                                <input type="text" class="formControl" name="FileName" ng-required="true" placeholder="File Name"
+                                    ng-model="model.FileName">
+                                <span class="errorMsg text-center" ng-show="formsubmit && (Form.FileName.$dirty || Form.FileName.$invalid)">
+                                    <span ng-show="Form.FileName.$error.required">
+                                        Please Enter File Name
+                                    </span>
+
+                            </div>
+                            <div class="col col-50">
+                                <label for="">User Name*</label>
+                                <select name="UserName" class="formControl" ng-model="model.UserId" ng-change="ChangeUser()"
+                                    required ng-disabled="!IsAdmin">
+                                    <option value="">Select User</option>
+                                    <option ng-repeat="o in lstUser" value="{{o.id}}">{{o.username}}</option>
+                                </select>
+                                <span class="errorMsg text-center" ng-show="formsubmit && (Form.UserName.$dirty || Form.UserName.$invalid)">
+                                    <span ng-show="Form.UserName.$error.required">
+                                        Please Enter User Name
+                                    </span>
+
+
+                                </span>
+                            </div>
+                        </div>
+                        <div class="s25"></div>
+                        <div class="row responsive-sm">
+                            <div class="col col-100">
+                                <label for="Remark">Remark</label>
+                                <textarea type="text" id="Remark" class="formControl" rows="5" name="Remark" ng-model="model.Remark"></textarea>
+                                <span class="errorMsg text-center" ng-show="formsubmit && (Form.Remark.$dirty || Form.Remark.$invalid)">
+                                    <span ng-show="Form.Remark.$error.required">
+                                        Please Enter Remark
+                                    </span>
+                                </span>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="s10"></div>
+                    <div style="text-align: center;color:black;">Document Upload</div>
+                    <div class="s10"></div>
+                    <div>
+                        <div id="dropzone1" class="dropzone" options="dzOptions" callbacks="dzCallbacks" ng-dropzone></div>
+                    </div>
+                </div>
+
+                <div class="s20"></div>
+                <div class="row">
+                    <div class="col">
+                        <button class="cBtn cBtn-green cBtn-block cBtn-shadow text-center" ng-click="Upload($event,Form)"
+                            type="submit"><i class="ion-document-text"></i>
+                            Upload</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </ion-content>
+</ion-view>

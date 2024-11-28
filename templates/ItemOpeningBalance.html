@@ -1,0 +1,283 @@
+<ion-view class="patternBg">
+    <ion-content>
+        <div ng-if="IsList">
+            <div class="container">
+                <div class="row row-center">
+                    <div class="col">
+                        <div class="searchBox">
+                            <input id="mytext" type="text" ng-model="Searchmodel.Search" class="formControl"
+                                ng-model-options="{ debounce: 1500 }" ng-change="FilterData()"
+                                placeholder="Filter by Item Name,UOM,Batch Number,Seq or Location">
+                            <button type="button" class="cBtn cBtn-blue" ng-click="FilterData()">
+                                <span>Search</span>
+                            </button>
+                            <a ng-click="Add()" class="cBtn cBtn-green cBtn-autoWidth c-cBtn-autoWidth d-flex items-center justify-center gap-2">
+                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                </svg>
+                                <span>Add Item Opening Balance</span>
+                            </a>
+                            <a ng-click="DownloadExcelTemplateItemBatch()" class="cBtn cBtn-green cbtn-onlyicon"
+                                title="Download Excel Template">
+                                <i class="ion-ios-cloud-download-outline"></i>
+                            </a>
+                            <a ng-click="Import()" class="cBtn cBtn-green cbtn-onlyicon" title="Import">
+                                <i class="icon ion-upload"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="cDataTable">
+                            <table id="IOBTable" class="cell-border" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th class="all">
+                                            No
+                                        </th>
+                                        <th>
+                                            Item Name
+                                        </th>
+                                        <th>
+                                            UOM
+                                        </th>
+                                        <th>
+                                            Batch Number
+                                        </th>
+                                        <th>
+                                            Location
+                                        </th>
+                                        <th>
+                                            Seq
+                                        </th>
+                                        <th>
+                                            Qty
+                                        </th>
+                                        <th>
+                                            Cost
+                                        </th>
+                                        <th>
+                                            Doc Date
+                                        </th>
+                                        <th class="all">
+                                            Action
+                                        </th>
+                                    </tr>
+                                </thead>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="container" ng-if="!IsList">
+            <form name="FormIOB" class="cForm light">
+                <div class="infoBox02">
+                    <div class="container">
+                        <div class="row responsive-sm">
+                            <div class="col col-33">
+                                <label for="ItemName">Item Name*</label>
+                                <input ng-model="model.ItemName" autocomplete="off" class="formControl"
+                                    ng-change="GetAllItemSearch(model.ItemName)">
+                                <div class="list12">
+                                    <ul class="list-group mainfont ulclass productul"
+                                        style="padding: 0px 5px;font-size: 10px;max-height: 20em;overflow-y: auto;">
+                                        <li id="{{t1.id}}" class="item autosearch"
+                                            style="border: 1px solid #a2a2a2;height: 0px;" ng-click="ChangeItemCode(t1)"
+                                            ng-repeat="t1 in lstItemsSearch" class="list-group-item mainfont">
+                                            {{t1.ItemName}}</li>
+                                    </ul>
+                                </div>
+                                <span class="errorMsg text-center"
+                                    ng-show="formsubmit && (FormIOB.ItemName.$dirty || FormIOB.ItemName.$invalid)">
+                                    <span ng-show="FormIOB.ItemCode.$error.required">
+                                        Please Select Item Name
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="col col-33">
+                                <label for="">UOM*</label>
+                                <select class="formControl" name="UOM" ng-model="model.UOM" ng-required="true"
+                                    ng-change="ChangeUOM()">
+                                    <option value="" disabled>Select UOM</option>
+                                    <option value="{{o.UOM}}" ng-repeat="o in ListItemUOM | orderBy : 'UOM'">{{o.UOM}}
+                                    </option>
+                                </select>
+                                <span class="errorMsg text-center"
+                                    ng-show="formsubmit && (FormIOB.UOM.$dirty || FormIOB.UOM.$invalid)">
+                                    <span ng-show="FormIOB.UOM.$error.required">
+                                        Please Select UOM
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="col col-33">
+                                <label for="Batch">Batch Number</label>
+                                <select class="formControl" name="Batch" ng-model="model.BatchNumber">
+                                    <option value="" disabled>Select Batch Number</option>
+                                    <option value="{{o.BatchNumber}}" ng-repeat="o in ListItemBatch">{{o.BatchNumber}}
+                                        |
+                                        {{o.ExpiryDate | date:'MMM-yyyy'}} | {{o.Stock}} | {{o.SalesRate}} |
+                                        {{o.MRP}}
+                                    </option>
+                                </select>
+                                <span class="errorMsg text-center"
+                                    ng-show="formsubmit && (FormIOB.Batch.$dirty || FormIOB.Batch.$invalid)">
+                                    <span ng-show="FormIOB.Batch.$error.required">
+                                        Please Select Batch Number
+                                    </span>
+
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row responsive-sm">
+                            <div class="col col-33">
+                                <label for="Location">Location*</label>
+                                <select class="formControl" name="Location" ng-model="model.idLocations"
+                                    ng-required="true">
+                                    <option value="" disabled>Select Location</option>
+                                    <option value="{{o.id}}" ng-repeat="o in lstLocation">{{o.Name}}</option>
+                                </select>
+                                <span class="errorMsg text-center"
+                                    ng-show="formsubmit && (FormIOB.Location.$dirty || FormIOB.Location.$invalid)">
+                                    <span ng-show="FormIOB.Location.$error.required">
+                                        Please Select Location
+                                    </span>
+
+                                </span>
+                            </div>
+                            <div class="col col-33">
+
+                                <label for="Seq">Seq</label>
+                                <input type="number" name="Seq" ng-model="model.Seq" class="formControl">
+
+
+                            </div>
+                            <div class="col col-33">
+                                <label for="Qty">Qty*</label>
+                                <input type="number" name="Qty" ng-model="model.Qty" class="formControl"
+                                    ng-required="true">
+                                <span class="errorMsg text-center"
+                                    ng-show="formsubmit && (FormIOB.Qty.$dirty || FormIOB.Qty.$invalid)">
+                                    <span ng-show="FormIOB.Qty.$error.required">
+                                        Please Enter Qty
+                                    </span>
+                                </span>
+                            </div>
+
+                        </div>
+                        <div class="row responsive-sm">
+                            <div class="col col-33">
+                                <label for="Cost">Cost*</label>
+                                <input type="number" name="Cost" ng-model="model.Cost" class="formControl"
+                                    ng-required="true">
+                                <span class="errorMsg text-center"
+                                    ng-show="formsubmit && (FormIOB.Cost.$dirty || FormIOB.Cost.$invalid)">
+                                    <span ng-show="FormIOB.Cost.$error.required">
+                                        Please Enter Cost
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="col col-33">
+                                <label for="Dates">Doc Date*</label>
+                                <input id="docDates" ng-model="model.DocDate"
+                                    value="{{model.DocDate | date: 'dd-MM-yyyy'}}" ng-required="true"
+                                    class="formControl" name="Dates" date ion-datetime-picker>
+                                <span class="errorMsg text-center"
+                                    ng-show="formsubmit && (FormIOB.Dates.$dirty || FormIOB.Dates.$invalid)">
+                                    <span ng-show="FormIOB.Dates.$error.required">
+                                        Please Select Doc Date
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <button class="cBtn cBtn-green cBtn-block cBtn-shadow"
+                                ng-click="SaveItemOpeningBalance(FormIOB)" type="submit"><i class="ion-document-text"></i>
+                                Save</button>
+                            </div>
+                        </div>
+                        <div class="s10"></div>
+                    </div>
+                </div>
+                
+            </form>
+        </div>
+
+    </ion-content>
+
+    <script id="ImportItem.html" type="text/ng-template">
+        <ion-modal-view class="patternBg">
+            <ion-header-bar class="customPgHeader">
+                <div class="col01">
+                    <span class="pgTitle">Import Item</span>
+                </div>
+                <div class="col02">
+                    <button class="cBtn cBtn-skyblue cBtn-block cBtn-shadow" ng-click="closeModal()" type="submit"><i class="ion-close-circled"></i>
+                    Cancel</button>
+                </div>
+            </ion-header-bar>
+            <ion-content padding="true">
+                <div class="container">
+                    <form name="FormImport" class="cForm light">
+                        <div class="infoBox02">
+                            <div class="container">
+                                <div class="row responsive-sm">
+                                    <div class="col col-20">
+                                        <label for="idLocations">Location*</label>
+                                    </div>
+                                    <div class="col col-80">
+                                        <select class="formControl" name="idLocations" ng-required="true"
+                                            ng-model="Importmodel.idLocations"  >
+                                            <option value="" disabled>Select Location</option>
+                                            <option value="{{o.id}}" ng-selected="Importmodel.idLocations == o.id"
+                                                ng-repeat="o in lstLocation">{{o.Name}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="s25"></div>
+                                <div class="row responsive-sm">
+                                    <div class="col col-33">
+                                        <input type="file" name="FileName" id="FilesImport" onclick="angular.element(this).scope().removeImportFile(this)" onchange="angular.element(this).scope().setFile(this)" placeholder="FileName" ng-model="FileName" ng-required="true">
+                                        <span style="color:black;">{{FileName == null ? 'Please select file' : FileName }}</span>
+                                        <span class="errorMsg text-center" ng-show="FormImportSubmit && (FormImport.FileName.$dirty || FormImport.FileName.$invalid)">
+                                            <span ng-show="FormImport.FileName.$error.required">
+                                              Please select File
+                                            </span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="s20"></div>
+                        <div class="row">
+                            <div class="col">
+                                <button class="cBtn cBtn-green cBtn-block cBtn-shadow" ng-click="ImportExcel(FormImport)" ng-disabled="!Importmodel.idLocations" type="submit"><i class="ion-document-text"></i>
+                                  Import</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </ion-content>
+        </ion-modal-view>
+    </script>
+
+    <style>
+        .list12 {
+            position: fixed;
+            z-index: 1;
+        }
+
+        .list12:hover {
+            display: block;
+        }
+
+        .autosearch.selected {
+            background: #989898;
+        }
+    </style>
+</ion-view>

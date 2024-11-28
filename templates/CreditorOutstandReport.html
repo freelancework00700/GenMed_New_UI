@@ -1,0 +1,94 @@
+<ion-view class="patternBg">
+    <ion-content>
+        <div class="container">
+            <div class="s10"></div>
+            <div class="row row-center">
+                <div class="col">
+                    <div class="searchBox">
+                        <input id="mytext" type="text" ng-model="Searchmodel.Search" class="formControl"
+                            ng-model-options="{ debounce: 1500 }" ng-change="FilterData()" placeholder="Filter by Code, Name, Total Amount, Remain Pay Amount or Paid Amount"">
+                        <button type="
+                            button" class="cBtn cBtn-blue" ng-click="FilterData()">
+                        <span>Search</span>
+                        </button>
+                        <a ng-click="EnableFilterOption()" class="cBtn cBtn-green cbtn-onlyicon" title="Advance Search">
+                            <i class="ion-ios-arrow-down" title="Advance Search"></i>
+                        </a>
+                        <a ng-click="Export()" class="cBtn cBtn-green cbtn-onlyicon" title="Export Excel">
+                            <i class="ion-ios-cloud-download-outline" title="Download Excel"></i>
+                        </a>
+                    </div>
+                    <div class="CustFilter" style="display:none;">
+                        <my-widget idlocations='false' status='false'></my-widget>
+                    </div>
+                </div>
+            </div>
+            <div class="s20"></div>
+            <div class="cDataTable">
+                <table id="CreditorOutstandReportTable" class="cell-border" width="100%">
+                    <thead>
+                        <tr>
+                            <th class="all">No</th>
+                            <th>Customer Code</th>
+                            <th>Customer Name</th>
+                            <th>Total Amount</th>
+                            <th>Remain Pay Amount</th>
+                            <th>Paid Amount</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </ion-content>
+
+    <script id="detail-modal.html" type="text/ng-template">
+        <ion-modal-view>
+
+            <!-- <button class="button button-icon icon ion-close-round" ng-click="closeModal()"></button> -->
+            <ion-header-bar class="customPgHeader">
+                <div class="col01">
+                    <span class="pgTitle">{{CustomerName}}</span>
+                </div>
+                <div class="col02">
+                    <button class="cBtn cBtn-skyblue cBtn-block cBtn-shadow" ng-click="closeModal()" type="submit"><i class="ion-close-circled"></i>
+                              Cancel</button>
+                </div>
+            </ion-header-bar>
+            <ion-content>
+                <div class="container">
+                    <div class="cDataTable">
+                        <table id="CreditorDetailTable" class="cell-border" width="100%">
+                            <thead>
+                                <tr>
+                                    <th class="all">No</th>
+                                    <th>Doc No </th>
+                                    <th>Doc Date</th>
+                                    <th>Doc Type</th>
+                                    <th>Branch Code</th>
+                                    <th>Currency Code</th>
+                                    <th>Total</th>
+                                    <th>Paid Amount</th>
+                                    <th>Remain Pay Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="o in lstDetails">
+                                    <td>{{$index + 1}}</td>
+                                    <td>{{o.DocNo|| "N/A"}}</td>
+                                    <td>{{o.APInvoiceDate | date:'dd-MM-yyyy'}}</td>
+                                    <td>{{o.SourceType|| "N/A"}}</td>
+                                    <td>{{o.BranchCode|| "N/A"}}</td>
+                                    <td>{{o.CurrencyCode|| "N/A"}}</td>
+                                    <td>{{o.FinalTotal|| "0"}}</td>
+                                    <td>{{o.PaymentAmount|| "0"}}</td>
+                                    <td>{{o.Outstanding|| "0"}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </ion-content>
+        </ion-modal-view>
+    </script>
+</ion-view>

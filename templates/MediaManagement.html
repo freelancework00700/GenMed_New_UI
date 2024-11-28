@@ -1,0 +1,255 @@
+<ion-view class="patternBg">
+    <ion-content>
+        <div ng-if="IsList">
+            <div class="container">
+                <div class="s10"></div>
+                <div class="row row-center">
+                    <div class="col">
+                        <div class="searchBox">
+                            <input id="mytext" type="text" ng-model="Searchmodel.Search" class="formControl"
+                                ng-model-options="{ debounce: 1500 }" ng-change="FilterData()"
+                                placeholder="Filter by Title, Short Description, Long Description or Vedio Link">
+                            <button type="button" class="cBtn cBtn-blue" ng-click="FilterData()">
+                                <span>Search</span>
+                            </button>
+                            <a ng-click="Add()" class="cBtn cBtn-green cBtn-autoWidth d-flex items-center justify-center gap-2">
+                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                </svg>
+                                <span>Add MediaFile</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="s20"></div>
+                <div class="cDataTable">
+                    <table id="MediaTable" class="cell-border" style="width:100%;">
+                        <thead>
+                            <tr>
+                                <th class="all">
+                                    No
+                                </th>
+                                <th>Title </th>
+
+                                <th>Short Description </th>
+                                <th>
+                                    Long Description
+                                </th>
+                                <th>
+                                    Image
+                                </th>
+
+                                <th>
+                                    Is Active
+                                </th>
+                                <th class="all">
+                                    Action
+                                </th>
+                            </tr>
+                        </thead>
+
+                    </table>
+                </div>
+            </div>
+            <!-- END .container -->
+        </div>
+        </div>
+        <!-- ng-if="!IsList" -->
+        <div class="container" ng-if="!IsList">
+            <div class="s20"></div>
+            <!-- <a ng-click="ResetAll()" class="cBtn cBtn-blue">
+                <i class="ion-arrow-left-c" title="Back">
+                    Return To List
+                </i>
+            </a>
+
+            <div class="s10"></div> -->
+            <form name="FormMedia" class="cForm light">
+                <div class="infoBox02">
+                    <div class="container">
+                        <div class="s25"></div>
+                        <div class="row responsive-sm">
+
+                            <div class="col">
+                                <label for="">Title*</label>
+                                <textarea ckeditor="editorOptions" name="Title" class="formControl" ng-required="true"
+                                    required placeholder="Title" ng-model="model.title" ckeditor2></textarea>
+                                <span class="errorMsg text-center"
+                                    ng-show="formsubmit && (FormMedia.title.$dirty || FormMedia.title.$invalid)">
+                                    <span ng-show="FormMedia.title.$error.required">
+                                        Please Enter Title
+                                    </span>
+                                </span>
+                            </div>
+
+                            <div class="col">
+                                <label for="">Short Description*</label>
+                                <textarea ckeditor="editorOptions" name="shortdescription" class="formControl"
+                                    ng-required="true" required placeholder="Short Description"
+                                    ng-model="model.shortdescription" ckeditor2></textarea>
+                                <span class="errorMsg text-center"
+                                    ng-show="formsubmit && (FormMedia.shortdescription.$dirty || FormMedia.shortdescription.$invalid)">
+                                    <span ng-show="FormMedia.shortdescription.$error.required">
+                                        Please Enter Short Description
+                                    </span>
+                                </span>
+                            </div>
+
+
+                            <div class="col">
+                                <label for="">Long Description*</label>
+                                <textarea ckeditor="editorOptions" name="longdescription" class="formControl"
+                                    ng-required="true" required placeholder="Long Description"
+                                    ng-model="model.longdescription" ckeditor2></textarea>
+                                <span class="errorMsg text-center"
+                                    ng-show="formsubmit && (FormMedia.longdescription.$dirty || FormMedia.longdescription.$invalid)">
+                                    <span ng-show="FormMedia.longdescription.$error.required">
+                                        Please Enter Long Description
+                                    </span>
+                                </span>
+                            </div>
+
+
+                        </div>
+                        <!-- image start -->
+                        <div class="s20"></div>
+                        <div class="s20"></div>
+                        <div class="row responsive-sm" style="margin-top: -50px;">
+                            <div class="col-80">
+                                <div class="tt-uppercase fw-500 custhedding">Image & Vedio
+                                </div>
+                            </div>
+                        </div>
+                        <div class="s20"></div>
+                        <div style="color:black;">
+                            <input type="file" class="FileUploads" name="photo" id="photo"
+                                accept=".png, .jpg, .jpeg,.mp4,.3gp,.wmv.mkv,.flv"
+                                onchange="angular.element(this).scope().readFile(this)" multiple>
+                        </div>
+                        <div class="s20"></div>
+
+                        <div class="row responsive-sm" ng-if="Mediafiles.length > 0">
+                            <div class="col col-20" ng-repeat="o in Mediafiles">
+                                <div class="row">
+                                    <img src="{{o[0].image}}" style="height: 180px;width: 180px;"
+                                        err-SRC="../img/no-image.png"
+                                        ng-if="o[0].type == 'image/png' || o[0].type == 'image/jpg' || o[0].type == 'image/jpeg'">
+                                    <video width="180" height="180" autoplay controls src="{{o[0].image | trusted}}"
+                                        ng-if="o[0].type != 'image/png' && o[0].type != 'image/jpg' && o[0].type != 'image/jpeg'">
+                                        <!-- <source src="{{o[0].image}}" type="video/mp4"> -->
+                                    </video>
+                                </div>
+                                <div class="row text-center">
+                                    <button class="cBtn cBtn-skyblue cBtn-block cBtn-shadow"
+                                        ng-click="RemoveImage($index,o[0])" type="submit">Remove
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- image end -->
+
+                        <!-- <div class="col col-33">
+                            <label for="">Vedio Link</label>
+                            <input type="text" name="videourl" class="formControl" ng-required="true"
+                                placeholder="Vedio Link" ng-model="model.videourl">
+                            <span class="errorMsg text-center"
+                                ng-show="formsubmit && (FormMedia.videourl.$dirty || FormMedia.videourl.$invalid)">
+                                <span ng-show="FormMedia.videourl.$error.required">
+                                    Please Enter Vedio Link
+                                </span>
+                            </span>
+                        </div> -->
+
+                    </div>
+                    <div class="row responsive-sm">
+                        <div class="col">
+                            <label class="formCheck" for="Active"><input type="checkbox" id="Active"
+                                    ng-model="model.IsActive"><span>Active</span></label>
+                        </div>
+                    </div>
+                </div>
+        </div>
+        <div class="s20"></div>
+        <div class="row">
+            <div class="col">
+                <button class="cBtn cBtn-green cBtn-block cBtn-shadow" ng-click="SaveMedia(FormMedia)" type="submit"><i
+                        class="ion-document-text"></i>
+                    Save</button>
+            </div>
+        </div>
+        </form>
+
+
+
+        </div>
+
+    </ion-content>
+    <script id="UserLocation.html" type="text/ng-template">
+        <ion-modal-view class="patternBg">
+            <ion-header-bar class="customPgHeader">
+                <div class="col01">
+                    <span class="pgTitle">Employee Location</span>
+                </div>
+                <div class="col02">
+                    <button class="cBtn cBtn-skyblue cBtn-block cBtn-shadow" ng-click="closeModal()" type="submit"><i class="ion-close-circled"></i>
+                      Cancel</button>
+                </div>
+            </ion-header-bar>
+            <ion-content padding="true">
+                <div class="container">
+                    <div class="s10"></div>
+                    <div class="row row-center">
+                        <div class="col 0">
+                            <div class="searchBox">
+                                <input type="text" ng-model="Searchmodel.SearchLocation" ng-enter="FilterDataLocation()" class="formControl" placeholder="Filter by Location">
+                                <button type="button" class="cBtn cBtn-blue" ng-click="FilterDataLocation()">
+                    <span>Search</span>
+                  </button>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="s20"></div>
+                    <div class="cDataTable">
+                        <table id="LocationTable" class="cell-border" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        No
+                                    </th>
+                                    <th>Location</th>
+
+                                    <th>
+                                        Action
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="o in lstLocation">
+                                    <td>{{$index + 1}}</td>
+                                    <td>{{o.Name}}</td>
+                                    <td>
+                                        <input type="checkbox" ng-model="o.isSelect" value="o.isSelect" ng-true-value="1" ng-false-value="0" ng-change="">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="s20"></div>
+                    <div class="row text-center">
+                        <div class="col">
+                            <button class="cBtn cBtn-green cBtn-block cBtn-shadow" ng-click="SaveAssignLocation(FormMedia)" type="submit"><i class="ion-document-text"></i>
+                  Save</button>
+                        </div>
+                        <!-- <div class="col col-50">
+                            <button class="cBtn cBtn-skyblue cBtn-block cBtn-shadow" ng-click="closeModal()" type="submit"><i class="ion-close-circled"></i>
+                  Cancel</button>
+                        </div> -->
+                    </div>
+                </div>
+
+            </ion-content>
+        </ion-modal-view>
+    </script>
+</ion-view>

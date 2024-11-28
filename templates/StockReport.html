@@ -1,0 +1,378 @@
+<ion-view class="patternBg">
+      <ion-content>
+            <div class="container">
+                  <div class="s10"></div>
+                  <div class="row row-center">
+                        <div class="col">
+                              <div class="searchBox">
+                                    <input id="mytext" type="text" ng-model="Searchmodel.Search" class="formControl"
+                                          ng-model-options="{ debounce: 1500 }" ng-change="FilterData()"
+                                          placeholder="Filter by Code, Name, Batch Number, Group Name, Company, Sub Company, Purchase Party, Pack or Pur Rate ">
+                                    <button type="button" class="cBtn cBtn-blue" ng-click="FilterData()">
+                                          <span>Search</span>
+                                    </button>
+                                    <a ng-click="Export()" class="cBtn cBtn-green cbtn-onlyicon" title="Export Excel">
+                                          <i class="ion-ios-cloud-download-outline" title="Download Excel"></i>
+                                    </a>
+                                    <a ng-click="ExportWithQty()" class="cBtn cBtn-green cbtn-onlyicon"
+                                          title="Export Excel">
+                                          <i class="ion-ios-cloud-download-outline" title="Export With Qty"></i>
+                                    </a>
+                              </div>
+                              <div class="row responsive-sm  cForm light">
+                                    <div class="col col-100">
+                                          <div class="infoBox02">
+                                                <div class="container">
+                                                      <div class="row responsive-sm">
+                                                            <div class="col">
+                                                                  <label>Main Company</label>
+                                                                  <select class="formControl" name="MainCompany"
+                                                                        ng-required="true"
+                                                                        ng-model="Filtermodel.MainCompany"
+                                                                        ng-change="FilterTableData(Filtermodel)">
+                                                                        <option value="">All</option>
+                                                                        <option value="{{o.Brand}}"
+                                                                              ng-repeat="o in lstBrand">
+                                                                              {{o.Brand}}
+                                                                        </option>
+                                                                  </select>
+                                                            </div>
+                                                            <div class="col">
+                                                                  <label>Sub Company</label>
+                                                                  <select class="formControl" name="SubCompany"
+                                                                        ng-change="FilterTableData(Filtermodel)"
+                                                                        ng-required="true"
+                                                                        ng-model="Filtermodel.SubCompany">
+                                                                        <option value="">All</option>
+                                                                        <option value="{{o.id}}"
+                                                                              ng-repeat="o in lstSubBrand">
+                                                                              {{o.SubBrandName}}
+                                                                        </option>
+                                                                  </select>
+                                                            </div>
+                                                            <div class="col">
+                                                                  <label>Product Group</label>
+                                                                  <select class="formControl" name="ProductGroup"
+                                                                        ng-change="FilterTableData(Filtermodel)"
+                                                                        ng-required="true"
+                                                                        ng-model="Filtermodel.ProductGroup"
+                                                                        ng-change="GetAllSubItemCategory(Filtermodel.ProductGroup)">
+                                                                        <option value="">All</option>
+                                                                        <option value="{{o.Name}}"
+                                                                              ng-repeat="o in lstParentItemCategory">
+                                                                              {{o.Name}}
+                                                                        </option>
+                                                                  </select>
+                                                            </div>
+                                                            <div class="col">
+                                                                  <label>From Date</label>
+                                                                  <input ng-model="Filtermodel.StartDate"
+                                                                        value="{{Filtermodel.StartDate | date: 'dd-MM-yyyy' }}"
+                                                                        ng-required="true" name="StartDate"
+                                                                        class="formControl" date ion-datetime-picker>
+                                                            </div>
+                                                            <div class="col">
+                                                                  <label>To Date</label>
+                                                                  <input ng-model="Filtermodel.EndDate"
+                                                                        value="{{Filtermodel.EndDate  | date: 'dd-MM-yyyy'}}"
+                                                                        ng-required="true" name="EndDate"
+                                                                        class="formControl" date ion-datetime-picker>
+                                                            </div>
+                                                            <div class="col">
+                                                                  <div class="s20"></div>
+                                                                  <a class="cBtn cBtn-blue"
+                                                                        ng-click="FilterTableData(Filtermodel)">
+                                                                        <i class="icon ion-search" title="Search"></i>
+                                                                  </a>
+                                                                  <a class="cBtn cBtn-green"
+                                                                        ng-click="ResetFilterData(null)">
+                                                                        <i class="icon ion-refresh" title="Search"></i>
+                                                                  </a>
+                                                            </div>
+                                                      </div>
+                                                </div>
+                                          </div>
+                                    </div>
+
+                              </div>
+
+                              <div class="row responsive-sm  cForm light">
+                                    <div class="col col-100">
+                                          <div class="infoBox02">
+                                                <div class="container">
+                                                      <div class="row responsive-sm">
+                                                            <div class="col-10">
+                                                                  <div style="text-align: center;margin-bottom: 10px;">
+                                                                        <label for="SaleRate">Sale Rate</label>
+                                                                  </div>
+                                                                  <div style="text-align: center;">
+                                                                        <input type="checkbox"
+                                                                              class="formControl_checkbox" id="SaleRate"
+                                                                              ng-model="checkboxmodel.SaleRate"
+                                                                              ng-change="ShowHideCol()">
+                                                                  </div>
+                                                            </div>
+                                                            <div class="col-10">
+                                                                  <div style="text-align: center;margin-bottom: 10px;">
+                                                                        <label for="PurRate">Purchase Rate</label>
+                                                                  </div>
+                                                                  <div style="text-align: center;">
+                                                                        <input type="checkbox"
+                                                                              class="formControl_checkbox" id="PurRate"
+                                                                              ng-model="checkboxmodel.PurRate"
+                                                                              ng-change="ShowHideCol()">
+                                                                  </div>
+                                                            </div>
+                                                            <div class="col-10">
+                                                                  <div style="text-align: center;margin-bottom: 10px;">
+                                                                        <label for="Pack">Pack</label>
+                                                                  </div>
+                                                                  <div style="text-align: center;">
+                                                                        <input type="checkbox"
+                                                                              class="formControl_checkbox" id="Pack"
+                                                                              ng-model="checkboxmodel.Pack"
+                                                                              ng-change="ShowHideCol()">
+                                                                  </div>
+                                                            </div>
+                                                            <div class="col-10">
+                                                                  <div style="text-align: center;margin-bottom: 10px;">
+                                                                        <label for="SubCompany">Sub Company</label>
+                                                                  </div>
+                                                                  <div style="text-align: center;">
+                                                                        <input type="checkbox"
+                                                                              class="formControl_checkbox"
+                                                                              id="SubCompany"
+                                                                              ng-model="checkboxmodel.SubCompany"
+                                                                              ng-change="ShowHideCol()">
+                                                                  </div>
+                                                            </div>
+                                                            <div class="col-10">
+                                                                  <div style="text-align: center;margin-bottom: 10px;">
+                                                                        <label for="SubCompany">ItemCode</label>
+                                                                  </div>
+                                                                  <div style="text-align: center;">
+                                                                        <input type="checkbox"
+                                                                              class="formControl_checkbox"
+                                                                              id="SubCompany"
+                                                                              ng-model="checkboxmodel.ItemCode"
+                                                                              ng-change="ShowHideCol()">
+                                                                  </div>
+                                                            </div>
+                                                            <div class="col-10">
+                                                                  <div style="text-align: center;margin-bottom: 10px;">
+                                                                        <label for="SubCompany">BatchNo</label>
+                                                                  </div>
+                                                                  <div style="text-align: center;">
+                                                                        <input type="checkbox"
+                                                                              class="formControl_checkbox"
+                                                                              id="SubCompany"
+                                                                              ng-model="checkboxmodel.BatchNo"
+                                                                              ng-change="ShowHideCol()">
+                                                                  </div>
+                                                            </div>
+                                                            <div class="col-10" ng-if="GenmedFlag">
+                                                                  <div style="text-align: center;margin-bottom: 10px;">
+                                                                        <label for="DrugMaster">Drug Master Open</label>
+                                                                  </div>
+                                                                  <div style="text-align: center;">
+                                                                        <input type="checkbox"
+                                                                              class="formControl_checkbox"
+                                                                              id="DrugMaster"
+                                                                              ng-model="checkboxmodel.DrugMaster"
+                                                                              ng-change="ShowHideCol()">
+                                                                  </div>
+                                                            </div>
+                                                            <div class="col-10">
+                                                                  <div style="text-align: center;margin-bottom: 10px;">
+                                                                        <label for="SubCompany">ExpirtDate</label>
+                                                                  </div>
+                                                                  <div style="text-align: center;">
+                                                                        <input type="checkbox"
+                                                                              class="formControl_checkbox"
+                                                                              id="SubCompany"
+                                                                              ng-model="checkboxmodel.ExpiryDate"
+                                                                              ng-change="ShowHideCol()">
+                                                                  </div>
+                                                            </div>
+                                                            <div class="col-10">
+                                                                  <div style="text-align: center;margin-bottom: 10px;">
+                                                                        <label for="SubCompany">Qty</label>
+                                                                  </div>
+                                                                  <div style="text-align: center;">
+                                                                        <input type="checkbox"
+                                                                              class="formControl_checkbox"
+                                                                              id="SubCompany"
+                                                                              ng-model="checkboxmodel.Qty"
+                                                                              ng-change="ShowHideCol()">
+                                                                  </div>
+                                                            </div>
+                                                      </div>
+                                                </div>
+                                          </div>
+                                    </div>
+                              </div>
+                        </div>
+                  </div>
+                  <!-- <div class="s20"> -->
+                  <!-- </div> -->
+                  <div class="cDataTable">
+                        <table id="StockBalanceReportTable" class="cell-border" width="100%">
+                              <thead>
+                                    <tr>
+                                          <th class="all">No</th>
+                                          <th style="white-space: normal;" ng-show="checkboxmodel.ItemCode">Item Code
+                                          </th>
+                                          <th>Prouduct Name</th>
+                                          <th ng-show="checkboxmodel.DrugMaster">Drug</th>
+                                          <th style="white-space: normal;" ng-show="checkboxmodel.BatchNo">Batch Number
+                                          </th>
+                                          <th style="white-space: normal;" ng-show="checkboxmodel.ExpiryDate">Expiry
+                                                Date
+                                          </th>
+                                          <th>Group Name</th>
+                                          <th>Company</th>
+                                          <th ng-show="checkboxmodel.SubCompany">Sub Company</th>
+                                          <th ng-show="checkboxmodel.Pack">Pack</th>
+                                          <th>Opening</th>
+                                          <th style="white-space: normal;">Pur QTY</th>
+                                          <th style="white-space: normal;" ng-show="checkboxmodel.PurRate">Pur Rate</th>
+                                          <th style="white-space: normal;">Pur AMT</th>
+                                          <th style="white-space: normal;">Sale QTY</th>
+                                          <th style="white-space: normal;" ng-show="checkboxmodel.SaleRate">Sale Rate
+                                          </th>
+                                          <th style="white-space: normal;">Sale AMT</th>
+                                          <th>Closing</th>
+                                          <th>Amount</th>
+                                          <th ng-show="checkboxmodel.Qty">Qty
+                                          </th>
+                                    </tr>
+                              </thead>
+                        </table>
+                  </div>
+                  <div class="s20">
+                  </div>
+                  <div class="row row-center">
+                        <div class="row responsive-sm  cForm light">
+                              <div class="col col-80">
+                                    <div class="infoBox02">
+                                          <div class="container">
+                                                <div class="row responsive-sm">
+                                                      <div class="col">
+                                                            <div style="text-align: center;margin-bottom: 10px;">
+                                                                  <label for="Purchase">Purchase Count</label>
+                                                            </div>
+                                                            <div style="text-align: center;">
+                                                                  <input ng-model="FinalTotalmodel.PurCount"
+                                                                        class="formControl" readonly>
+                                                            </div>
+                                                      </div>
+                                                      <div class="col">
+                                                            <div style="text-align: center;margin-bottom: 10px;">
+                                                                  <label for="PAmount">Amount</label>
+                                                            </div>
+                                                            <div style="text-align: center;">
+                                                                  <input ng-model="FinalTotalmodel.PurAmount"
+                                                                        class="formControl" readonly>
+                                                            </div>
+                                                      </div>
+                                                      <div class="col">
+                                                            <div style="text-align: center;margin-bottom: 10px;">
+                                                                  <label for="Sales">Sales Count</label>
+                                                            </div>
+                                                            <div style="text-align: center;">
+                                                                  <input ng-model="FinalTotalmodel.SaleCount"
+                                                                        class="formControl" readonly>
+                                                            </div>
+                                                      </div>
+                                                      <div class="col">
+                                                            <div style="text-align: center;margin-bottom: 10px;">
+                                                                  <label for="Samount">Amount</label>
+                                                            </div>
+                                                            <div style="text-align: center;">
+                                                                  <input ng-model="FinalTotalmodel.SaleAmount"
+                                                                        class="formControl" readonly>
+                                                            </div>
+                                                      </div>
+                                                      <div class="col">
+                                                            <div style="text-align: center;margin-bottom: 10px;">
+                                                                  <label for="Closing">Closing Count</label>
+                                                            </div>
+                                                            <div style="text-align: center;">
+                                                                  <input ng-model="FinalTotalmodel.ClosingCount"
+                                                                        class="formControl" readonly>
+                                                            </div>
+                                                      </div>
+                                                      <div class="col">
+                                                            <div style="text-align: center;margin-bottom: 10px;">
+                                                                  <label for="CAmount">Amount</label>
+                                                            </div>
+                                                            <div style="text-align: center;">
+                                                                  <input ng-model="FinalTotalmodel.ClosingAmount"
+                                                                        class="formControl" readonly>
+                                                            </div>
+                                                      </div>
+                                                </div>
+                                          </div>
+                                    </div>
+                              </div>
+                        </div>
+                  </div>
+            </div>
+      </ion-content>
+      <script id="DrugMaster.html" type="text/ng-template">
+            <ion-modal-view class="patternBg">
+            <ion-header-bar class="customPgHeader">
+                <div class="col01">
+                    <span class="pgTitle">Drug Master</span>
+                </div>
+                <div class="col02">
+                    <button class="cBtn cBtn-skyblue cBtn-block cBtn-shadow" ng-click="CloseModal()" type="submit"><i class="ion-close-circled"></i>
+                                  Cancel</button>
+                </div>
+            </ion-header-bar>
+            <ion-content padding="true">
+                <div class="container">
+                        <div class="searchBox" style="margin-bottom: 20px;">
+                                <input type="text" ng-model="Searchmodel.Search" class="formControl" ng-change="FilterdrugData()"
+                                    placeholder="Search here">
+                                <button type="button" class="cBtn cBtn-blue" ng-click="FilterdrugData()">
+                                    <span>Search</span>
+                                </button>
+                            </div>
+                        <div class="cDataTable">
+                                <table id="DrugMasterTable" class="cell-border" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th class="all">No</th>
+                                            <th>Product Name </th>
+                                            <th>Main Company </th>
+                                            <th>Company </th>
+                                            <th>Pack</th>
+                                            <th>Sale Rate</th>
+                                            <th>MRP</th>
+                                            <th>Stock</th>
+                                            <th>Pure Rate</th>
+                                            <th>Margin</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="o in lstItembyDrug">
+                                          <td class="all">{{$index + 1}}</td>
+                                          <td>{{o.ItemName || "N/A"}}</td>
+                                          <td>{{o.Descriptions2 || "N/A"}}</td>
+                                          <td>{{o.subbrand.SubBrandName || "N/A"}}</td>
+                                          <td>{{o.SalesUOM || "N/A"}}</td>
+                                          <td>{{o.SaleRate | number:2}}</td>
+                                          <td>{{o.MRP | number:2}}</td>
+                                          <td>{{o.Stock || 0}}</td>
+                                          <td>{{o.PurchaseRate | number:2}}</td>
+                                          <td>{{o.MarginGenmed}}</td>
+                                      </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                </div>
+            </ion-content>
+        </ion-modal-view>
+    </script>
+</ion-view>

@@ -1,0 +1,964 @@
+<ion-view class="patternBg">
+    <ion-content>
+
+        <div ng-if="IsList">
+            <div class="container">
+                <div class="s10"></div>
+                <div class="row row-center">
+                    <div class="col">
+                        <div class="searchBox">
+                            <input id="mytext" type="text" ng-model="Searchmodel.Search" class="formControl"
+                                ng-model-options="{ debounce: 1500 }" ng-change="FilterData()" placeholder="Filter by Code,Name, Description, Total or S/R No">
+                            <button type="button" class="cBtn cBtn-blue" ng-click="FilterData()">
+                                <span>Search</span>
+                            </button>
+                            <!-- <a ng-click="EnableFilterOption()" class="cBtn cBtn-green cBtn-autoWidth">
+                                <i class="ion-ios-cloud-download-outline" title="Advance Search"><span> Advance Search</span></i>
+                            </a> -->
+                            <a ng-click="EnableFilterOption()" class="cBtn cBtn-green cbtn-onlyicon" title="Advance Search">
+                                <i class="ion-ios-arrow-down" title="Advance Search"></i>
+                            </a>
+                            <a ng-click="Add()" class="cBtn cBtn-green cBtn-autoWidth d-flex items-center justify-center gap-2">
+                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                </svg>
+                                <span>Add Invoice</span>
+                            </a>
+                        </div>
+                        <div class="CustFilter" style="display:none;">
+                            <my-widget></my-widget>
+                        </div>
+                    </div>
+                </div>
+                <div class="s20"></div>
+                <div class="cDataTable">
+                    <table id="InvoiceTable" class="cell-border" width="100%">
+                        <thead>
+                            <tr>
+                                <th class="all">No</th>
+                                <th>I/V No </th>
+                                <th>Invoice Date</th>
+                                <th>Customer Code</th>
+                                <th>Customer Name</th>
+                                <th>Description</th>
+                                <th>Branch Code</th>
+                                <th>Status</th>
+                                <th>Sub Total</th>
+                                <th>Tax</th>
+                                <th>Final Total</th>
+                                <th>Favorite</th>
+                                <th class="all">Action</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div ng-if="!IsList">
+            <form name="FormSales" class="cForm light">
+                <div class="row responsive-sm">
+                    <div class="col col-50">
+                        <div class="infoBox02">
+                            <!-- Creditor -->
+                            <div class="row responsive-sm">
+                                <div class="col col-20">
+                                    <label for="CustomerCode">Customer* </label>
+                                </div>
+                                <div class="col col-80">
+                                    <div class="row itemdrp" style="padding:0" hide-reset="false" modal-title="Search Customer"
+                                        modal-select="" ng-model="model.CustomerCode" on-select="DisplayCustomerCode(model)"
+                                        options="lstCustomer" option-property="id" has-search="true">
+                                        <input class="formControl" ng-model="model.CustomerCode" readonly name="CustomerCode"
+                                            ng-required="true" style="cursor: pointer !important;float: left;border-right: none;border-top-right-radius:0px;border-bottom-right-radius: 0px; ">
+                                        <button style="padding: 2px"> <i class="icon ion-arrow-down-b" title="Select"></i>
+                                            <div class="option">
+                                                <div class="row" style="font-weight: bold;font-size: 14px;" ng-show="$index==0">
+                                                    <div class="col" style="padding: 1px;" class="text-center">Account
+                                                        Number
+                                                    </div>
+                                                    <div class="col" style="padding: 1px;" class="text-center">Name
+                                                    </div>
+                                                </div>
+                                                <br />
+                                                <div class="row" style="font-size: 14px;">
+                                                    <div class="col" class="text-center">{{option.AccountNumbder}}</div>
+                                                    <div class="col" class="text-center">{{option.Name}}</div>
+                                                </div>
+                                            </div>
+                                        </button>
+                                    </div>
+
+                                    <!-- <select class="formControl" name="CustomerCode" ng-required="true"
+                                    ng-model="model.CustomerCode" ng-change="SelectCustomer(model.CustomerCode)">
+                                    <option value="{{o.AccountNumbder}}" ng-repeat="o in lstCustomer">
+                                        {{o.AccountNumbder}}-{{o.Name}}</option>
+                                </select> -->
+                                    <span class="errorMsg text-center" ng-show="formsubmit && (FormPurchase.CustomerCode.$dirty || FormPurchase.CustomerCode.$invalid)">
+                                        <span ng-show="FormPurchase.CustomerCode.$error.required">
+                                            Please Select Customer
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Name -->
+                            <div class="row responsive-sm">
+                                <div class="col col-20">
+                                    <label>Name* </label>
+                                </div>
+                                <div class="col col-80">
+                                    <input type="text" class="formControl" maxlength="100" ng-maxlength="100" name="CustomerName"
+                                        ng-required="true" ng-model="model.CustomerName">
+                                    <span class="errorMsg text-center" ng-show="formsubmit && (FormSales.CustomerName.$dirty || FormSales.CustomerName.$invalid)">
+                                        <span ng-show="FormSales.CustomerName.$error.required">
+                                            Please Enter Name
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Address line -1 -->
+                            <div class="row responsive-sm">
+                                <div class="col col-20">
+                                    <label for="Address">Address </label>
+                                </div>
+                                <div class="col col-80">
+                                    <input type="text" class="formControl" maxlength="100" ng-maxlength="100" name="Address1"
+                                        ng-model="model.Address1">
+                                    <input type="text" class="formControl" maxlength="100" ng-maxlength="100" name="Address2"
+                                        ng-model="model.Address2">
+                                    <input type="text" class="formControl" maxlength="100" ng-maxlength="100" name="Address3"
+                                        ng-model="model.Address3">
+                                </div>
+                            </div>
+
+                            <!-- Branch -->
+                            <div class="row responsive-sm">
+                                <div class="col col-20">
+                                    <label for="BranchCode">Branch </label>
+                                </div>
+                                <div class="col col-80">
+                                    <select class="formControl" name="BranchCode" ng-model="model.BranchCode">
+                                        <option value="{{o.Name}}" ng-repeat="o in lstBranch">{{o.Name}}</option>
+                                    </select>
+                                    <span class="errorMsg text-center" ng-show="formsubmit && (FormSales.BranchCode.$dirty || FormSales.BranchCode.$invalid)">
+                                        <span ng-show="FormSales.BranchCode.$error.required">
+                                            Please Select Branch
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Purchase Location -->
+                            <div class="row responsive-sm">
+                                <div class="col col-20">
+                                    <label for="idLocations">Sales Location* </label>
+                                </div>
+                                <div class="col col-80">
+                                    <select class="formControl" name="idLocations" ng-required="true" ng-model="model.idLocations"
+                                        ng-change="ChangeLocation()">
+                                        <option value="{{o.id}}" ng-repeat="o in lstLocations">{{o.Name}}</option>
+                                    </select>
+                                    <span class="errorMsg text-center" ng-show="formsubmit && (FormSales.idLocations.$dirty || FormSales.idLocations.$invalid)">
+                                        <span ng-show="FormSales.idLocations.$error.required">
+                                            Please Select Sales Location
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col col-50">
+                        <div class="infoBox02">
+
+                            <!-- P/O No -->
+                            <div class="row responsive-sm">
+                                <div class="col col-20">
+                                    <label for="Invoice">Invoice NO </label>
+                                </div>
+                                <div class="col col-80">
+                                    <input type="text" id="DocNo" class="formControl" readonly name="DocNo" ng-model="model.DocNo">
+                                </div>
+                            </div>
+
+                            <!-- Date -->
+                            <div class="row responsive-sm">
+                                <div class="col col-20">
+                                    <label for="ItemCode">Date* </label>
+                                </div>
+                                <div class="col col-80">
+                                    <input ng-model="model.InvoiceDate" ng-required="true" value=" {{model.InvoiceDate | date: 'dd-MM-yyyy'}}"
+                                        name="InvoiceDate" class="formControl" date ion-datetime-picker>
+                                    <span class="errorMsg text-center" ng-show="formsubmit && (FormSales.InvoiceDate.$dirty || FormSales.InvoiceDate.$invalid)">
+                                        <span ng-show="FormSales.InvoiceDate.$error.required">
+                                            Please Select Date
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr size=2 style="margin:0px">
+                <div class="row">
+                    <div class="md-form col-md-12">
+                        <button ng-class="SelectedTab == 1?'cBtn cBtn-skyblue':'cBtn cBtn-green'" ng-click="ChangeTab(1)"
+                            type="button">Main</button>
+                        <button ng-class="SelectedTab == 2?'cBtn cBtn-skyblue':'cBtn cBtn-green'" ng-click="ChangeTab(2)"
+                            type="button">More
+                            Header</button>
+                    </div>
+                </div>
+                <hr size=2 style="margin:0px">
+                <span ng-show="SelectedTab==1">
+
+                    <div class="row responsive-sm">
+                        <a ng-click="AddSaleMainItemInList()" class="custlablebtn">
+                            <span>Add New</span>
+                        </a>
+                    </div>
+                    <div class="row responsive-sm">
+                        <div class="infoBox02">
+                            <div class="row responsive-sm">
+                                <div class="col col-7">
+                                    <label>Item Code*</label>
+                                    <scanner-widget status="ItemCode" obj="WorkingSaleMain"></scanner-widget>
+                                </div>
+                                <div class="col col-7">
+                                    <label>Descriptions</label>
+                                </div>
+                                <div class="col col-7">
+                                    <label>Batch No.</label>
+                                    <scanner-widget status="Batch" obj="WorkingSaleMain"></scanner-widget>
+                                </div>
+                                <div class="col col-7">
+                                    <label>Location</label>
+                                </div>
+                                <div class="col col-7">
+                                    <label>UOM</label>
+                                </div>
+                                <div class="col col-7">
+                                    <label>Qty*</label>
+                                </div>
+                                <div class="col col-7">
+                                    <label>Unit Price</label>
+                                </div>
+                                <div class="col col-7">
+                                    <label>Discount</label>
+                                </div>
+                                <div class="col col-7">
+                                    <label>SubTotal</label>
+                                </div>
+                                <div class="col col-7">
+                                    <label>Tax Code</label>
+                                </div>
+                                <div class="col col-7">
+                                    <label>Tax Rate</label>
+                                </div>
+                                <div class="col col-7">
+                                    <label>Tax</label>
+                                </div>
+                                <div class="col col-7">
+                                    <label>Total (ex)</label>
+                                </div>
+                                <div class="col col-7">
+                                    <label>Total (inc)</label>
+                                </div>
+                            </div>
+                            <div class="row responsive-sm" ng-repeat="o in lstSelectedSaleMain">
+                                <div class="col col-7" ng-if="!o.id" hide-reset="true" modal-title="Select Item"
+                                    modal-select="" ng-model="o.ItemCode" options="lstItems" on-select="AddItemCode(o)"
+                                    option-property="ItemCode" has-search="true">
+                                    <!-- <select class="formControl" ng-model="o.ItemCode" ng-change="AddItemCode(o)" ng-disabled="o.id > 0">
+                                        <option value="{{p.ItemCode}}" ng-repeat="p in lstItems">{{p.ItemCode}}</option>
+                                    </select> -->
+                                    <!-- <div> -->
+                                    <div class="row itemdrp" style="padding:0">
+                                        <input class="formControl" ng-model="o.ItemCode" readonly style="cursor: pointer !important;float: left;border-right: none;border-top-right-radius:0px;border-bottom-right-radius: 0px; ">
+                                        <button style="padding: 2px"> <i class="icon ion-arrow-down-b" title="Select"></i>
+                                            <div class="option">
+
+                                                <div class="row" style="font-weight: bold;font-size: 12px;" ng-show="$index==0">
+                                                    <div class="col" style="padding: 0" class="text-center">Item Code
+                                                    </div>
+                                                    <div class="col" style="padding: 0" class="text-center">Item Name
+                                                    </div>
+                                                    <div class="col" style="padding: 0" class="text-center">Description
+                                                    </div>
+                                                    <div class="col" style="padding: 0" class="text-center">Description2
+                                                    </div>
+                                                    <div class="col" style="padding: 0" class="text-center">Bal Qty
+                                                    </div>
+                                                </div>
+                                                <div class="row" style="font-size: 14px;">
+                                                    <div class="col" class="text-center">{{option.ItemCode}}</div>
+                                                    <div class="col" class="text-center">{{option.ItemName}}</div>
+                                                    <div class="col" class="text-center"> {{option.Descriptions ||
+                                                        "N/A"}} </div>
+                                                    <div class="col" class="text-center"> {{option.Descriptions2 ||
+                                                        "N/A"}}</div>
+                                                    <div class="col" class="text-center">{{option.itembatches[0].BalQty
+                                                        || "N/A"}}</div>
+                                                </div>
+
+                                            </div>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="col col-7" ng-if="o.id> 0">
+                                    <input ng-model="o.ItemCode" class="formControl" readonly>
+                                </div>
+                                <div class="col col-7">
+                                    <input ng-model="o.Descriptions" class="formControl" readonly>
+                                </div>
+                                <div class="col col-7">
+
+                                    <select class="formControl" ng-model="o.BatchNo" ng-options="p.BatchNumber as p.BatchNumber for p in o.BatchList">
+                                        <option value="" disabled>Select Batch Number</option>
+                                    </select>
+                                </div>
+                                <div class="col col-7">
+                                    <!-- <select class="formControl" ng-model="o.idLocations" ng-change="AddLocation(o)"
+                                        ng-options="p.id as p.Name for p in lstLocations">
+                                        <option value="" disabled>Select Location</option>
+
+                                    </select> -->
+                                    <select class="formControl" ng-model="o.idLocations" ng-change="AddLocation(o)">
+                                        <option value="{{p.id}}" ng-selected="o.idLocations == p.id" ng-repeat="p in lstLocations">{{p.Name}}</option>
+                                    </select>
+                                </div>
+                                <div class="col col-7">
+                                    <select class="formControl" ng-model="o.UOM" ng-change="FillItemUnitPrice(o)"
+                                        ng-options="item.UOM as item.UOM for item in o.listUOM | orderBy : 'UOM'">
+                                        <option value="" disabled>Select UOM</option>
+
+                                    </select>
+                                </div>
+                                <div class="col col-7">
+                                    <input id="Qty" ng-model="o.Qty" class="formControl" ng-change="AddTaxCode(o)"
+                                        numbers-only>
+                                </div>
+                                <div class="col col-7">
+                                    <input id="Price" ng-model="o.Price" class="formControl" ng-change="AddTaxCode(o)"
+                                        manage-Dynamicfraction="{{Dynamicfraction}}">
+                                </div>
+                                <div class="col col-7">
+                                    <input id="DiscountAmount" ng-model="o.DiscountAmount" class="formControl"
+                                        ng-change="AddDiscountAmount(o)" manage-Dynamicfraction="{{Dynamicfraction}}">
+                                </div>
+                                <div class="col col-7">
+                                    <input ng-model="o.Total" class="formControl" readonly manage-Dynamicfraction="{{Dynamicfraction}}">
+                                </div>
+                                <div class="col col-7">
+                                    <select class="formControl" ng-model="o.TaxCode" ng-change="AddTaxCode(o)"
+                                        ng-options="p.TaxType as p.TaxType for p in lstTaxCode">
+                                        <option value="" disabled>Select TaxCode</option>
+                                    </select>
+                                </div>
+                                <div class="col col-7">
+                                    <input ng-model="o.TaxRate" class="formControl" readonly manage-Dynamicfraction="{{Dynamicfraction}}">
+                                </div>
+                                <div class="col col-7">
+                                    <input ng-model="o.Tax" class="formControl" readonly manage-Dynamicfraction="{{Dynamicfraction}}">
+                                </div>
+                                <div class="col col-7">
+                                    <input ng-model="o.Total" class="formControl" readonly manage-Dynamicfraction="{{Dynamicfraction}}">
+                                </div>
+                                <div class="col col-7">
+                                    <input ng-model="o.FinalTotal" class="formControl" readonly manage-Dynamicfraction="{{Dynamicfraction}}">
+                                </div>
+                                <a ng-click="RemoveSaleMainItemInList($index)" class="RemoveBtn">
+                                    <i class="ion-trash-a" title="Remove Item"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="s10"></div>
+                    <div class="row responsive-sm">
+                        <div class="col col-30">
+                            <div class="infoBox02">
+                                <div class="row responsive-sm">
+                                    <div class="col col-25">
+                                        <label for="Inclusive">Inclusive?</label>
+                                    </div>
+                                    <div class="col col-75">
+                                        <input type="checkbox" class="formControl_checkbox" id="IsInclusive" ng-model="model.IsInclusive"
+                                            ng-change="ChangeInclusivePrice()">
+                                    </div>
+                                </div>
+                                <div class="row responsive-sm">
+                                    <div class="col col-25">
+                                        <label for="IsFavorite">Favorite?</label>
+                                    </div>
+                                    <div class="col col-75">
+                                        <input type="checkbox" class="formControl_checkbox" id="IsFavorite" ng-model="model.IsFavorite">
+                                    </div>
+                                </div>
+                                <div class="row responsive-sm">
+                                    <div class="col col-25">
+                                        <label for="Currency">Currency</label>
+                                    </div>
+                                    <div class="col col-75">
+                                        <select class="formControl" name="CurrencyCode" ng-required="true" ng-disabled="model.CustomerCode ==''"
+                                            ng-change="changeRateByCurrency(model.CurrencyCode)" ng-model="model.CurrencyCode">
+                                            <option value="">Select Currency</option>
+                                            <option ng-repeat="o in lstCurrency" value={{o.CurrencyCode}}>
+                                                {{o.CurrencyWord}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row responsive-sm">
+                                    <div class="col col-25">
+                                        <label for="Rate">Rate</label>
+                                    </div>
+                                    <div class="col col-75">
+                                        <input type="text" ng-disabled="true" id="CurrencyRate" class="formControl"
+                                            name="CurrencyRate" ng-model="model.CurrencyRate">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col col-30">
+                            <div class="infoBox02">
+
+                                <div class="row responsive-sm">
+                                    <div class="col col-40">
+                                        <label for="LocalTotal">Local Total </label>
+                                    </div>
+                                    <div class="col col-60">
+                                        <input type="text" id="LocalNetTotal" class="formControl" readonly name="LocalNetTotal"
+                                            ng-required="true" placeholder="Total" ng-model="model.LocalNetTotal"
+                                            manage-Dynamicfraction="{{Dynamicfraction}}">
+                                    </div>
+                                </div>
+                                <div class="row responsive-sm">
+                                    <div class="col col-40">
+                                        <label for="Discount">Discount(per) </label>
+                                    </div>
+                                    <div class="col col-60">
+                                        <input type="number" id="Discount" class="formControl" ng-blur="ManageDiscount()"
+                                            name="Discount" placeholder="Discount" ng-model="model.DiscountRate" min="0"
+                                            max="100" limit-to-max>
+                                    </div>
+                                </div>
+                                <div class="row responsive-sm">
+                                    <div class="col col-40">
+                                        <label for="TaxableAmount">Taxable Amount </label>
+                                    </div>
+                                    <div class="col col-60">
+                                        <input type="text" id="Total" class="formControl" readonly name="Total"
+                                            ng-required="true" placeholder="Total" ng-model="model.Total"
+                                            manage-Dynamicfraction="{{Dynamicfraction}}">
+                                    </div>
+                                </div>
+                                <div class="row responsive-sm">
+                                    <div class="col col-40">
+                                        <label for="Weight">Total Weight</label>
+                                    </div>
+                                    <div class="col col-60">
+                                        <input type="text" id="Weight" class="formControl" readonly name="Weight"
+                                            placeholder=" Total Weight" ng-model="model.Weight" manage-Dynamicfraction="{{Dynamicfraction}}">
+                                    </div>
+                                </div>
+                                <div class="row responsive-sm">
+                                    <div class="col col-40">
+                                        <label for="Freight">Total Freight</label>
+                                    </div>
+                                    <div class="col col-60">
+                                        <input type="text" id="Freight" class="formControl" readonly name="Freight"
+                                            placeholder="Total Freight" ng-model="model.Freight" manage-Dynamicfraction="{{Dynamicfraction}}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col col-30">
+                            <div class="infoBox02">
+                                <div class="row responsive-sm">
+                                    <div class="col col-25">
+                                        <label for="SubTotal">Sub Total </label>
+                                    </div>
+                                    <div class="col col-75">
+                                        <input type="text" id="Total1" class="formControl" name="Total" readonly
+                                            ng-required="true" placeholder="Sub Total" ng-model="model.Total"
+                                            manage-Dynamicfraction="{{Dynamicfraction}}">
+                                    </div>
+                                </div>
+                                <div class="row responsive-sm">
+                                    <div class="col col-25">
+                                        <label for="Tax">Tax </label>
+                                    </div>
+                                    <div class="col col-75">
+                                        <input type="text" id="Tax" class="formControl" name="Tax" readonly ng-required="true"
+                                            placeholder="Tax" ng-model="model.Tax" manage-Dynamicfraction="{{Dynamicfraction}}">
+                                    </div>
+                                </div>
+                                <div class="row responsive-sm">
+                                    <div class="col col-25">
+                                        <label for="Total">Total </label>
+                                    </div>
+                                    <div class="col col-75">
+                                        <input type="text" id="NetTotal" class="formControl" readonly name="NetTotal"
+                                            ng-required="true" placeholder="Total" ng-model="model.NetTotal"
+                                            manage-Dynamicfraction="{{Dynamicfraction}}">
+                                    </div>
+                                </div>
+                                <div class="row responsive-sm">
+                                    <div class="col col-25">
+                                        <label for="WeightAmount">Total Weight Amount</label>
+                                    </div>
+                                    <div class="col col-75">
+                                        <input type="text" id="WeightAmount" class="formControl" readonly name="WeightAmount"
+                                            placeholder="Total Weight Amount" ng-model="model.WeightAmount"
+                                            manage-Dynamicfraction="{{Dynamicfraction}}">
+                                    </div>
+                                </div>
+                                <div class="row responsive-sm">
+                                    <div class="col col-25">
+                                        <label for="FreightAmount">Total Freight Amount</label>
+                                    </div>
+                                    <div class="col col-75">
+                                        <input type="text" id="FreightAmount" class="formControl" readonly name="FreightAmount"
+                                            placeholder="Total Freight Amount" ng-model="model.FreightAmount"
+                                            manage-Dynamicfraction="{{Dynamicfraction}}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </span>
+
+                <span ng-show="SelectedTab==2">
+                    <div class="row responsive-sm">
+                        <div class="col col-50">
+                            <h4><b>Document Information</b></h4>
+                            <div class="infoBox02">
+                                <div class="row responsive-sm">
+                                    <div class="col col-20">
+                                        <label for="Description">Description </label>
+                                    </div>
+                                    <div class="col col-80">
+                                        <textarea type="text" id="Description" class="formControl md-textarea" rows="1"
+                                            name="Description" ng-model="model.Description"></textarea>
+                                    </div>
+                                </div>
+                                <div class="row responsive-sm">
+                                    <div class="col col-20">
+                                        <label for="Ref">Ref </label>
+                                    </div>
+                                    <div class="col col-80">
+                                        <input type="text" id="Ref" class="formControl" name="Ref" ng-model="model.Ref">
+                                    </div>
+                                </div>
+                            </div>
+                            <h4><b>Supplier Information</b></h4>
+                            <div class="infoBox02">
+                                <div class="row responsive-sm">
+                                    <div class="col col-20">
+                                        <label for="Attention">Attention</label>
+                                    </div>
+                                    <div class="col col-80">
+                                        <input type="text" id="Attentions" class="formControl" name="Attentions"
+                                            ng-model="model.Attentions">
+                                    </div>
+                                </div>
+                                <div class="row responsive-sm">
+                                    <div class="col col-20">
+                                        <label for="Phone">Phone</label>
+                                    </div>
+                                    <div class="col col-80">
+                                        <input type="tel" id="PhoneNumber" class="formControl" name="PhoneNumber"
+                                            ng-model="model.PhoneNumber" placeholder="+11234567890">
+                                        <!-- <br /> -->
+                                        <!-- <span ng-show="isValidMobile" class="errorMsg text-center">
+                                            Please enter valid phone number
+                                        </span> -->
+                                    </div>
+                                </div>
+                                <div class="row responsive-sm">
+                                    <div class="col col-20">
+                                        <label for="Fax">Fax</label>
+                                    </div>
+                                    <div class="col col-80">
+                                        <input type="text" id="Fax" class="formControl" name="Fax" ng-model="model.Fax">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col col-50">
+                            <h4><b>Delivery Information</b></h4>
+                            <div class="infoBox02">
+                                <div class="row responsive-sm">
+                                    <div class="col col-20">
+                                        <label for="DeliveryAddress">Delivery Address</label>
+                                    </div>
+                                    <div class="col col-80">
+                                        <input type="text" id="DeliverAddress1" class="formControl" name="DeliverAddress1"
+                                            ng-model="model.DeliverAddress1">
+                                        <input type="text" id="DeliverAddress2" class="formControl" name="DeliverAddress2"
+                                            ng-model="model.DeliverAddress2">
+                                        <input type="text" id="DeliverAddress3" class="formControl" name="DeliverAddress3"
+                                            ng-model="model.DeliverAddress3">
+                                    </div>
+                                </div>
+                                <div class="row responsive-sm">
+                                    <div class="col col-20">
+                                        <label for="Phone">Phone</label>
+                                    </div>
+                                    <div class="col col-80">
+                                        <input type="tel" id="DeliverPhoneNumber" class="formControl" name="DeliverPhoneNumber"
+                                            ng-model="model.DeliverPhoneNumber" placeholder="+11234567890">
+                                        <!-- <br />
+                                        <span ng-show="isValidMobile2" class="errorMsg text-center">
+                                            Please enter valid phone number
+                                        </span> -->
+                                    </div>
+                                </div>
+                                <div class="row responsive-sm">
+                                    <div class="col col-20">
+                                        <label for="Fax">Fax</label>
+                                    </div>
+                                    <div class="col col-80">
+                                        <input type="text" id="DeliverFax" class="formControl" name="DeliverFax"
+                                            ng-model="model.DeliverFax">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </span>
+                <div class="row">
+                    <div class="col">
+                        <button class="cBtn cBtn-green cBtn-block cBtn-shadow" ng-click="SaveSale(FormSales)" type="submit">
+                            <i class="ion-document-text" title="Save"></i>
+                            Save
+                        </button>
+                    </div>
+                    <!-- <div class="col col-50">
+                        <button class="cBtn cBtn-skyblue cBtn-block cBtn-shadow" ng-click="ResetAll()" type="submit">
+                            <i class="ion-close-circled"></i>
+                            Cancel
+                        </button>
+                    </div> -->
+                </div>
+            </form>
+        </div>
+    </ion-content>
+
+    <script id="UomConverstionModel.html" type="text/ng-template">
+        <ion-modal-view class="patternBg">
+            <ion-header-bar class="customPgHeader">
+                <div class="col01">
+                    <span class="pgTitle">New Stock UOM Converstion</span>
+                </div>
+                <div class="col02">
+                    <button class="cBtn cBtn-skyblue cBtn-block cBtn-shadow" ng-click="closeModal()" type="submit"><i class="ion-close-circled"></i>
+                      Cancel</button>
+                </div>
+            </ion-header-bar>
+            <ion-content>
+                <!-- <div ng-if="!IsList"> -->
+
+                <div class="s10"></div>
+                <div class="container">
+                    <form name="FormUOMConv" class="cForm light">
+                        <div class="infoBox02">
+                            <div class="container">
+                                <div class="s25"></div>
+                                <div class="row responsive-sm">
+                                    <div class="col col-33">
+                                        <label for="Description">Description*</label>
+                                        <textarea type="text" id="Description" class="formControl" rows="1" name="Description" placeholder="Description" ng-model="MainUOM.Description" ng-required="true"></textarea>
+                                        <span class="errorMsg text-center" ng-show="formUOMsubmit && (FormUOMConv.Description.$dirty || FormUOMConv.Description.$invalid)">
+                                                <span ng-show="FormUOMConv.Description.$error.required">
+                                                    Please Enter Description
+                                                </span>
+                                        </span>
+                                    </div>
+
+                                    <div class="col col-33">
+                                        <label for="DocNo">Stock UOM Conversion No.</label>
+                                        <input type="text" id="DocNo" class="formControl" name="DocNo" placeholder="UOM Conversion No" ng-model="MainUOM.DocNo" ng-disabled="true">
+                                    </div>
+
+                                    <div class="col col-33">
+                                        <label for="Date">Date*</label>
+                                        <input ng-model="MainUOM.DocDate" value="{{MainUOM.DocDate | date: 'dd-MM-yyyy'}}" ng-required="true" class="formControl" date ion-datetime-picker>
+                                        <span class="errorMsg text-center" ng-show="formUOMsubmit && (FormUOMConv.DocDate.$dirty || FormUOMConv.DocDate.$invalid)">
+                                                <span ng-show="FormUOMConv.DocDate.$error.required">
+                                                    Please Enter Date
+                                                </span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="row responsive-sm">
+                                    <div class="col">
+                                        <label for="Notes">Notes</label>
+                                        <textarea type="text" id="Note" maxlength="100" ng-maxlength="100" class="formControl" rows="5" name="Note" placeholder="Notes" ng-model="MainUOM.Note">{{MainUOM.Note}}</textarea>
+                                        <!-- <span class="errorMsg text-center" ng-show="formUOMsubmit && (FormUOMConv.Note.$dirty || FormUOMConv.Note.$invalid)">
+                                                <span ng-show="FormUOMConv.Note.$error.maxlength">
+                                                    Maximum length is 100.
+                                                </span>
+                                            </span> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="s20"></div>
+                        <div class="row responsive-sm">
+                            <a ng-click="AddUOMItemInList()" class="custlablebtn">
+                                <span>Add New</span>
+                            </a>
+                        </div>
+
+                        <div class="row responsive-sm">
+                            <div class="col">
+                                <div class="infoBox02">
+                                    <div class="s20"></div>
+                                    <div class="container">
+                                        <div class="row responsive-sm">
+                                            <div class="col col-14">
+                                                <label>Item Code*</label>
+                                            </div>
+                                            <div class="col col-14">
+                                                <label>Location*</label>
+                                            </div>
+                                            <div class="col col-14">
+                                                <label>Batch No</label>
+                                            </div>
+                                            <div class="col col-14">
+                                                <label>From Qty*</label>
+                                            </div>
+                                            <div class="col col-14">
+                                                <label>From UOM*</label>
+                                            </div>
+                                            <div class="col col-14">
+                                                <label>To UOM*</label>
+                                            </div>
+                                            <div class="col col-14">
+                                                <label>To Qty*</label>
+                                            </div>
+                                        </div>
+                                        <div class="row responsive-sm" ng-repeat="item in lstSelectedUOM">
+                                            <div class="col col-14" hide-reset="true" modal-title="Select Item" modal-select="" ng-model="item.ItemCode" options="lstItems" on-select="GetAllItemBachNo(item)" option-property="ItemCode" has-search="true"> <i class="icon ion-arrow-down-b" title="Select">
+                                                <!-- <select ng-model="item.ItemCode" class="formControl" ng-change="GetAllItemBachNo(item)">
+                                                        <option value="">Select Item</option>
+                                                        <option ng-repeat="o in lstItems" value="{{o.ItemCode}}">{{o.ItemCode}}</option>
+                                                    </select> -->
+                                                <div class="row itemdrp" style="padding:0">
+                                                    <input class="formControl" ng-model="item.ItemCode" readonly style="cursor: pointer !important;float: left;border-right: none;border-top-right-radius:0px;border-bottom-right-radius: 0px; ">
+                                                    <button style="padding: 2px"></i>
+                                                <div class="option">
+
+                                                    <div class="row" style="font-weight: bold;font-size: 12px;" ng-show="$index==0">
+                                                        <div class="col" style="padding: 0" class="text-center">Item Code</div>
+                                                        <div class="col" style="padding: 0" class="text-center">Item Name</div>
+                                                        <div class="col" style="padding: 0" class="text-center">Description</div>
+                                                        <div class="col" style="padding: 0" class="text-center">Description2</div>
+                                                        <div class="col" style="padding: 0" class="text-center">Bal Qty</div>
+                                                    </div>
+                                                    <div class="row" style="font-size: 14px;">
+                                                        <div class="col" class="text-center">{{option.ItemCode}}</div>
+                                                        <div class="col" class="text-center">{{option.ItemName}}</div>
+                                                        <div class="col" class="text-center"> {{option.Descriptions || "N/A"}} </div>
+                                                        <div class="col" class="text-center"> {{option.Descriptions2 || "N/A"}}</div>
+                                                        <div class="col" class="text-center">{{option.itembatches[0].BalQty || "N/A"}}</div>
+                                                    </div>
+
+                                                </div>
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <div class="col col-14">
+                                            <select class="formControl" ng-model="item.idLocations" ng-change="CalculateToQty(item,0,$index)" ng-options="p.id as p.Name for p in lstLocation">
+                                                            <option value="" disabled>Select Location</option>
+                                                        </select>
+                                        </div>
+                                        <div class="col col-14">
+                                            <select class="formControl" ng-model="item.BatchNo" ng-options="o.BatchNumber as o.BatchNumber for o in item.lstBatch">
+                                                            <option value="" disabled>Select Batch Number</option>
+                                                        </select>
+                                        </div>
+                                        <div class="col col-14">
+                                            <input id="name" ng-model="item.FromQty" class="formControl" ng-change="CalculateToQty(item,0,$index)" numbers-only>
+                                        </div>
+                                        <div class="col col-14">
+                                            <select ng-model="item.FromUOM" ng-options="o.UOM as o.UOM for o in item.lstUOM" class="formControl" ng-change="CalculateToQty(item,'FromUOM',$index)">
+                                                            <option value="" disabled>Select Item</option>
+                                                    
+                                                        </select>
+                                        </div>
+                                        <div class="col col-14">
+                                            <select ng-model="item.ToUom" g-options="o.UOM as o.UOM for o in item.lstUOM" class="formControl" ng-change="CalculateToQty(item,'ToUom',$index)">
+                                                            <option value="" disabled>Select Item</option>
+                                                         
+                                                        </select>
+                                        </div>
+                                        <div class="col col-14">
+                                            <input id="name" ng-model="item.ToQty" class="formControl" numbers-only readonly>
+                                        </div>
+                                        <a ng-click="RemoveUOMItemInList($index)" class="RemoveBtn">
+                                            <i class="ion-trash-a" title="Remove Item"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="s20"></div>
+                            </div>
+                        </div>
+                </div>
+                <div class="s20"></div>
+                <div class="row">
+                    <div class="col">
+                        <button class="cBtn cBtn-green cBtn-block cBtn-shadow" ng-click="SaveItem(FormUOMConv)" type="submit"><i class="ion-document-text"></i>
+                                        Save
+                                    </button>
+                    </div>
+                    <!-- <div class="col col-50">
+                                    <button class="cBtn cBtn-skyblue cBtn-block cBtn-shadow" ng-click="init()" type="submit"><i class="ion-close-circled"></i>
+                                        Cancel
+                                    </button>
+                                </div> -->
+                    <!-- </div> -->
+                    </form>
+                </div>
+                </div>
+            </ion-content>
+        </ion-modal-view>
+    </script>
+
+    <script id="DeliveryPackingSlipModel.html" type="text/ng-template">
+        <ion-modal-view class="patternBg">
+            <ion-header-bar class="customPgHeader">
+                <div class="col01">
+                    <span class="pgTitle">Delivery Packing Slip</span>
+                </div>
+                <div class="col02">
+                    <button class="cBtn cBtn-skyblue cBtn-block cBtn-shadow" ng-click="closeDeliveryPackingSlipModal()" type="submit"><i class="ion-close-circled"></i>
+                      Cancel</button>
+                </div>
+            </ion-header-bar>
+            <ion-content>
+                <div class="container">
+                    <form name="FormDeliverySlip" class="cForm light">
+                        <div class="infoBox02">
+                            <div class="row responsive-sm">
+                                <div class="col col-50">
+                                    <label for="DocNo">DPS No.</label>
+                                    <input type="text" id="DocNo" class="formControl" name="DocNo" ng-model="DeliverySlipModel.DocNo" ng-disabled="true">
+                                </div>
+                                <div class="col col-50">
+                                    <label for="Date">Date*</label>
+                                    <input ng-model="DeliverySlipModel.DocDate" value="{{DeliverySlipModel.DocDate | date: 'dd-MM-yyyy'}}" ng-required="true" class="formControl" date ion-datetime-picker>
+                                    <span class="errorMsg text-center" ng-show="formUOMsubmit && (FormDeliverySlip.DocDate.$dirty || FormDeliverySlip.DocDate.$invalid)">
+                                            <span ng-show="FormDeliverySlip.DocDate.$error.required">
+                                                Please Enter Date
+                                            </span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="s20"></div>
+                        <div class="row responsive-sm">
+                            <a ng-click="AddMainDeliveryItem()" class="custlablebtn">
+                                <span>Add New</span>
+                            </a>
+                        </div>
+
+                        <div ng-repeat="o in DeliveryList">
+                            <div class="infoBox02">
+                                <div class="row responsive-sm">
+                                    <div class="col col-20">
+                                        <label>Box No*</label>
+                                    </div>
+                                    <div class="col col-60">
+                                        <input type="text" id="BoxNo" ng-model="o.BoxNo" class="formControl" ng-disabled="true">
+
+                                    </div>
+                                    <div class="col col-20">
+                                        <a ng-click="AddItem(o)" class="custlablebtn">
+                                            <span>Add Item</span>
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <div class="row responsive-sm">
+                                    <div class="col">
+                                        <div class="infoBox02">
+                                            <div class="row responsive-sm">
+                                                <div class="col col-14">
+                                                    <label>Item Code*</label>
+                                                </div>
+                                                <div class="col col-14">
+                                                    <label>Qty*</label>
+                                                </div>
+                                                <div class="col col-14">
+                                                    <label>Price</label>
+                                                </div>
+                                            </div>
+                                            <div class="row responsive-sm" ng-repeat="item in o.ListItem">
+                                                <div class="col col-14" hide-reset="true" modal-title="Select Item" modal-select="" ng-change="SetPrice(item)" ng-model="item.ItemCode" options="DeliveryItemList" option-property="ItemCode" has-search="true"> <i class="icon ion-arrow-down-b" title="Select">
+                                                    <!-- <select ng-model="item.ItemCode" class="formControl" ng-change="GetAllItemBachNo(item)">
+                                                            <option value="">Select Item</option>
+                                                            <option ng-repeat="o in lstItems" value="{{o.ItemCode}}">{{o.ItemCode}}</option>
+                                                        </select> -->
+                                                    <div class="row itemdrp" style="padding:0">
+                                                        <input class="formControl" ng-model="item.ItemCode" readonly style="cursor: pointer !important;float: left;border-right: none;border-top-right-radius:0px;border-bottom-right-radius: 0px; ">
+                                                        <button style="padding: 2px"></i>
+                                                    <div class="option">
+
+                                                        <div class="row" style="font-weight: bold;font-size: 12px;" ng-show="$index==0">
+                                                            <div class="col" style="padding: 0" class="text-center">Item Code</div>
+                                                            <div class="col" style="padding: 0" class="text-center">Qty</div>
+                                                            <div class="col" style="padding: 0" class="text-center">Price</div>
+                                                            <div class="col" style="padding: 0" class="text-center">Tax</div>
+                                                        </div>
+                                                        <div class="row" style="font-size: 14px;">
+                                                            <div class="col" class="text-center">{{option.ItemCode}}</div>
+                                                            <div class="col" class="text-center">{{option.Qty}}</div>
+                                                            <div class="col" class="text-center"> {{option.FinalTotal}}</div>
+                                                            <div class="col" class="text-center"> {{option.Tax}}</div>
+                                                        </div>
+
+                                                    </div>
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                            <div class="col col-14">
+                                                <input type="number" id="Qty" ng-model="item.Qty" class="formControl" ng-change="SetPrice(item)">
+                                            </div>
+                                            <div class="col col-14">
+                                                <input id="Price" ng-model="item.Price" class="formControl" ng-disabled="true" manage-Dynamicfraction="{{Dynamicfraction}}">
+                                            </div>
+                                            <a ng-click="RemoveItem(o,$index)" class="RemoveBtn" class="RemoveBtn">
+                                                <i class="ion-trash-a" title="Remove Item"></i>
+                                            </a>
+                                        </div>
+                                        <div class="s20"></div>
+                                    </div>
+                                </div>
+                                <a ng-click="RemoveMainDeliveryItem($index)" class="RemoveBtn">
+                                    <i class="ion-trash-a" title="Remove Item"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="s10"></div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <button class="cBtn cBtn-green cBtn-block cBtn-shadow" ng-click="SaveDeliveryPackingSlipItem(FormDeliverySlip)" type="submit"><i class="ion-document-text"></i>
+                                        Save
+                                    </button>
+                    </div>
+                </div>
+                </form>
+                </div>
+            </ion-content>
+        </ion-modal-view>
+    </script>
+</ion-view>

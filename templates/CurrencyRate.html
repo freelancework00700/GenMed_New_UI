@@ -1,0 +1,154 @@
+<ion-view class="patternBg">
+    <ion-content>
+        <div ng-if="IsList">
+            <div class="container">
+                <div class="row row-center">
+                    <div class="col">
+                        <div class="searchBox">
+                            <input id="mytext" type="text" ng-model="Searchmodel.Search" class="formControl"
+                                ng-model-options="{ debounce: 1500 }" ng-change="FilterData()" placeholder="Filter by Date, Code or Rate">
+                            <button type="button" class="cBtn cBtn-blue" ng-click="FilterData()">
+                                <span>Search</span>
+                            </button>
+                            <a ng-click="Add()" class="cBtn cBtn-green cBtn-autoWidth d-flex items-center justify-center gap-2">
+                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                </svg>
+                                <span>Add Currency Rate</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="cDataTable">
+                            <table id="CurrencyRateTable" class="cell-border" style="width:100%;">
+                                <thead>
+                                    <tr>
+                                        <th class="all">No</th>
+                                        <th>From Date</th>
+                                        <th>To Date</th>
+                                        <th>Currency Code</th>
+                                        <th>Buy Rate</th>
+                                        <th>Sell Rate</th>
+                                        <th class="all">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="o in lstCurrencyRate">
+                                        <td>{{$index + 1}}</td>
+                                        <td>{{o.FromDate | date: "dd/MM/yy" }}</td>
+                                        <td>{{o.ToDate | date: "dd/MM/yy" }}</td>
+                                        <td>
+                                            <span ng-if="o.CurrencyCode.length<=50">{{o.CurrencyCode || "N/A"}}</span>
+                                            <span ng-if="o.CurrencyCode.length>50" title="{{o.CurrencyCode}}">{{o.CurrencyCode
+                                                | limitTo:50}}...</span>
+                                        </td>
+                                        <td>{{o.BuyRate || "N/A"}}</td>
+                                        <td>{{o.SellRate}}</td>
+                                        <td>
+                                            <a ng-click="CopyToModel(o)" class="btnAction btnAction-edit">
+                                                <i class="ion-edit" title="Edit">
+                                                </i>
+                                            </a>
+                                            <a ng-click="DeleteCurrencyRate(o.id)" class="btnAction btnAction-error">
+                                                <i class="ion-trash-a" title="Delete">
+                                                </i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="container" ng-if="!IsList">
+            <form name="FormCurrencyRate" class="cForm light">
+                <div class="infoBox02">
+                    <div class="container">
+                        <div class="row responsive-sm">
+                            <div class="col col-33">
+                                <label for="">From Date*</label>
+                                <input type="text" name="FromDate" value="{{model.FromDate | date: 'dd-MM-yyyy'}}"
+                                    class="formControl" placeholder="From Date" ng-required="true" ng-model="model.FromDate"
+                                    date ion-datetime-picker>
+                                <span class="errorMsg text-center" ng-show="formsubmit && (FormCurrencyRate.FromDate.$dirty || FormCurrencyRate.FromDate.$invalid)">
+                                    <span ng-show="FormCurrencyRate.FromDate.$error.required">
+                                        Please Select From Date
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="col col-33">
+                                <label for="">To Date*</label>
+                                <input type="text" value="{{model.ToDate | date: 'dd-MM-yyyy'}}" name="ToDate" class="formControl"
+                                    placeholder="To Date" ng-required="true" ng-model="model.ToDate" date
+                                    ion-datetime-picker>
+                                <span class="errorMsg text-center" ng-show="formsubmit && (FormCurrencyRate.ToDate.$dirty || FormCurrencyRate.ToDate.$invalid)">
+                                    <span ng-show="FormCurrencyRate.ToDate.$error.required">
+                                        Please Select To Date
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="col col-33">
+                                <label for="">Currency Code*</label>
+                                <select class="formControl" name="CurrencyCode" ng-required="true" ng-model="model.CurrencyCode">
+                                    <option value="" disabled>Select</option>
+                                    <option ng-repeat="o in lstCurrencycode" value="{{o.code}}">
+                                        {{o.code}} - {{o.symbol}}
+                                    </option>
+                                </select>
+                                <span class="errorMsg text-center" ng-show="formsubmit && (FormCurrencyRate.CurrencyCode.$dirty || FormCurrencyRate.CurrencyCode.$invalid)">
+                                    <span ng-show="FormCurrencyRate.CurrencyCode.$error.maxlength">
+                                        Maximum length is 50.
+                                    </span>
+                                    <span ng-show="FormCurrencyRate.CurrencyCode.$error.required">
+                                        Please Enter Currency Code
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row responsive-sm">
+                            <div class="col col-33">
+                                <label for="">Buy Rate*</label>
+                                <input type="number" name="BuyRate" class="formControl" placeholder="Buy Rate"
+                                    ng-required="true" ng-model="model.BuyRate">
+                                <span class="errorMsg text-center" ng-show="formsubmit && (FormCurrencyRate.BuyRate.$dirty || FormCurrencyRate.BuyRate.$invalid)">
+                                    <span ng-show="FormCurrencyRate.BuyRate.$error.required">
+                                        Please Enter Buy Rate
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="col col-33">
+                                <label for="">Sell Rate*</label>
+                                <input type="number" name="SellRate" class="formControl" ng-required="true" placeholder="Sell Rate"
+                                    ng-model="model.SellRate">
+                                <span class="errorMsg text-center" ng-show="formsubmit && (FormCurrencyRate.SellRate.$dirty || FormCurrencyRate.SellRate.$invalid)">
+                                    <span ng-show="FormCurrencyRate.SellRate.$error.required">
+                                        Please Enter Sell Rate
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <button class="cBtn cBtn-green cBtn-block cBtn-shadow" ng-click="SaveCurrencyRate(FormCurrencyRate)"
+                                type="submit"><i class="ion-document-text"></i>
+                                Save</button>
+                            </div>
+                        </div>
+                        <div class="s10"></div>
+                    </div>
+                </div>
+               
+            </form>
+
+
+
+        </div>
+
+    </ion-content>
+
+</ion-view>

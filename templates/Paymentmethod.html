@@ -1,0 +1,179 @@
+<ion-view class="patternBg">
+    <ion-content>
+        <div ng-if="IsList">
+            <div class="container">
+                <div class="s10"></div>
+                <div class="row row-center">
+                    <div class="col">
+                        <div class="searchBox">
+                            <input id="mytext" type="text" ng-model="Searchmodel.Search" class="formControl"
+                                ng-model-options="{ debounce: 1500 }" ng-change="FilterData()" placeholder="Filter by  Payment Method,Payment Type,Payment Method Type or Payment By">
+                            <button type="button" class="cBtn cBtn-blue" ng-click="FilterData()">
+                                <span>Search</span>
+                            </button>
+                            <a ng-click="Add()" class="cBtn cBtn-green cBtn-autoWidth d-flex items-center justify-center gap-2">
+                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                </svg>
+                                <span>Add Payment Method</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="s20"></div>
+                <div class="cDataTable">
+                    <table id="PaymentMethodTable" class="cell-border" width="100%">
+                        <thead>
+                            <tr>
+                                <th class="all">
+                                    No
+                                </th>
+                                <th>Payment Method Type </th>
+                                <th>
+                                    Payment Method
+                                </th>
+                                <th>
+                                    Payment By
+                                </th>
+                                <th>
+                                    Payment Type
+                                </th>
+                                <th>
+                                    Is Active
+                                </th>
+                                <th class="all">
+                                    Action
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-if="lstPaymentMethod.length>0" ng-repeat="o in lstPaymentMethod">
+                                <td>{{$index + 1}}</td>
+                                <td>
+                                    {{o.Paymentmethodtype}}
+                                </td>
+                                <td>
+                                    {{o.Paymentmethod}}
+                                </td>
+                                <td>
+                                    {{o.Paymentby}}
+                                </td>
+                                <td>
+                                    {{o.Paymenttype}}
+                                </td>
+                                <td><span style="font-size: 20px;color: green" ng-if="o.IsActive==1" class="ng-scope">✔</span>
+                                    <span style="font-size: 20px;color: red" ng-if="o.IsActive==0" class="ng-scope">✖</span>
+                                </td>
+                                <td>
+                                    <a ng-click="CopyToModel(o)" class="btnAction btnAction-edit">
+                                        <i class="ion-edit" title="Edit">
+                                        </i>
+                                    </a>
+                                    <a ng-click="DeletePaymentMethod(o.id)" class="btnAction btnAction-error">
+                                        <i class="ion-trash-a" title="Delete">
+                                        </i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- END .container -->
+        </div>
+        </div>
+        <!-- ng-if="!IsList" -->
+        <div class="container" ng-if="!IsList">
+            <div class="s20"></div>
+            <div class="s10"></div>
+            <form name="FormCreditTerm" class="cForm light">
+                <div class="infoBox02">
+                    <div class="container">
+                        <div class="s25"></div>
+                        <div class="row responsive-sm">
+                            <div class="col col-20">
+                                <label>Payment Method Type</label>
+                            </div>
+                            <div class="col col-80">
+                                <div class="row">
+                                    <label class="formCheck" style="padding-right: 5px;" for="Bank"><input type="radio"
+                                            ng-model='model.Paymentmethodtype' ng-value='"Bank"' name="Paymentmethodtype"><span>Bank</span></label>
+                                    <label class="formCheck" style="padding-right: 5px;" for="Deposit"><input type="radio"
+                                            ng-model='model.Paymentmethodtype' ng-value='"Deposit"' name="Paymentmethodtype"><span>Deposit</span></label>
+                                    <label class="formCheck" style="padding-right: 5px;" for="Cash"><input type="radio"
+                                            ng-model='model.Paymentmethodtype' ng-value='"Cash"' name="Paymentmethodtype"><span>Cash</span></label>
+                                    <label class="formCheck" style="padding-right: 5px;" for="Others"><input type="radio"
+                                            ng-model='model.Paymentmethodtype' ng-value='"Others"' name="Paymentmethodtype"><span>Others</span></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row responsive-sm">
+                            <div class="col col-20">
+                                <label>Payment Method*</label>
+                            </div>
+                            <div class="col col-40">
+                                <input type="text" maxlength="100" ng-maxlength="100" id="paymentmethod" class="formControl"
+                                    name="paymentmethod" ng-required="true" placeholder="Payment Method" ng-model="model.Paymentmethod">
+                                <span class="errorMsg text-center" ng-show="formsubmit && (FormCreditTerm.paymentmethod.$dirty || FormCreditTerm.paymentmethod.$invalid)">
+                                    <span ng-show="FormCreditTerm.paymentmethod.$error.required">
+                                        Please Enter Payment Method
+                                    </span>
+                                </span>
+                            </div>
+
+                        </div>
+                        <div class="row responsive-sm">
+                            <div class="col col-20">
+                                <label>Payment By*</label>
+                            </div>
+                            <div class="col col-40">
+                                <input type="text" maxlength="100" ng-maxlength="100" id="Paymentby" class="formControl"
+                                    name="Paymentby" ng-required="true" placeholder="Payment By" ng-model="model.Paymentby">
+                                <span class="errorMsg text-center" ng-show="formsubmit && (FormCreditTerm.Paymentby.$dirty || FormCreditTerm.Paymentby.$invalid)">
+                                    <span ng-show="FormCreditTerm.Paymentby.$error.required">
+                                        Please Enter Payment Method
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row responsive-sm">
+                            <div class="col col-20">
+                                <label>Payment Type</label>
+                            </div>
+                            <div class="col col-40">
+                                <select class="formControl" name="Paymenttype" ng-model="model.Paymenttype" ng-required="true">
+                                    <!-- <option value="" disabled>Select Payment Type</option> -->
+                                    <option value="Cash">Cash</option>
+                                    <option value="Cheque">Cheque</option>
+
+                                </select>
+                                <span class="errorMsg text-center" ng-show="formsubmit && (FormCreditTerm.Paymenttype.$dirty || FormCreditTerm.Paymenttype.$invalid)">
+                                    <span ng-show="FormCreditTerm.Paymenttype.$error.required">
+                                        Please Enter Payment Type
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="s20"></div>
+                        <div class="row responsive-sm">
+                            <div class="col col-20">
+                            </div>
+                            <div class="col col-40">
+                                <label class="formCheck" for="Active"><input type="checkbox" id="Active" ng-model="model.IsActive"><span>Active</span></label>
+                            </div>
+                        </div>
+                        <div class="s20"></div>
+                    </div>
+                </div>
+                <div class="s20"></div>
+                <div class="row">
+                    <div class="col">
+                        <button class="cBtn cBtn-green cBtn-block cBtn-shadow" ng-click="SavePaymentMethod(FormCreditTerm)"
+                            type="submit"><i class="ion-document-text"></i>
+                            Save</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </ion-content>
+</ion-view>

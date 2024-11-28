@@ -1,0 +1,317 @@
+<ion-view class="patternBg">
+    <ion-content>
+        <div ng-if="IsList">
+            <div class="container">
+                <div class="row row-center">
+                    <div class="col">
+                        <div class="searchBox">
+                            <input id="mytext" type="text" ng-model="Searchmodel.Search" class="formControl"
+                                ng-model-options="{ debounce: 1500 }" ng-change="FilterData()"
+                                placeholder="Filter by Name, Account Number, Reg Number,Phone Number,Email Address,Group,Branch or Price Category">
+                            <button type="button" class="cBtn cBtn-blue" ng-click="FilterData()">
+                                <span>Search</span>
+                            </button>
+                            <a ng-click="Add()" class="cBtn cBtn-green cBtn-autoWidth d-flex items-center justify-center gap-2">
+                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                </svg>
+                                 <span>Add Supplier</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="cDataTable">
+                            <table id="SupplierTable" class="cell-border" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th class="all">No</th>
+                                        <th>Name</th>
+                                        <th>Account Number </th>
+                                        <th>Registration Number</th>
+                                        <th>Billing Address</th>
+                                        <th>Phone Number</th>
+                                        <th>Email Address</th>
+                                        <th>Delivery Address</th>
+                                        <th>Is Active</th>
+                                        <th>Group</th>
+                                        <th>Branch</th>
+                                        <th>Price Category</th>
+                                        <th>Location</th>
+                                        <th>Order Status</th>
+                                        <th class="all">Action</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container" ng-if="!IsList">
+            <form name="FormCustomer" class="cForm light">
+                <div class="infoBox02">
+                    <div class="container">
+                        <div class="row responsive-sm">
+                            <div class="col col-33">
+                                <label for="ACCNO">Account Number*</label>
+                                <input type="text" id="ACCNO" class="formControl" name="ACCNO" ng-required="true"
+                                    ng-model="model.AccountNumbder" ng-disabled="true">
+                            </div>
+                            <div class="col col-33">
+                                <label for="Name">Name*</label>
+                                <input type="text" id="Name" class="formControl" maxlength="100" ng-maxlength="100"
+                                    name="Name" ng-required="true" placeholder="Name" ng-model="model.Name">
+                                <span class="errorMsg text-center"
+                                    ng-show="formsubmit && (FormCustomer.Name.$dirty || FormCustomer.Name.$invalid)">
+                                    <span ng-show="FormCustomer.Name.$error.required">
+                                        Please Enter Name
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="col col-33">
+                                <label for="">Registration No*</label>
+                                <input type="text" id="Registration" class="formControl" maxlength="100"
+                                    ng-maxlength="100" name="Registration" ng-required="true"
+                                    placeholder=" Registration No" ng-model="model. RegistrationNo">
+                                <span class="errorMsg text-center"
+                                    ng-show="formsubmit && (FormCustomer.Registration.$dirty || FormCustomer.Registration.$invalid)">
+                                    <span ng-show="FormCustomer.Registration.$error.required">
+                                        Please Enter Registration No
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row responsive-sm">
+                            <div class="col col-33">
+                                <label for="">Email*</label>
+                                <input type="email" id="Email" class="formControl" maxlength="100" ng-maxlength="100"
+                                    name="Email" placeholder="Email Address" ng-model="model.EmailAddress">
+                            </div>
+                            <div class="col col-33">
+                                <label for="">Delivery Address 1</label>
+                                <textarea type="text" id="DeliveryAdd" class="formControl" maxlength="100"
+                                    ng-maxlength="100" rows="1" name="DeliveryAdd" placeholder="Delivery Address"
+                                    ng-model="model.DeliveryAddress1"></textarea>
+                            </div>
+                            <div class="col col-33">
+                                <label for="">Delivery Address 2</label>
+                                <textarea type="text" id="DeliveryAdd2" class="formControl" maxlength="100"
+                                    ng-maxlength="100" rows="1" name="DeliveryAdd2" placeholder="Delivery Address"
+                                    ng-model="model.DeliveryAddress2"></textarea>
+                            </div>
+                        </div>
+                        <div class="row responsive-sm">
+                            <div class="col col-33">
+                                <label for="">Delivery Address 3</label>
+                                <textarea type="text" id="DeliveryAdd3" class="formControl" maxlength="100"
+                                    ng-maxlength="100" rows="1" name="DeliveryAdd3" placeholder="Delivery Address"
+                                    ng-model="model.DeliveryAddress3"></textarea>
+                            </div>
+                            <div class="col col-33">
+                                <label for="">Delivery Post Code</label>
+                                <input type="number" id="DeliveryPostCode" maxlength="100" ng-maxlength="100"
+                                    class="formControl" name="DeliveryPostCode" placeholder="Delivery Post Code"
+                                    ng-model="model.DeliveryPostCode">
+                            </div>
+
+                            <div class="col col-33">
+                                <label for="">Phone Number*</label>
+                                <input type="tel" id="PhoneNumber" class="formControl" name="PhoneNumber"
+                                    ng-model="model.PhoneNumber" placeholder="+11234567890">
+                            </div>
+                        </div>
+                        <div class="row responsive-sm">
+                            <div class="col col-33">
+                                <label for="">Currency</label>
+                                <select class="formControl" name="Currency" ng-model="model.Currency">
+                                    <option value="" disabled>Select Currency</option>
+                                    <option value="{{o.CurrencyCode}}" ng-repeat="o in lstCurrency">{{o.CurrencyCode}}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="col col-33">
+                                <label for="">Note</label>
+                                <textarea type="text" id="Note" class="formControl md-textarea" maxlength="600"
+                                    ng-maxlength="600" rows="1" name="Note" placeholder="Note"
+                                    ng-model="model.Note"></textarea>
+                            </div>
+                            <div class="col col-33">
+                                <label for="">Branch</label>
+                                <select class="formControl" name="Branch" ng-model="model.idBranch">
+                                    <option value="" disabled>Select Branch</option>
+                                    <option value="{{o.id}}" ng-repeat="o in lstCustBranch">{{o.Name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row responsive-sm">
+                            <div class="col col-33">
+                                <label for="Location">Location</label>
+                                <select class="formControl" name="Location" ng-model="model.idLocations">
+                                    <option value="" disabled>Select Location</option>
+                                    <option value="{{o.id}}" ng-repeat="o in lstLocation">{{o.Name}}</option>
+                                </select>
+                            </div>
+                            <div class="col col-33">
+                                <label for="">Credit Limit *</label>
+                                <input type="text" id="CreditLimit" class="formControl" name="CreditLimit"
+                                    placeholder="Credit Limit" ng-model="model.CreditLimit" ng-required="true">
+                                <span class="errorMsg text-center"
+                                    ng-show="formsubmit && (FormCustomer.CreditLimit.$dirty || FormCustomer.CreditLimit.$invalid)">
+                                    <span ng-show="FormCustomer.CreditLimit.$error.required">
+                                        Please Enter Credit Limit
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="col col-33">
+                                <label for="">Exceed Limit Type *</label>
+                                <select class="formControl" name="Exceed" ng-model="model.ExceedLimitType"
+                                    ng-required="true" ng-change="model.SuspendReason='';model.AdminPassword='';">
+                                    <option value="" disabled>Select</option>
+                                    <option value="Admin password">Admin Password</option>
+                                    <option value="Suspend">Suspend</option>
+
+                                </select>
+                                <span class="errorMsg text-center"
+                                    ng-show="formsubmit && (FormCustomer.Exceed.$dirty || FormCustomer.Exceed.$invalid)">
+                                    <span ng-show="FormCustomer.Exceed.$error.required">
+                                        Please Enter Exceed Limit Type
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row responsive-sm" ng-if="IsDebitCreditControll">
+
+                            <div class="col col-33" ng-if="model.ExceedLimitType=='Suspend'">
+                                <label for="">Suspend Reason</label>
+                                <input type="text" id="SuspendReason" class="formControl" name="SuspendReason"
+                                    placeholder="Suspend Reason" ng-model="model.SuspendReason">
+                            </div>
+                        </div>
+                        <div class="row responsive-sm">
+                            <div class="col col-33">
+                                <label for="">Remark</label>
+                                <textarea type="text" id="Remark" class="formControl md-textarea" maxlength="600"
+                                    ng-maxlength="600" rows="1" name="Remark" placeholder="Remark"
+                                    ng-model="model.Remark"></textarea>
+                            </div>
+                            <div class="col col-33">
+                                <label for="Status">Status</label>
+                                <select class="formControl" name="FoundusOn" ng-model="model.Status"
+                                    ng-change="ChangeStatus()">
+                                    <option value="" disabled>Select</option>
+                                    <option value="Solved">Solved</option>
+                                    <option value="Not Solved">Not Solved</option>
+                                </select>
+                            </div>
+                            <div class="col col-33" ng-if="ReferenceBy == 1">
+                                <label for="">Reference By</label>
+                                <input type="text" id="ReferenceByCode" class="formControl" maxlength="100"
+                                    ng-maxlength="100" name="ReferenceByCode" placeholder="Supplier Code"
+                                    ng-model="model.ReferenceByCode" ng-disabled="IsEdit">
+                            </div>
+                        </div>
+                        <div class="row responsive-sm" ng-if="model.Status == 'Not Solved'">
+                            <div class="col col-33">
+                                <label for="">Status Remark</label>
+                                <textarea type="text" id="StatusRemark" ng-required="true" name="StatusRemark"
+                                    class="formControl md-textarea" maxlength="600" ng-maxlength="600" rows="1"
+                                    name="StatusRemark" placeholder="Status Remark"
+                                    ng-model="model.StatusRemark"></textarea>
+                                <span class="errorMsg text-center"
+                                    ng-show="formsubmit && (FormCustomer.StatusRemark.$dirty || FormCustomer.StatusRemark.$invalid)">
+                                    <span ng-show="FormCustomer.StatusRemark.$error.required">
+                                        Please Enter Status Remark
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row responsive-sm">
+                            <div class="col col-25">
+                                <label for="IsDebitCreditControll">
+                                    <input class="formControl_checkbox"
+                                        ng-change="model.CreditLimit='';model.ExceedLimitType='';model.AdminPassword='';model.SuspendReason='';"
+                                        type="checkbox" id="IsDebitCreditControll" ng-model="IsDebitCreditControll">
+                                    Debit Credit Controll
+                                </label>
+                            </div>
+                            <div class="col col-25">
+                                <label for="isAllowLogin">
+                                    <input class="formControl_checkbox"
+                                        ng-change="model.password='';model.ConfirmPassword='';" type="checkbox"
+                                        id="isAllowLogin" ng-model="model.isAllowLogin">
+                                    Is Allow Login
+                                </label>
+                            </div>
+
+                            <div class="col col-25">
+                                <label for="Active">
+                                    <input class="formControl_checkbox" type="checkbox" id="Active"
+                                        ng-model="model.isActive">
+                                    Active
+                                </label>
+                            </div>
+                            <div class="col col-25">
+                                <label for="IsIGST">
+                                    <input class="formControl_checkbox" type="checkbox" id="IsIGST"
+                                        ng-model="model.IsIGST" ng-true-value="1" ng-false-value="0">
+                                    Is IGST
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="row responsive-sm" ng-if="model.isAllowLogin && model.id == ''">
+                            <div class="col col-33" ng-if="model.id==''">
+                                <label for="">Password*</label>
+                                <input type="password" name="password" class="formControl" ng-required="true"
+                                    placeholder="Enter Password" maxlength="100" ng-maxlength="100"
+                                    ng-model="model.password">
+                                <span class="errorMsg text-center"
+                                    ng-show="formsubmit && (FormCustomer.password.$dirty || FormCustomer.password.$invalid)">
+                                    <span ng-show="FormCustomer.password.$error.required">
+                                        Please Enter Password
+                                    </span>
+                                    <span ng-show="FormCustomer.password.$error.maxlength">
+                                        Maximum length is 100.
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="col col-33" ng-if="model.id==''">
+                                <label for="">Confirm Password*</label>
+                                <input type="password" name="Cpassword" class="formControl" ng-required="true"
+                                    placeholder="Enter Confirm Password" ng-model="model.ConfirmPassword">
+                                <span class="errorMsg text-center"
+                                    ng-show="formsubmit && (FormCustomer.Cpassword.$dirty || FormCustomer.Cpassword.$invalid)">
+                                    <span ng-show="FormCustomer.Cpassword.$error.required">
+                                        Please Enter Confirm Password
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="row responsive-sm" ng-if="IsMLM">
+                            <div class="col">
+                                <label for="IsDPCommission">
+                                    <input class="formControl_checkbox" type="checkbox" id="Active"
+                                        ng-model="model.IsDPCommission" ng-true-value="1" ng-false-value="0">
+                                    Is DP Commission
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col">
+                                <button class="cBtn cBtn-green cBtn-block cBtn-shadow"
+                                    ng-click="SaveCustomer(FormCustomer)" type="submit"><i
+                                        class="ion-document-text"></i>
+                                    Save</button>
+                            </div>
+                        </div>
+                        <div class="s10"></div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </ion-content>
+</ion-view>

@@ -1,0 +1,124 @@
+<ion-view class="patternBg">
+    <ion-content>
+        <div ng-if="IsList">
+            <div class="container">
+                <div class="s10"></div>
+                <div class="row row-center">
+                    <div class="col">
+                        <div class="searchBox">
+                            <input id="mytext" type="text" ng-model="Searchmodel.Search" ng-model-options="{ debounce: 1500 }"
+                                class="formControl" ng-change="FilterData()" placeholder="Filter by Type, Month or Date Value">
+                            <button type="button" class="cBtn cBtn-blue" ng-click="FilterData()">
+                                <span>Search</span>
+                            </button>
+                            <a ng-click="Add()" class="cBtn cBtn-green cBtn-autoWidth d-flex items-center justify-center gap-2">
+                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                </svg> <span>Add Task Type</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="s20"></div>
+                <div class="cDataTable">
+
+                    <table id="TaskTypeTable" class=" cell-border" width="100%">
+                        <thead>
+                            <tr>
+                                <th class="all">
+                                    No
+                                </th>
+                                <th>Type </th>
+                                <th>
+                                    Month Value
+                                </th>
+                                <th>
+                                    Date Value
+                                </th>
+                                <th class="all">
+                                    Action
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="o in lstTaskType">
+                                <td>{{$index + 1}}</td>
+                                <td>
+                                    <span ng-if="o.Type.length<=50">{{o.Type || "N/A"}}</span>
+                                    <span ng-if="o.Type.length>50" title=" {{o.Type}}">{{o.Type | limitTo:50}}...</span>
+                                </td>
+                                <td>
+                                    <span>{{o.Month|| "N/A"}}</span>
+                                </td>
+                                <td>
+                                    <span>{{o.DateValue|| "N/A"}}</span>
+                                </td>
+                                <td>
+                                    <a ng-click="CopyToModel(o)" class="btnAction btnAction-edit">
+                                        <i class="ion-edit" title="Edit">
+                                        </i>
+                                    </a>
+                                    <a ng-click="DeleteTaskType(o.id)" class="btnAction btnAction-error">
+                                        <i class="ion-trash-a" title="Delete">
+                                        </i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="container" ng-if="!IsList">
+            <div class="s10"></div>
+            <form name="FormTaskType" class="cForm light">
+                <div class="infoBox02">
+                    <div class="container">
+                        <div class="s25"></div>
+                        <div class="row responsive-sm">
+                            <div class="col col-33">
+                                <label for="Type">Type*</label>
+                                <input type="text" class="formControl" name="Type" ng-required="true" maxlength="100"
+                                    ng-maxlength="100" placeholder="Task Type" ng-model="model.Type" ng-disabled="IsEdit">
+                                <span class="errorMsg text-center" ng-show="formsubmit && (FormTaskType.Type.$dirty || FormTaskType.Type.$invalid)">
+                                    <span ng-show="FormTaskType.Type.$error.required">
+                                        Please Enter Type
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="col col-33">
+                                <label for="Description">Month</label>
+                                <select class="formControl" name="MonthValue" ng-model="model.MonthValue">
+                                    <option value="">Select Month</option>
+                                    <option value="{{o.value}}" ng-repeat="o in MonthList">{{o.month}}</option>
+                                </select>
+                            </div>
+                            <div class="col col-33">
+                                <label for="DateValue">Date Value</label>
+                                <input type="number" class="formControl" name="DateValue" min="1" max="31" class="formControl"
+                                    ng-model="model.DateValue">
+                                <span class="errorMsg text-center" ng-show="formsubmit && (FormTaskType.DateValue.$dirty || FormTaskType.DateValue.$invalid)">
+                                    <span ng-show="FormTaskType.DateValue.$error.min">
+                                        Date must be between 0 to 31
+                                    </span>
+                                    <span ng-show="FormTaskType.DateValue.$error.max">
+                                        Date must be between 0 to 31
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="s20"></div>
+                <div class="row">
+                    <div class="col">
+                        <button class="cBtn cBtn-green cBtn-block cBtn-shadow" ng-click="SaveTaskType(FormTaskType)"
+                            type="submit"><i class="ion-document-text"></i>
+                            Save</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </ion-content>
+</ion-view>

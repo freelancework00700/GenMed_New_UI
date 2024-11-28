@@ -1,0 +1,174 @@
+<ion-view class="patternBg">
+    <ion-content>
+        <div ng-if="IsList">
+            <div class="container">
+                <div class="s10"></div>
+                <div class="row row-center">
+                    <div class="col">
+                        <div class="searchBox">
+                            <input id="mytext" type="text" ng-model="Searchmodel.Search" class="formControl" ng-change="FilterData()"
+                                ng-model-options="{ debounce: 1500 }" placeholder="Filter by Page Name or Title">
+                            <button type="button" class="cBtn cBtn-blue" ng-click="FilterData()">
+                                <span>Search</span>
+                            </button>
+                            <a ng-click="Add()" class="cBtn cBtn-green cBtn-autoWidth d-flex items-center justify-center gap-2">
+                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                </svg>
+                                <span>Add Dynamic Page</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="s20"></div>
+                <div class="cDataTable">
+                    <table id="DynamicPageTable" class="cell-border" width="100%">
+                        <thead>
+                            <tr>
+                                <th class="all">
+                                    No
+                                </th>
+                                <th>Image </th>
+                                <th>Title </th>
+                                <th>Name </th>
+                                <th>Publish </th>
+                                <th class="all">
+                                    Action
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="o in lstDynamicPage">
+                                <td style="text-align:center">{{$index + 1}}</td>
+                                <td><img src="{{RoutePath}}MediaUploads/ImageUpload/{{o.Image}}" style="height: 50px;width: 50px;"
+                                        err-src="img/no-image.jpg">
+                                </td>
+                                <td style="text-align:center">
+                                    <span>{{o.Title || "N/A" }}</span>
+                                </td>
+                                <td style="text-align:center">
+                                    <span>{{o.Name || "N/A" }}</span>
+                                </td>
+                                <td style="text-align:center"><span style="font-size: 20px;color: green" ng-if="o.isPublish==1"
+                                        class="ng-scope">✔</span>
+                                    <span style="font-size: 20px;color: red" ng-if="o.isPublish==0" class="ng-scope">✖</span>
+                                </td>
+                                <td style="text-align:center">
+                                    <a ng-click="CopyToModel(o)" class="btnAction btnAction-edit">
+                                        <i class="ion-edit" title="Edit">
+                                        </i>
+                                    </a>
+                                    <a ng-click="DeleteDynamicPage(o.id)" class="btnAction btnAction-error">
+                                        <i class="ion-trash-a" title="Delete">
+                                        </i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="container" ng-if="!IsList">
+            <div class="s20"></div>
+            <form name="FormUOM" class="cForm light">
+                <div class="infoBox02">
+                    <div class="container">
+                        <div class="s25"></div>
+                        <div class="row responsive-sm">
+                            <div class="col">
+                                <label for="">Name*</label>
+                                <input type="text" name="Name" class="formControl" ng-required="true" placeholder="Name"
+                                    ng-model="model.Name">
+                                <span class="errorMsg text-center" ng-show="formsubmit && (FormUOM.Name.$dirty || FormUOM.Name.$invalid)">
+                                    <span ng-show="FormUOM.Name.$error.required">
+                                        Please Enter Name
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="col">
+                                <label for="">Title*</label>
+                                <input type="text" name="Title" class="formControl" ng-required="true" placeholder="Title"
+                                    ng-model="model.Title">
+                                <span class="errorMsg text-center" ng-show="formsubmit && (FormUOM.Title.$dirty || FormUOM.Title.$invalid)">
+                                    <span ng-show="FormUOM.Title.$error.required">
+                                        Please Enter Title
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row responsive-sm">
+                            <div class="col">
+                                <label class="formCheck" for="Publish"><input type="checkbox" id="Publish" ng-model="model.isPublish"><span>Publish</span></label>
+                            </div>
+                        </div>
+
+                        <!--start image upload -->
+                        <div class="s20"></div>
+                        <div class="s20"></div>
+                        <div class="row responsive-sm" style="margin-top: -50px;">
+                            <div class="col-80">
+                                <div class="tt-uppercase fw-500 custhedding">Image
+                                </div>
+                            </div>
+                        </div>
+                        <div class="s20"></div>
+                        <div style="color:black;">
+                            <input type="file" class="FileUploads" name="photo" id="photo" accept=".png, .jpg, .jpeg"
+                                onchange="angular.element(this).scope().readFile(this)" multiple>
+                        </div>
+                        <div class="s20"></div>
+
+                        <div class="row responsive-sm" ng-if="Mediafiles.length > 0">
+                            <div class="col col-20" ng-repeat="o in Mediafiles">
+                                <div class="row">
+                                    <img src="{{o[0].image}}" style="height: 180px;width: 180px;" err-SRC="img/no-image.png">
+                                </div>
+                                <div class="row text-center">
+                                    <button class="cBtn cBtn-skyblue cBtn-block cBtn-shadow" ng-click="RemoveImage($index,o[0])"
+                                        type="submit">Remove
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="s20"></div>
+
+                        <!-- end image upload -->
+
+                        <div class="row responsive-sm">
+                            <div class="col col-10">
+                                <label for="PageContent">Page Content</label>
+                            </div>
+                            <div class="col col-90">
+                                <textarea ckeditor="editorOptions" id="PageContent" class="formControl md-textarea"
+                                    rows="20" cols="70" name="PageContent" ng-model="model.PageContent" ckeditor2></textarea>
+                                <span class="errorMsg text-center" ng-show="formsubmit && (FormUOM.PageContent.$dirty || FormUOM.PageContent.$invalid)">
+                                    <span ng-show="FormUOM.PageContent.$error.required">
+                                        Please Enter Page Content
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="s20"></div>
+                <div class="row">
+                    <div class="col">
+                        <button class="cBtn cBtn-green cBtn-block cBtn-shadow" ng-click="SaveDynamicPage(FormUOM)" type="submit"><i
+                                class="ion-document-text"></i>
+                            Save</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </ion-content>
+</ion-view>
+<style>
+    .cropArea {
+        background: #E4E4E4;
+        overflow: hidden;
+        width: 100%;
+        height: 350px;
+    }
+</style>

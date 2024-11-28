@@ -1,0 +1,146 @@
+<ion-view class="patternBg">
+    <ion-content>
+        <div class="row">
+            <div class="col">
+                <h1 class="text-center">{{calendarView.title}}</h1>
+                <div style="padding:10px" class="text-center">
+                    <button class="cBtn cBtn-green " ng-click="Prev()" type="submit">PREV</button>
+                    <button class="cBtn cBtn-green " ng-click="Next()" type="submit">NEXT</button>
+                </div>
+                <div id="calendarView" ui-calendar="calendarUiConfig
+.calendar" ng-model="events" calendar="main"></div>
+            </div>
+        </div>
+
+        <script id="Notes.html" type="text/ng-template">
+            <ion-modal-view class="patternBg">
+                <ion-header-bar class="customPgHeader">
+                    <div class="col01">
+                        <span class="pgTitle">{{Type}}</span>
+
+                    </div>
+                    <div class="col02">
+                        <button class="cBtn cBtn-skyblue cBtn-block cBtn-shadow" ng-click="closeModal()" type="submit"><i class="ion-close-circled"></i>
+                                          Cancel</button>
+                    </div>
+                </ion-header-bar>
+                <ion-content padding="true">
+                    <div class="container">
+                        <div ng-if="!IsAdmin">
+                            <div class="row">
+                                <div class="col">
+                                    {{model.Date | date:'dd/MM/yyyy'}}
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    {{model.Notes}}
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    Is Active :
+                                    <span style="font-size: 20px;color: green" ng-if="model.isActive">✔</span>
+                                    <span style="font-size: 20px;color: red" ng-if="!model.isActive">✖</span>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    Mark As Complete:
+                                    <span style="font-size: 20px;color: green" ng-if="model.MarkAsComplete">✔</span>
+                                    <span style="font-size: 20px;color: red" ng-if="!model.MarkAsComplete">✖</span>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div ng-if="IsAdmin">
+                            <form name="FormNotes" class="cForm light">
+                                <div class="infoBox02">
+                                    <div class="container">
+                                        <div class="s25"></div>
+                                        <div class="row responsive-sm">
+                                            <div class="col col-10">
+                                                <label for="Title">Title *</label>
+                                            </div>
+                                            <div class="col col-50">
+
+                                                <input type="text" id="Title" class="formControl" maxlength="50" ng-maxlength="50" name="Title" ng-required="true" ng-model="model.Title">
+                                                <span class="errorMsg text-center" ng-show="formsubmit && (FormNotes.Title.$dirty || FormNotes.Title.$invalid)">
+                                        <span ng-show="FormNotes.Title.$error.required">
+                                            Please Enter Title
+                                        </span>
+                                                <!-- <span ng-show="FormNotes.Title.$error.maxlength">
+                                            Maximum length is 100.
+                                            </span> -->
+                                                </span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="row responsive-sm">
+                                            <div class="col col-10">
+                                                <label for="Notes">Note *</label>
+                                            </div>
+                                            <div class="col col-50">
+                                                <textarea type="text" id="Notes" class="formControl md-textarea" rows="10" name="Notes" ng-model="model.Notes" maxlength="500" ng-maxlength="500" ng-required="true"></textarea>
+                                                <span class="errorMsg text-center" ng-show="formsubmit && (FormNotes.Notes.$dirty || FormNotes.Notes.$invalid)">
+                                            <span ng-show="FormNotes.Notes.$error.required">
+                                                Please Enter Note
+                                            </span>
+
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="s20"></div>
+                                        <div class="row responsive-sm">
+                                            <div class="col col-50">
+                                                <label class="formCheck" for="Active"><input type="checkbox" id="Active" ng-model="model.isActive"><span>Active</span></label>
+                                            </div>
+                                            <div class="col col-50">
+                                                <label class="formCheck" for="MarkAsComplete"><input type="checkbox" id="MarkAsComplete" ng-model="model.MarkAsComplete"><span>Mark As Complete</span></label>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="s20"></div>
+                                <div class="row">
+                                    <div class="col">
+
+                                        <button class="cBtn cBtn-green cBtn-block cBtn-shadow" ng-click="SaveNotes(FormNotes)" type="submit"><i class="ion-document-text"></i>
+                                                Save</button>
+                                    </div>
+                                    <div class="col" ng-if="model.id > 0">
+                                        <button class="cBtn cBtn-skyblue cBtn-block cBtn-shadow" ng-click="DeleteNotes(model.id)" type="submit"><i class="ion-close-circled"></i>
+                                            Delete</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </ion-content>
+            </ion-modal-view>
+        </script>
+    </ion-content>
+    <style>
+        .ActiveEvent {
+            cursor: pointer;
+            border: 1px solid #006400;
+            background-color: #006400;
+        }
+        
+        .UnActiveEvent {
+            cursor: pointer;
+            border: 1px solid #FF0000;
+            background-color: #FF0000;
+        }
+        
+        .CompletedEvent {
+            cursor: pointer;
+            border: 1px solid #358bcc;
+            background-color: #358bcc;
+        }
+    </style>
+</ion-view>

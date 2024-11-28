@@ -1,0 +1,195 @@
+<ion-view class="patternBg">
+    <ion-content>
+        <div ng-if="IsList">
+            <div class="container">
+                <div class="row row-center">
+                    <div class="col">
+                        <div class="searchBox">
+                            <input id="mytext" type="text" ng-model="Searchmodel.Search" class="formControl"
+                                ng-model-options="{ debounce: 1500 }" ng-change="FilterData()" placeholder="Filter by Item Code, UOM, Price Category, Fixed Price or Price Details Discount">
+                            <button type="button" class="cBtn cBtn-blue" ng-click="FilterData()">
+                                <span>Search</span>
+                            </button>
+                            <a ng-click="Add()" class="cBtn cBtn-green cBtn-autoWidth d-flex items-center justify-center gap-2">
+                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                </svg>
+                               <span>Add Item Price</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="cDataTable">
+                            <table id="ItemPriceTable" class="cell-border" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th class="all">No</th>
+                                        <th>Item </th>
+                                        <th>UOM</th>
+                                        <th>Price Category</th>
+                                        <th>Fixed Price</th>
+                                        <th>Price Details Discount</th>
+                                        <th>Is Price</th>
+                                        <th class="all">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="o in lstItemPrice">
+                                        <td>{{$index + 1}}</td>
+                                        <td>{{o.ItemCode}}</td>
+                                        <td>{{o.UOM}}</td>
+                                        <td>{{o.pricecategory.Name}}</td>
+                                        <td class="right-aligned-cell">{{o.FixedPrice | number}}</td>
+                                        <td class="right-aligned-cell">{{o.FixedDetailsDiscount | number}}</td>
+                                        <td><span style="font-size: 20px;color: green" ng-if="o.isPrice==1" class="ng-scope">✔</span>
+                                            <span style="font-size: 20px;color: red" ng-if="o.isPrice==0" class="ng-scope">✖</span>
+                                        </td>
+                                        <td>
+                                            <a ng-click="CopyToModel(o)" class="btnAction btnAction-edit">
+                                                <i class="ion-edit" title="Edit"></i>
+                                            </a>
+                                            <a ng-click="DeleteItem(o.id)" class="btnAction btnAction-error">
+                                                <i class="ion-trash-a" title="Delete"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div ng-if="!IsList">
+            <form name="FormItemPrice" class="cForm light">
+                <div class="row responsive-sm">
+                    <div class="col col-50">
+                        <div class="infoBox02">
+                            <div class="row responsive-sm">
+                                <div class="col col-25">
+                                    <label for="IdPriceCategory">Price Category* </label>
+                                </div>
+                                <div class="col col-75">
+                                    <select class="formControl" name="IdPriceCategory" ng-required="true" ng-model="model.IdPriceCategory">
+                                        <option value="{{o.id}}" ng-repeat="o in lstPriceCategory">{{o.Name}}</option>
+                                    </select>
+                                    <span class="errorMsg text-center" ng-show="formsubmit && (FormItemPrice.IdPriceCategory.$dirty || FormItemPrice.IdPriceCategory.$invalid)">
+                                        <span ng-show="FormItemPrice.IdPriceCategory.$error.required">
+                                            Please Select Price Category
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row responsive-sm">
+                    <a ng-click="AddItemPriceInMainList()" class="custlablebtn">
+                        <span>Add New</span>
+                    </a>
+                </div>
+                <div class="row responsive-sm">
+                    <div class="col">
+                        <div class="infoBox02">
+                            <div class="container">
+                                <div class="row responsive-sm">
+                                    <div class="col col-20">
+                                        <label>Item Code*</label>
+                                    </div>
+                                    <div class="col col-20">
+                                        <label>UOM</label>
+                                    </div>
+                                    <div class="col col-20">
+                                        <label>Fixed Price</label>
+                                    </div>
+                                    <div class="col col-20">
+                                        <label>Fixed Details Discount</label>
+                                    </div>
+                                    <div class="col col-20">
+                                        <label>Is Price</label>
+                                    </div>
+                                </div>
+
+                                <div class="row responsive-sm" ng-repeat="o in lstSelectedItemPriceMain">
+                                    <div class="col col-20" hide-reset="true" modal-title="Select Item" modal-select=""
+                                        ng-model="o.ItemCode" options="lstItems" on-select="AddItemCode(o)"
+                                        option-property="ItemCode" has-search="true">
+                                        <div class="row itemdrp" style="padding:0">
+                                            <input class="formControl" ng-model="o.ItemCode" readonly style="cursor: pointer !important;float: left;border-right: none;border-top-right-radius:0px;border-bottom-right-radius: 0px; ">
+                                            <button style="padding: 2px"> <i class="icon ion-arrow-down-b" title="Select"></i>
+                                                <div class="option">
+
+                                                    <div class="row" style="font-weight: bold;font-size: 12px;" ng-show="$index==0">
+                                                        <div class="col" style="padding: 0" class="text-center">Item
+                                                            Code</div>
+                                                        <div class="col" style="padding: 0" class="text-center">Item
+                                                            Name</div>
+                                                        <div class="col" style="padding: 0" class="text-center">
+                                                            Description</div>
+                                                        <div class="col" style="padding: 0" class="text-center">
+                                                            Description2</div>
+                                                        <div class="col" style="padding: 0" class="text-center">Bal Qty
+                                                        </div>
+                                                    </div>
+                                                    <div class="row" style="font-size: 14px;">
+                                                        <div class="col" class="text-center">{{option.ItemCode}}</div>
+                                                        <div class="col" class="text-center">{{option.ItemName}}</div>
+                                                        <div class="col" class="text-center">
+                                                            {{option.Descriptions || "N/A"}} </div>
+                                                        <div class="col" class="text-center">
+                                                            {{option.Descriptions2 || "N/A"}}</div>
+                                                        <div class="col" class="text-center">
+                                                            {{option.itembatches[0].BalQty || "N/A"}}</div>
+                                                    </div>
+
+                                                </div>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="col col-20">
+                                        <select class="formControl" ng-model="o.UOM">
+                                            <option value="{{item.UOM}}" ng-repeat="item in o.listUOM | orderBy : 'UOM'">{{item.UOM}}</option>
+                                        </select>
+                                    </div>
+                                    <div class="col col-20">
+                                        <input id="FixedPrice" ng-model="o.FixedPrice" class="formControl">
+                                    </div>
+                                    <div class="col col-20">
+                                        <input id="FixedDetailsDiscount" ng-model="o.FixedDetailsDiscount" class="formControl">
+                                    </div>
+                                    <div class="col col-20">
+                                        <label class="formCheck" for="isPrice"><input type="checkbox" id="isPrice"
+                                                ng-model="model.isPrice" value="o.isPrice" ng-true-value="true"
+                                                ng-false-value="false"></label>
+                                    </div>
+                                    <a ng-click="RemoveItemPriceFromMainList($index)" class="RemoveBtn">
+                                        <i class="ion-trash-a" title="Remove Item"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="s10"></div>
+                <div class="row">
+                    <div class="col">
+                        <button class="cBtn cBtn-green cBtn-block cBtn-shadow" ng-click="SaveItemPrice(FormItemPrice)"
+                            type="submit">
+                            <i class="ion-document-text" title="Save"></i>
+                            Save
+                        </button>
+                    </div>
+                    <div class="col col-50">
+                        <button class="cBtn cBtn-skyblue cBtn-block cBtn-shadow" ng-click="ResetAll()" type="submit">
+                            <i class="ion-close-circled" title="Cancel"></i>
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </ion-content>
+</ion-view>

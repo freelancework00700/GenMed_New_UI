@@ -1,0 +1,227 @@
+<ion-view class="patternBg">
+    <ion-content>
+        <div ng-if="IsList">
+            <div class="container">
+                <div class="s10"></div>
+                <div class="row row-center">
+                    <div class="col">
+                        <div class="searchBox">
+                            <input id="mytext" type="text" ng-model="Searchmodel.Search" class="formControl"
+                                ng-model-options="{ debounce: 1500 }" ng-change="FilterData()" placeholder="Filter by Name, Description, Phone Number or Address">
+                            <button type="button" class="cBtn cBtn-blue" ng-click="FilterData()">
+                                <span>Search</span>
+                            </button>
+                            <a ng-click="Add()" class="cBtn cBtn-green cBtn-autoWidth d-flex items-center justify-center gap-2">
+                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                </svg>
+                                <span>Add Customer Branch</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="cDataTable">
+                            <table id="CustomerBranchTable" class="table table-bordered table-hover dt-responsive DataTables"
+                                width="100%">
+                                <thead>
+                                    <tr>
+                                        <th class="all">
+                                            No
+                                        </th>
+                                        <th>Name </th>
+                                        <th width="22%">
+                                            Description
+                                        </th>
+                                        <th width="22%">
+                                            Address 1
+                                        </th>
+                                        <!-- <th>
+                                                    Address 2
+                                                </th> -->
+                                        <!-- <th>
+                                                    Post Code
+                                                </th> -->
+                                        <th>
+                                            Phone 1
+                                        </th>
+                                        <!-- <th>
+                                                    Phone 2
+                                                </th> -->
+                                        <th>
+                                            Contact
+                                        </th>
+                                        <th>
+                                            Latitude
+                                        </th>
+                                        <th>
+                                            Longitude
+                                        </th>
+                                        <th>
+                                            Is Active
+                                        </th>
+                                        <th class="all">
+                                            Action
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="o in lstCustomerBranch">
+                                        <td>{{$index + 1}}</td>
+                                        <td>
+                                            <span ng-if="o.Name.length<=50">{{o.Name || "N/A"}}</span>
+                                            <span ng-if="o.Name.length>50" title="{{o.Name}}">{{o.Name | limitTo:50}}...</span>
+                                        </td>
+                                        <td>
+                                            <span ng-if="o.Description.length<=50">{{o.Description || "N/A"}}</span>
+                                            <span ng-if="o.Description.length>50" title="{{o.Description}}">{{o.Description |
+                                                limitTo:50}}...</span>
+                                        </td>
+                                        <td>
+                                            <span ng-if="o.Address1.length<=50">{{o.Address1 || "N/A"}}</span>
+                                            <span ng-if="o.Address1.length>50" title="{{o.Address1}}">{{o.Address1 |
+                                                limitTo:50}}...</span>
+                                            <p ng-show="o.PostCode.length > 0"><b>PostCode : </b>{{o.PostCode}}</p>
+                                        </td>
+                                        <!-- <td>{{o.Address2}}</td> -->
+                                        <!-- <td>{{o.PostCode}}</td> -->
+                                        <td>{{o.Phone1 || "N/A"}}</td>
+                                        <!-- <td>{{o.Phone2}}</td> -->
+                                        <td>{{o.Contact || "N/A"}}</td>
+                                        <td>{{o.Latitude || "N/A"}}</td>
+                                        <td>{{o.Longitude || "N/A"}}</td>
+                                        <td class="text-center"><span style="font-size: 20px;color: green" ng-if="o.IsActive==1" class="ng-scope">✔</span>
+                                            <span style="font-size: 20px;color: red" ng-if="o.IsActive==0" class="ng-scope">✖</span>
+                                        </td>
+
+                                        <td class="text-center">
+                                            <a ng-click="CopyToModel(o)" class="btnAction btnAction-edit">
+                                                <i class="ion-edit" title="Edit">
+                                                </i>
+                                            </a>
+                                            <a ng-click="DeleteCustomerBranch(o.id)" class="btnAction btnAction-error">
+                                                <i class="ion-trash-a" title="Delete">
+                                                </i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="container" ng-if="!IsList">
+            <form name="FormCustomerBranch" class="cForm light">
+                <div class="infoBox02">
+                    <div class="container">
+                        <div class="row responsive-sm">
+                            <div class="col col-33">
+                                <label for="">Name*</label>
+                                <input type="text" name="Name" class="formControl" maxlength="100" ng-maxlength="100"
+                                    ng-required="true" placeholder="Name" ng-model="model.Name">
+                                <span class="errorMsg text-center" ng-show="formsubmit && (FormCustomerBranch.Name.$dirty || FormCustomerBranch.Name.$invalid)">
+                                    <span ng-show="FormCustomerBranch.Name.$error.required">
+                                        Please Enter Name
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="col col-33">
+                                <label for="">Phone Number</label>
+                                <input type="tel" id="Phone1" class="formControl" name="Phone1" ng-model="model.Phone1"
+                                    placeholder="+11234567890">
+                            </div>
+                            <div class="col col-33">
+                                <label for="">Phone Number</label>
+                                <input type="tel" id="Phone2" class="formControl" name="Phone2" ng-model="model.Phone2"
+                                    placeholder="+11234567890">
+                            </div>
+                        </div>
+                        <div class="row responsive-sm">
+                            <div class="col">
+                                <label for="">Address</label>
+                            </div>
+                        </div>
+                        <div class="row responsive-sm">
+                            <div class="col col-33">
+                                <textarea type="text" id="Add" class="formControl md-textarea" maxlength="100"
+                                    ng-maxlength="100" rows="3" name="Add" placeholder="Address" ng-model="model.Address1"></textarea>
+                            </div>
+                            <div class="col col-33">
+                                <textarea type="text" id="Add2" class="formControl md-textarea" maxlength="100"
+                                    ng-maxlength="100" rows="3" name="Add2" placeholder="Address" ng-model="model.Address2"></textarea>
+                            </div>
+                            <div class="col col-33">
+                                <textarea type="text" id="Add3" class="formControl md-textarea" maxlength="100"
+                                    ng-maxlength="100" rows="3" name="Add3" placeholder="Address" ng-model="model.Address3"></textarea>
+                            </div>
+                        </div>
+                        <div class="row responsive-sm">
+                            <div class="col col-33">
+                                <label for="">Post Code</label>
+                                <input type="text" id="PostCode" class="formControl" name="PostCode" maxlength="100"
+                                    ng-maxlength="100" placeholder="Post Code" ng-model="model.PostCode">
+                            </div>
+                            <div class="col col-33">
+                                <label for="">Contact</label>
+                                <input type="text" name="Contact" class="formControl" maxlength="100" ng-maxlength="100"
+                                    placeholder="Contact" ng-model="model.Contact">
+                            </div>
+                            <div class="col col-33">
+                                <label for="">Description</label>
+                                <input type="text" name="Description" class="formControl" maxlength="100" ng-maxlength="100"
+                                    placeholder="Description" ng-model="model.Description">
+                            </div>
+                        </div>
+                        <div class="row responsive-sm">
+                            <div class="col col-33">
+                                <label for="">Note</label>
+                                <input type="text" name="Note" class="formControl" maxlength="600" ng-maxlength="600"
+                                    laceholder="Note" ng-model="model.Note">
+                            </div>
+                            <div class="row responsive-sm">
+                                <div class="col col-50">
+                                    <label for="">Latitude*</label>
+                                    <input type="text" id="Latitude" class="formControl" name="Latitude" ng-model="model.Latitude"
+                                        placeholder="Latitude" required>
+                                    <span class="errorMsg text-center" ng-show="formsubmit && (FormCustomerBranch.Latitude.$dirty || FormCustomerBranch.Latitude.$invalid)">
+                                        <span ng-show="FormCustomerBranch.Latitude.$error.required">
+                                            Please Enter Latitude
+                                        </span>
+                                    </span>
+                                </div>
+                                <div class="col col-50">
+                                    <label for="">Longitude*</label>
+                                    <input type="text" id="Longitude" class="formControl" name="Longitude" ng-model="model.Longitude"
+                                        placeholder="Longitude" required>
+                                    <span class="errorMsg text-center" ng-show="formsubmit && (FormCustomerBranch.Longitude.$dirty || FormCustomerBranch.Longitude.$invalid)">
+                                        <span ng-show="FormCustomerBranch.Longitude.$error.required">
+                                            Please Enter Longitude
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row responsive-sm">
+                            <div class="col">
+                                <label class="formCheck" for="Active"><input type="checkbox" id="Active" ng-model="model.IsActive"><span>Active</span></label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <button class="cBtn cBtn-green cBtn-block cBtn-shadow" ng-click="SaveCustomerBranch(FormCustomerBranch)"
+                                type="submit"><i class="ion-document-text"></i>
+                                Save</button>
+                            </div>
+                        </div>
+                        <div class="s20"></div>
+                    </div>
+                </div>
+                
+            </form>
+        </div>
+    </ion-content>
+</ion-view>

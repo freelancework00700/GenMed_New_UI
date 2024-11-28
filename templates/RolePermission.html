@@ -1,0 +1,61 @@
+<ion-view class="patternBg">
+    <ion-content>
+        <div class="container">
+            <div class="s10"></div>
+            <div class="row row-center">
+                <div class="col">
+                    <select name="role" class="formControl" ng-model="model.idRoles" ng-change="GetAllPermissionByRole()">
+                        <option value="">Select Role</option>
+                        <option ng-repeat="o in lstRoles" value="{{o.id}}">{{o.Name}}</option>
+                    </select>
+                </div>
+
+            </div>
+            <div class="s10"></div>
+            <div class="row row-center">
+                <div class="col">
+                    <div class="searchBox">
+                        <input id="mytext" type="text" ng-model="Searchmodel.Search" class="formControl"
+                            ng-model-options="{ debounce: 1500 }" ng-change="FilterData()" placeholder="Filter by  Module">
+                        <button type="button" class="cBtn cBtn-blue" ng-click="FilterData()">
+                            <span>Search</span>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+            <div class="s20"></div>
+            <div class="cDataTable">
+                <table id="RolePerTable" class="cell-border" style="width:100%;">
+                    <thead>
+                        <tr>
+                            <th class="all">
+                                No
+                            </th>
+                            <th>Module </th>
+                            <th class="all">
+                                Access Permission
+                                <input type="checkbox" ng-change="ChangeAllPermission()" ng-model="modelAllPermission.AccessPermission"
+                                    value="modelAllPermission.AccessPermission" ng-true-value="true" ng-false-value="false">
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-if="lstModules.length>0" ng-repeat="o in lstModules">
+                            <td>{{$index + 1}}</td>
+                            <td>{{o.Name}}</td>
+                            <td>
+                                <input type="checkbox" ng-change="ChangePermission(o)" ng-model="o.AccessPermission"
+                                    value="o.AccessPermission" ng-true-value="true" ng-false-value="false">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- END .container -->
+        </div>
+
+
+    </ion-content>
+</ion-view>

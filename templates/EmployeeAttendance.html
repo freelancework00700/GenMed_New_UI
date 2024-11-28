@@ -1,0 +1,231 @@
+<ion-view class="patternBg">
+    <ion-content>
+        <div ng-if="!flag">
+            <div class="container">
+                <div class="s10"></div>
+                <div class="row row-center">
+                    <div class="col">
+                        <div class="searchBox">
+                            <input type="text" ng-model="Searchmodel.Search" class="formControl" ng-model-options="{ debounce: 1500 }"
+                                ng-enter="FilterData()" placeholder="Filter by Employee, Date  or Time">
+                            <button type="button" class="cBtn cBtn-blue" ng-click="FilterData()">
+                                <span>Search</span>
+                            </button>
+                            <a ng-click="vm.Reset()" class="cBtn cBtn-green cBtn-autoWidth d-flex items-center justify-center gap-2">
+                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                </svg>
+                                <span>Add
+                                    Attendence</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="s20"></div>
+                <div class="cDataTable">
+                    <table id="EMPAttendenceTable" class="cell-border" style="width:100%;">
+                        <thead>
+                            <tr>
+                                <th class="all">No</th>
+                                <th>Employee</th>
+                                <th>Month - Year</th>
+                                <th>Total Days</th>
+                                <th>F/A Days</th>
+                                <th>Half Days</th>
+                                <th class="all">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="o in pendlist | orderBy: '-CreatedDate'">
+                                <td>{{$index + 1}}</td>
+                                <td>{{o.Name}}</td>
+                                <td>{{o.AttendenceMonth}} - {{o.AttendenceYear}}</td>
+                                <td>{{o.TotalDays}}</td>
+                                <td>{{o.TotalPresentDays}} / {{o.TotalAbsentDays}} days</td>
+                                <td>{{o.TotalHalfDays}}</td>
+                                <td>
+                                    <a ng-click="EditAttendanceById(o)" class="btnAction btnAction-edit">
+                                        <i class="ion-edit" title="Edit">
+                                        </i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- END .container -->
+        </div>
+
+        <!-- ng-if="!IsList" -->
+        <div class="container" ng-if="flag">
+            <div class="s20"></div>
+            <form name="formempdetails" class="cForm light">
+                <div class="infoBox02">
+                    <div class="container">
+                        <div class="s25"></div>
+                        <div class="row responsive-sm">
+                            <div class="col col-33">
+                                <label for="">Employee*</label>
+                                <select Name="idUser" class="formControl" ng-disabled="flgEdit" ng-model="model.idUser"
+                                    ng-change="AddAllRow()" required>
+                                    <option value="">Select Employee</option>
+                                    <option ng-repeat="e in lstEmployee" value="{{e.id}}" ng-selected="e.id==model.idUser">{{e.username}}</option>
+                                </select>
+                                <span class="errorMsg text-center" ng-show="FormEMPSubmit && (formempdetails.idUser.$dirty || formempdetails.idUser.$invalid)">
+                                    <span ng-show="formempdetails.idUser.$error.required">
+                                        Please Enter Employee
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="col col-33">
+                                <label for="">Month*</label>
+                                <select Name="Month" class="formControl" ng-disabled="flgEdit" ng-model="model.AttendenceMonth"
+                                    ng-change="AddAllRow()" required convert-to-number>
+                                    <option value="">Select Month</option>
+                                    <option value="{{o.id}}" ng-selected="o.id==model.AttendenceMonth" ng-repeat="o in lstMonth">{{o.Month}}</option>
+                                </select>
+                                <span class="errorMsg text-center" ng-show="FormEMPSubmit && (formempdetails.Month.$dirty || formempdetails.Month.$invalid)">
+                                    <span ng-show="formempdetails.Month.$error.required">
+                                        Please Enter Month
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="col col-33">
+                                <label for="">Year*</label>
+                                <select Name="Year" class="formControl" ng-disabled="flgEdit" ng-model="model.AttendenceYear"
+                                    ng-change="AddAllRow()" required convert-to-number>
+                                    <option value="">Select Year</option>
+                                    <option value="{{o.id}}" ng-selected="o.id==model.AttendenceYear" ng-repeat="o in lstyear | orderBy: 'Year'">{{o.Year}}</option>
+                                </select>
+                                <span class="errorMsg text-center" ng-show="FormEMPSubmit && (formempdetails.Year.$dirty || formempdetails.Year.$invalid)">
+                                    <span ng-show="formempdetails.Year.$error.required">
+                                        Please Enter Year
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="s20"></div>
+
+                <div class="row responsive-sm">
+                    <div class="col col-25">
+                        <div class="infoBox02">
+                            <div class="container">
+                                <div class="s20"></div>
+
+                                <h2 class="text-center">{{TotalDays}}</h2>
+                                <h3 class="text-center">Total Month Days</h3>
+                                <!-- END .dash2col -->
+                                <div class="s20"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col col-25">
+                        <div class="infoBox02">
+                            <div class="container">
+                                <div class="s20"></div>
+
+                                <h2 class="text-center">{{AbsentDays}}</h2>
+                                <h3 class="text-center">Absent Days</h3>
+                                <!-- END .dash2col -->
+                                <div class="s20"></div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="col col-25">
+                        <div class="infoBox02">
+                            <div class="container">
+                                <div class="s20"></div>
+
+                                <h2 class="text-center">{{PresentDays}}</h2>
+                                <h3 class="text-center">Present Days</h3>
+                                <!-- END .dash2col -->
+                                <div class="s20"></div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="col col-25">
+                        <div class="infoBox02">
+                            <div class="container">
+                                <div class="s20"></div>
+
+                                <h2 class="text-center">{{HalfDays}}</h2>
+                                <h3 class="text-center">Half Days</h3>
+                                <!-- END .dash2col -->
+                                <div class="s20"></div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                </div>
+                <div class="s10"></div>
+                <div class="row">
+                    <div class="col">
+                        <button class="cBtn cBtn-green cBtn-block cBtn-shadow" ng-click="CreateEmpAttenDetails(formempdetails)"
+                            type="submit"><i class="ion-document-text"></i>
+                            Save</button>
+
+                    </div>
+                    <div class="col">
+                        <button class="cBtn cBtn-skyblue cBtn-block cBtn-shadow" ng-click="gotoList()" type="submit"><i
+                                class="ion-document-text"></i>
+                            Cancel</button>
+                    </div>
+                </div>
+                <div class="s20"></div>
+                <div class="row responsive-sm">
+
+                    <table id="TableDays" class="customTable" style="width:100%;">
+                        <thead>
+                            <tr>
+                                <th>Attendance Date</th>
+                                <th>Day</th>
+                                <th>
+
+                                    <input type="checkbox" name="chkAll" ng-change="toggleAll()" ng-model="vm.isAllSelected"
+                                        aria-label="IsPresent" ng-true-value="1" ng-false-value="0">Is Present
+                                </th>
+                                <th>
+                                    <input type="checkbox" name="chkHalfAll" ng-change="toggleAllHalfDay()" ng-model="vm.isAllHalfDay"
+                                        aria-label="IsHalfDay" ng-true-value="1" ng-false-value="0">Is Half Day
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="emp in lstdate" ng-class="emp.AttendenceDay == 'Sunday' ? 'sunday' : ''">
+                                <td>{{emp.AttendenceDate | date:'dd-MM-yyyy'}}</td>
+                                <td>{{emp.AttendenceDay}}</td>
+                                <td>
+                                    <input type="checkbox" name="chk_{{$index}}" ng-model="emp.IsPresent" value="emp.IsPresent"
+                                        ng-click="optionToggled(emp)" ng-model="emp.IsPresent" ng-true-value="1"
+                                        ng-false-value="0">
+                                </td>
+                                <td>
+                                    <input type="checkbox" name="chkHalf_{{$index}}" value="emp.IsHalfDay" ng-click="optionHalfDayToggled(emp)"
+                                        ng-model="emp.IsHalfDay" ng-true-value="1" ng-false-value="0">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </form>
+        </div>
+    </ion-content>
+</ion-view>
+
+<style>
+    #TableDays {
+        color: #000000;
+    }
+</style>

@@ -1,0 +1,338 @@
+<ion-view class="grayBg">
+      <ion-content class="has-header">
+            <div class="container">
+                  <div class="s10"></div>
+                  <div class="row ">
+                        <div class="col col-66">
+                              <div class="section-heading mb-4">Dashboard Statistic</div>
+                              <div class="row box-main-wrapper">
+                                    <div class="col col-33">
+                                          <div class="infoBoxDashboard gradient-box-dashboard h-full">
+                                                <div class="infoBoxIcon c-infoBoxIcon">
+                                                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-users stroke-[1] w-6 h-6 text-pending fill-pending/10"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                                                </div>
+                                                <div>
+                                                      <div class="box-number">{{obj.TotalCustomer | number}}</div>
+                                                      <div class="box-number-content">Total Customer</div>
+                                                      <div class="content-text">The total Customer generated from Medical Sales and Medical services.</div>
+                                                </div>
+                                                <div class="full-report">
+                                                      <div class="report-text">Show full reports</div>
+                                                      <div class="forward-icon-report">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right stroke-[1] w-4 h-4"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                                                      </div>
+                                                </div>
+                                          </div>
+                                    </div>
+                                    <div class="col col-66 p-0">
+                                          <div class="row flex-wrap p-0">
+                                                <div class="col col-50">
+                                                      <div class="infoBoxDashboard">
+                                                            <div class="infoBoxIcon purple-color ">
+                                                                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3730a3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-dollar-sign stroke-[1] w-6 h-6 text-warning fill-warning/10"><circle cx="12" cy="12" r="10"></circle><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><path d="M12 18V6"></path></svg>
+                                                            </div>
+                                                            <div class="text-right">
+                                                                  <div class="box-number">{{obj.CurrentMonthSale | number}}</div>
+                                                                  <div class="box-number-content">This Month Sales</div>
+                                                            </div>
+                                                      </div>
+                                                </div>
+                                                <div class="col col-50">
+                                                      <div class="infoBoxDashboard">
+                                                            <div class="infoBoxIcon red-color">
+                                                                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c2410c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-dollar-sign stroke-[1] w-6 h-6 text-warning fill-warning/10"><circle cx="12" cy="12" r="10"></circle><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><path d="M12 18V6"></path></svg>
+                                                            </div>
+                                                            <div class="text-right">
+                                                                  <div class="box-number">{{obj.LastMonthSale | number}}</div>
+                                                                  <div class="box-number-content">Last Month Sales</div>
+                                                            </div>
+                                                      </div>
+                                                </div>
+                                                <div class="col col-50">
+                                                      <div class="infoBoxDashboard">
+                                                            <div class="infoBoxIcon yellow-color">
+                                                                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ca8a04" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shopping-bag stroke-[1] w-6 h-6 text-primary fill-primary/10"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path><path d="M3 6h18"></path><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                                                            </div>
+                                                            <div class="text-right">
+                                                                  <div class="box-number">{{obj.CurrentMonthPurchase | number}}</div>
+                                                                  <div class="box-number-content">This Month Purchases</div>
+                                                            </div>
+                                                      </div>
+                                                </div>
+                                                <div class="col col-50">
+                                                      <div class="infoBoxDashboard">
+                                                            <div class="infoBoxIcon green-color">
+                                                                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shopping-bag stroke-[1] w-6 h-6 text-primary fill-primary/10"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path><path d="M3 6h18"></path><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                                                            </div>
+                                                            <div class="text-right">
+                                                                  <div class="box-number">{{obj.LastMonthPurchase | number}}</div>
+                                                                  <div class="box-number-content">Last Month Purchases</div>
+                                                            </div>
+                                                      </div>
+                                                </div>
+                                          </div>
+                                    </div>
+                              </div>
+                              <div class="s10"></div>
+                              <div class="d-flex justify-content-between items-center mb-3 mt-4">
+                                    <div class="section-heading">Sales</div>
+                                    <div class="subsection-heading">Total sales amount:  <span class="box-number">{{totalAmount | number}}</span></div>
+                              </div>
+                              <div class="sales-dashboard-table">
+                                    <div class="cDataTable">
+                                          <table id="SalesTable" class="cell-border" width="100%">
+                                                <thead>
+                                                      <tr>
+                                                            <th class="all">No</th>
+                                                            <th>S/I No </th>
+                                                            <th>Invoice Date</th>
+                                                            <th>Customer Code</th>
+                                                            <th>Customer Name</th>
+                                                            <th>Branch Code</th>
+                                                            <th>Sub Total</th>
+                                                            <th>Tax</th>
+                                                            <th>Final Total</th>
+                                                            <th>Favorite</th>
+                                                            <th class="all">Action</th>
+                                                      </tr>
+                                                </thead>
+                                          </table>
+                                    </div>
+                              </div>
+                        </div>
+                        <div class="col col-33">
+                              <div class="d-flex justify-content-between items-center mb-3">
+                                    <div class="section-heading ">Appointment</div>
+                                    <div class="d-flex items-center gap-2 cursor-pointer" ng-click="ShowHideAppointment()" ng-if="!show">
+                                          <button class="backBtn-return"> 
+                                          <div class="add-new-appoint-text">Add new</div>
+                                          <div class="add-new-appoint-icon d-flex">
+                                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-7 7V5"/>
+                                                </svg>                                              
+                                          </div>
+                                          </button>
+                                    </div>
+                                    <div class="d-flex items-center gap-2 cursor-pointer" ng-click="BackToList()" ng-if="show">
+                                          <button class="backBtn-return"> 
+                                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#2283c1" version="1.1" id="Capa_1" 
+                                                width="18px" height="24px" viewBox="0 0 36.438 36.438" xml:space="preserve" class="svgRotate">
+                                                      <g>
+                                                            <path d="M26.58,17.594c0.417,0.417,0.962,0.625,1.508,0.625s1.091-0.208,1.508-0.625l5.332-5.331   c0.001-0.002,0.002-0.002,0.002-0.002l1.508-1.508l-1.507-1.507c0,0-0.002-0.002-0.003-0.003l-4.977-4.977   c-0.832-0.833-2.182-0.833-3.016,0c-0.834,0.834-0.834,2.184,0,3.017l1.336,1.336H12.088C5.422,8.619,0,14.043,0,20.708   c0,6.666,5.423,12.089,12.088,12.089h21.333c1.179,0,2.133-0.955,2.133-2.134c0-1.178-0.954-2.133-2.133-2.133H12.088   c-4.313,0-7.822-3.51-7.822-7.822c0-4.312,3.509-7.821,7.822-7.821h16.184l-1.691,1.691C25.746,15.411,25.746,16.761,26.58,17.594z   "/>
+                                                      </g>
+                                                </svg>
+                                          Back to Appointment List</button>
+                                    </div>
+                              </div>
+                              <div class="box-main-wrapper appointment-custom-height">
+                                    <div class="row flex-wrap" ng-if="!show">
+                                          <div class="col col-16">
+                                                <div class="date-box active">
+                                                      <div class="date">26</div>
+                                                      <div class="day">Today</div>
+                                                </div>
+                                          </div>
+                                          <div class="col col-16">
+                                                <div class="date-box ">
+                                                      <div class="date">27</div>
+                                                      <div class="day">Tuesday</div>
+                                                </div>
+                                          </div>
+                                          <div class="col col-16">
+                                                <div class="date-box ">
+                                                      <div class="date">28</div>
+                                                      <div class="day">Wednesday</div>
+                                                </div>
+                                          </div>
+                                          <div class="col col-16">
+                                                <div class="date-box ">
+                                                      <div class="date">29</div>
+                                                      <div class="day">Thursday</div>
+                                                </div>
+                                          </div>
+                                          <div class="col col-16">
+                                                <div class="date-box ">
+                                                      <div class="date">30</div>
+                                                      <div class="day">Friday</div>
+                                                </div>
+                                          </div>
+                                          <div class="col col-16">
+                                                <div class="date-box">
+                                                      <div class="date">31</div>
+                                                      <div class="day">Saturday</div>
+                                                </div>
+                                          </div>
+                                    </div>
+                                    <div>
+                                          <form name="appointment" class="cForm light" ng-submit="SaveAppointment()" ng-if="show">                                                       
+                                                <div class="row responsive-sm">
+                                                      <div class="col col-50">
+                                                            <label for="date">Date</label>
+                                                            <input type="text" class="formControl" ng-model="o.RCHQDate" date ion-datetime-picker
+                                                                  placeholder="Select Date" value="{{o.RCHQDate | date : 'dd-mm-yyyy'}}">
+                                                      </div>                                            
+                                                      <div class="col col-50">
+                                                            <label for="time">Time</label>
+                                                            <input type="text" class="formControl" ng-model="o.RCHQTime" ion-datetime-picker time
+                                                                  placeholder="Select Time" time-format="h:mm a" value="{{o.RCHQTime | date : 'h:mm a'}}">
+                                                      </div>
+                                                </div>
+                                                <div class="row responsive-sm">
+                                                      <div class="col col-50">
+                                                            <label for="name">Name</label>
+                                                            <input class="formControl" type="text" ng-model="o.name" id="name" placeholder="Enter Name">
+                                                            <span class="errorMsg text-center" ng-show="formsubmit && (FormSales.CustomerName.$dirty || FormSales.CustomerName.$invalid)">
+                                                                  <span ng-show="FormSales.CustomerName.$error.required">
+                                                                        Please Enter Name
+                                                                  </span>
+                                                            </span>
+                                                      </div>
+                                                      <div class="col col-50">
+                                                            <label for="appointmentType">Appointment Type</label>
+                                                            <select id="appointmentType" class="formControl" ng-model="o.appointmentType"
+                                                                  name="appointmentType">
+                                                                  <option value="consultation">Consultation</option>
+                                                                  <option value="follow-up">Follow-up</option>
+                                                            </select>
+                                                      </div>
+                                                </div>
+                                                <div style="margin: 10px;margin-top: 0;">
+                                                      <label for="description">Description</label>
+                                                      <textarea id="description" name="description" class="formControl md-textarea"  placeholder="Enter Description" ng-model="o.description"></textarea>
+                                                </div>
+                                                <div class="row">
+                                                      <div class="col col-100">
+                                                            <button class="cBtn cBtn-green cBtn-block " ng-click="SaveAppointment($event)">Book Appointment</button>
+                                                      </div>
+                                                </div>
+                                          </form>                                            
+                                          <div ng-if="!show" >
+                                                <div class="cDataTable appointment-table-wrapper">
+                                                      <table id="ApplicationTable" class="cell-border" style="width:100%;">
+                                                            <thead>
+                                                                  <tr>
+                                                                        <th class="all" width="4%">
+                                                                            No
+                                                                        </th>
+                                                                        <th width="12%">
+                                                                            Name
+                                                                        </th>
+                                                                        <th width="26%">
+                                                                            Description
+                                                                        </th>
+                                                                        <th width="26%">
+                                                                            Date
+                                                                        </th>
+                                                                        <th width="12%">
+                                                                            Time
+                                                                        </th width="10%">
+                                                                        <th>
+                                                                            Appointment type
+                                                                        </th>
+                                                                        <th width="4%">
+                                                                            status
+                                                                        </th>
+                                                                  </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                  <tr ng-if="lstAppointment.length>0" ng-repeat="o in lstAppointment">
+                                                                        <td>{{$index + 1}}</td>
+                                                                        <td>{{o.name || "N/A"}}</td>
+                                                                        <td>
+                                                                            <span ng-if="o.description.length<=50">{{o.description|| "N/A"}}</span>
+                                                                            <span ng-if="o.description.length>50" title="{{o.description}}">{{o.description |
+                                                                                limitTo:50}}...</span>
+                                                                        </td>
+                                                                        <td>
+                                                                            {{o.date | date : 'dd-mm-yyyy'}}
+                                                                        </td>
+                                                                        <td>
+                                                                            {{o.time | date : 'h:mm a'}}
+                                                                        </td>
+                                                                        <td>
+                                                                            {{o.appointmentType}}
+                                                                        </td>
+                                                                        <td>
+                                                                            {{o.status ? "Done" : "Pending"}}
+                                                                        </td>
+                                                                  </tr>
+                                                            </tbody>
+                                                      </table>
+                                                </div>
+                                          </div>
+                                    </div>
+                              </div>
+                        </div>
+                  </div>
+            </div>           
+      </ion-content>
+      <script id="OrderView.html" type="text/ng-template">
+            <ion-modal-view class="patternBg">
+            <ion-header-bar class="customPgHeader">
+                <div class="col01">
+                    <span class="pgTitle">Order Details</span>
+                </div>
+                <div class="col02">
+                    <button class="cBtn cBtn-skyblue cBtn-block cBtn-shadow" ng-click="closeModal()" type="submit"><i class="ion-close-circled"></i>
+                      Cancel</button>
+                </div>
+            </ion-header-bar>
+            <ion-content padding="true">
+                <div class="container">
+                    <div class="s10"></div>
+                    <div class="row row-center">
+                        <div class="col 0">
+                            <div><b>Customer Name :</b>{{RecentOrderView.CustomerName}}</div>
+                            <div><b>Customer Code :</b>{{RecentOrderView.CustomerCode}}</div>
+                        </div>
+                        <div class="col 0">
+                            <div><b>Invoice Date :</b>{{RecentOrderView.InvoiceDate}}</div>
+                            <div><b>Phone Number :</b>{{RecentOrderView.PhoneNumber}}</div>
+                        </div>
+                    </div>
+                    <div class="s20"></div>
+                    <div class="row row-center">
+                        <div class="col"><b>Item List</b>
+                        </div>
+                    </div>
+                    <div>
+                        <table class="customTable" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>Description</th>
+                                    <th>Oty</th>
+                                    <th>Unit Price</th>
+                                    <th>Total</th>
+                                    <th>VAT</th>
+                                    <th>Final Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="o in RecentOrderView.invoicedetails">
+                                    <td>{{o.Descriptions}}</td>
+                                    <td>{{o.Qty}}</td>
+                                    <td>{{o.Price | number}}</td>
+                                    <td>{{o.Total | number}}</td>
+                                    <td>{{o.Tax | number : 2}}</td>
+                                    <td>{{o.FinalTotal | number : 2}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="s20"></div>
+                    <div class="row text-center" style="text-align: right;">
+                        <div class="col col-80">
+                            <div><b>Total :</b></div>
+                            <div><b>Tax :</b></div>
+                            <div><b>Net Total :</b></div>
+                        </div>
+                        <div class="col col-20" style="text-align=right;">
+                            <div>{{RecentOrderView.Total | number : 2}}</div>
+                            <div>{{RecentOrderView.Tax | number : 2 }}</div>
+                            <div>{{RecentOrderView.NetTotal | number : 2}}</div>
+                        </div>
+                    </div>
+            </ion-content>
+        </ion-modal-view>
+    </script>
+</ion-view>

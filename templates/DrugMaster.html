@@ -1,0 +1,303 @@
+<ion-view class="patternBg">
+    <ion-content>
+        <div ng-if="IsList">
+            <div class="container">
+                <div class="row responsive-sm cForm light">
+                    <div class="col col-100">
+                        <div class="infoBox02">
+                            <div class="container">
+                                <div class="row responsive-sm">
+                                    <div class="col col-33">
+                                        <div style="text-align: left;margin-bottom: 5px;">
+                                            <label for="ItemName">ItemName</label>
+                                        </div>
+                                        <div style="text-align: left;">
+                                            <input ng-model="EditModel.ItemName" class="formControl"
+                                                ng-change="GetAllItemSearch(EditModel.ItemName)">
+                                            <div class="list12" ng-hide="EditModel.ItemName==''">
+                                                <ul class="list-group mainfont ulclass"
+                                                    style="padding: 0px 5px;font-size: 10px;max-height: 20em;overflow-y: auto;">
+                                                    <li class="item" style="border: 1px solid #a2a2a2;height: 0px;"
+                                                        ng-click="SelectItem(t1)" ng-repeat="t1 in lstItemsSearch"
+                                                        class="list-group-item mainfont">
+                                                        {{t1.ItemName}}</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col col-33">
+                                        <div style="text-align: left;margin-bottom: 5px;">
+                                            <label for="Contain">Contain</label>
+                                        </div>
+                                        <div style="text-align: left;">
+                                            <input ng-model="EditModel.Descriptions" class="formControl">
+                                        </div>
+                                    </div>
+                                    <div class="col col-33">
+                                        <div class="s20"></div>
+                                        <div class="row responsive-sm" style="text-align: right;display: block">
+                                            <a ng-click="SaveContainName()" class="cBtn cBtn-green cBtn-autoWidth d-flex items-center justify-center gap-2">
+                                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                                </svg>
+                                                 <span>Save</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>                               
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row responsive-sm" style="max-width: 100%; display: block;">
+                    <div class="infoBox02">
+                        <div class="row responsive-sm">
+                            <div class="col">
+                                <div class="searchBox">
+                                    <input type="text" ng-model="modelContainSearch.Search" class="formControl"
+                                        placeholder="Search Contain Here"
+                                        ng-change="GetAllContianBySearchText(modelContainSearch.Search)">
+                                    <div class="list12" ng-hide="modelContainSearch.Search==''">
+                                        <ul class="list-group mainfont ulclass"
+                                            style="padding: 40px 5px;font-size: 10px;max-height: 20em;overflow-y: auto;">
+                                            <li class="item" style="border: 1px solid #a2a2a2;height: 0px;"
+                                                ng-click="GetAllItemByDrug(t1.Descriptions)"
+                                                ng-repeat="t1 in lstcontainSearch" class="list-group-item mainfont">
+                                                {{t1.Descriptions}}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row responsive-sm">
+                            <div style="width: 20%;">
+                                <label>Contains</label>
+                            </div>
+                            <div style="width: 80%; text-align: center;" class="row responsive-sm">
+                                <div class="col col-10"><label>No</label>
+                                </div>
+                                <div class="col col-10"> <label>Name</label>
+                                </div>
+                                <div class="col col-10"><label> Main Company</label>
+                                </div>
+                                <div class="col col-10"> <label>Company</label>
+                                </div>
+                                <div class="col col-10"> <label>Pack</label>
+                                </div>
+                                <div class="col col-10"><label> Sales Rate</label>
+                                </div>
+                                <div class="col col-10"> <label>MRP</label>
+                                </div>
+                                <div class="col col-10"> <label>Stock</label>
+                                </div>
+                                <div class="col col-10"> <label>Pure Rate</label>
+                                </div>
+                                <div class="col col-10"> <label>Margin</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class=" row responsive-sm">
+                            <div style="width: 20%;">
+                                <ul class="list-group mainfont ulclass" style="color: black;
+                                    list-style-type: none;padding: 10px;max-height: 30em;overflow-y: auto;">
+                                    <li ng-show="lstcontain.length>0"
+                                        ng-repeat="t1 in lstcontain | filter: modelContainSearch.Search"
+                                        style="padding:3px;cursor: pointer;border-bottom: 1px inset"
+                                        ng-click="GetAllItemByDrug(t1.Descriptions);SetColor(-1)">
+                                        {{t1.Descriptions}}</li>
+                                    <li ng-show="(lstcontain | filter:modelContainSearch.Search).length == 0"
+                                        style="padding:3px">
+                                        No Data Available</li>
+                                </ul>
+                            </div>
+                            <div style="width: 80%;">
+                                <ul class="list-group mainfont ulclass" style="color: black;
+                                    list-style-type: none;
+                                    max-height: 30em;overflow-y: auto;">
+                                    <li ng-show="lstItembyDrug.length>0" ng-repeat="o in lstItembyDrug"
+                                        style="border-bottom: 1px inset; font-size: 12px;"
+                                        ng-click="AddItemToTable(o); SetColor($index)"
+                                        ng-class="$index == MyColor? 'ColorOdd' : 'ColorEven'">
+                                        <div class="row">
+                                            <div class="col col-10 border1_r">
+                                                {{$index + 1}}</div>
+                                            <div class="col col-10 border1_r">
+                                                {{o.ItemName || "N/A"}}
+                                            </div>
+                                            <div class="col col-10 border1_r">
+                                                {{o.Descriptions2 || "N/A"}}
+                                            </div>
+                                            <div class="col col-10 border1_r">
+                                                {{o.subbrand.SubBrandName || "N/A"}}
+                                            </div>
+                                            <div class="col col-10 border1_r">
+                                                {{o.SalesUOM || "N/A"}}
+                                            </div>
+                                            <div class="col col-10 border1_r">
+                                                {{o.SaleRate | number:2}}
+                                            </div>
+                                            <div class="col col-10 border1_r">
+                                                {{o.MRP | number:2}}
+                                            </div>
+                                            <div class="col col-10 border1_r">
+                                                {{o.Stock || 0}}
+                                            </div>
+                                            <div class="col col-10 border1_r">
+                                                {{o.PurchaseRate | number:2}}
+                                            </div>
+                                            <div class="col col-10 border1_r"
+                                                ng-show="CurrentCustomerGroup == 'Genmed'">
+                                                Genmed: {{o.MarginGenmed}}<br>
+                                                Stokist: {{o.MarginStockHolder}}<br>
+                                                Franchise: {{o.MarginShop}}
+                                            </div>
+                                            <div class="col col-10 border1_r"
+                                                ng-show="CurrentCustomerGroup == 'Stock Holder'">
+                                                Stokist: {{o.MarginStockHolder}}<br>
+                                                Franchise: {{o.MarginShop}}
+                                            </div>
+                                            <div class="col col-10 border1_r" ng-show="CurrentCustomerGroup == 'Shop'">
+                                                {{o.MarginShop}}
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li ng-hide="lstItembyDrug.length>0" style="padding:3px">
+                                        No Data Available</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </ion-content>
+
+    <!-- Commented Code Start-->
+
+    <!-- <script id="DrugMasterpopup.html" type="text/ng-template">
+        <ion-modal-view class="patternBg" style="width: 75%;">
+            <ion-header-bar class="customPgHeader">
+                <div class="col01">
+                    <span class="pgTitle">Drug Detail</span>
+                </div>
+                <div class="col02">
+                    <button class="cBtn cBtn-skyblue cBtn-block cBtn-shadow" ng-click="closeDeliveryPackingSlipModal()" type="submit"><i class="ion-close-circled"></i>
+                      Cancel</button>
+                </div>
+            </ion-header-bar>
+            <ion-content>
+                <div class="container">
+                    <div class="cDataTable">
+                        <table id="DMTable" class="cell-border" width="100%">
+                            <thead>
+                                <tr>
+                                    <th class="all">
+                                        No
+                                    </th>
+                                    <th>
+                                        Name
+                                    </th>
+                                    <th>
+                                        Main Company
+                                    </th>
+                                    <th>
+                                         Company
+                                    </th>
+                                    <th>
+                                        Pack
+                                   </th>
+                                    <th>
+                                        Sales Rate
+                                    </th>
+                                    <th>
+                                        MRP
+                                    </th>
+                                    <th>
+                                        Stock
+                                    </th>
+                                    <th>
+                                        Pure Rate
+                                    </th>
+                                    <th>
+                                        Margin
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="o in lstItembyDrug">
+                                    <td>{{$index + 1}}</td>
+                                    <td>
+                                       {{o.ItemName || "N/A"}}
+                                    </td>
+                                    <td>
+                                        {{o.Descriptions2 || "N/A"}}
+                                     </td>
+                                     <td>
+                                        {{o.subbrand.SubBrandName || "N/A"}}
+                                     </td>
+                                     <td>
+                                        {{o.SalesUOM || "N/A"}}
+                                     </td>
+                                     <td>
+                                        {{o.SaleRate | number:2}}
+                                     </td>
+                                     <td>
+                                        {{o.MRP | number:2}}
+                                     </td>
+                                     <td>
+                                        {{o.Stock || 0}}
+                                     </td>
+                                     <td>
+                                        {{o.PurchaseRate | number:2}}
+                                     </td>
+                                     <td ng-if="CurrentCustomerGroup == 'Genmed'">
+                                        Genmed: {{o.MarginGenmed}}<br>
+                                        Stokist:  {{o.MarginStockHolder}}<br>
+                                        Franchise: {{o.MarginShop}}
+                                     </td>
+                                     <td ng-if="CurrentCustomerGroup == 'Stock Holder'">
+                                        Stokist: {{o.MarginStockHolder}}<br>
+                                        Franchise: {{o.MarginShop}}
+                                     </td>
+                                     <td ng-if="CurrentCustomerGroup == 'Shop'">
+                                        {{o.MarginShop}}
+                                     </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </ion-content>
+        </ion-modal-view>
+    </script> -->
+
+    <!-- Commented Code End-->
+
+
+    <style>
+        .list12 {
+            position: fixed;
+            z-index: 1;
+        }
+
+        .list12:hover {
+            display: block;
+        }
+
+        /* .ColorevenOdd {
+            background: #b8d1f3;
+        } */
+
+        .ColorEven {
+            background: #adebca;
+        }
+
+        .ColorOdd {
+            background: #fafdfa;
+        }
+    </style>
+
+</ion-view>

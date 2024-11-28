@@ -1,0 +1,188 @@
+<ion-view class="loginBg">
+  <ion-content scroll="false">
+    <div class="loginBoard">
+      <div class="shadow-login-bg"></div>
+      <div class="login-bg-color">  
+        <div class="content-loginform">
+          <div class="illustration-box">
+            <div class="illustration-img">
+              <img src="img/bg-illustration.png"/>
+            </div>
+            <div class="login-box-h3">Preventive Healthcare:<br> The Key to a Healthy Future</div>
+            <div class="login-box-p">Preventive medicine focuses on maintaining well-being through early detection, regular check-ups, and healthy lifestyle choices. Vaccinations, routine screenings, and balanced nutrition play a crucial role in preventing chronic illnesses.</div>
+          </div>
+        </div>      
+        <div class="bg-white-loginform">          
+          <div class="loginFormWrapper">
+            <div class="logoCont w-70 mx-auto">
+              <img src="img/empathy-healthcare.png" alt="">
+            </div>
+            <div class="s40"></div>
+            <div ng-if="IsLoginForm==0">
+              <form role="form" class="cForm ccForm w-70 mx-auto" id="form" name="form">
+                <div>
+                  <input type="text" name="UserName" ng-model="model.UserName" value="" class="formControl" ng-required="true"
+                    placeholder="Username *">
+                  <span class="errorMsg text-center" ng-show="formsubmit && (form.UserName.$dirty || form.UserName.$invalid)">
+                    <span ng-show="form.UserName.$error.required">
+                      Please Enter Email ID
+                    </span>
+                </div>
+                <div class="s15"></div>
+                <div>
+                  <input type="password" name="Password" ng-model="model.Password" value="" class="formControl"
+                    ng-required="true" ng-enter="Login(form,model)" placeholder="Password ">
+                  <span class="errorMsg text-center" ng-show="formsubmit && form.Password.$invalid">
+                    <span ng-show="form.Password.$error.required">
+                      Please Enter Password
+                    </span>
+                  </span>
+                </div>
+                <div class="s15"></div>
+                <div class="row row-no-padding">
+                  <div class="col col-50 no-padding d-flex items-center">
+                      <label class="rememberMe Link-text"><i><input type="checkbox" ng-model="model.IsRemember"></i><span>Remember
+                        Me</span></label>
+                    </div>
+                    <div class="col col-50 no-padding">
+                      <button type="button" ng-click="GoTo(1)" class="cBtn cBtn-block cBtn-clear text-right cBtn-np forgot-password Link-text">Forgot
+                        Password?</button>
+                    </div>
+                </div>                
+                <div class="s40"></div>
+                <button type="button" class="cBtn cBtn-block cBtn-blue fill-btn" ng-click="Login(form,model)">Login</button>
+                <div class="s20"></div>
+                <div class="row row-no-padding">
+                  <div class="col">
+                    <button type="button" ng-click="GoTo(2)" class="cBtn cBtn-block cBtn-clear cBtn-np outline-btn Link-text">Create an
+                      account</button>
+                  </div>
+                </div>  
+              </form>
+            </div>
+            <div ng-if="IsLoginForm==1">
+              <form role="formFP" class="cForm ccForm w-70 mx-auto" id="formFP" name="formFP">
+                <div>
+                  <input type="text" name="UserName" ng-model="modelFP.username" value="" class="formControl"
+                    ng-required="true" placeholder="Please Enter Username Or Email Address*">
+                  <span class="errorMsg text-center"
+                    ng-show="formsubmitFp && (formFP.UserName.$dirty || formFP.UserName.$invalid)">
+                    <span ng-show="formFP.UserName.$error.required">
+                      Please Enter Email ID OR User Name
+                    </span>
+                </div>
+  
+                <div class="s40"></div>
+                <button type="button" class="cBtn cBtn-block cBtn-blue" ng-click="FogotPassword(formFP,modelFP)">Forgot
+                  Password</button>
+                <div class="s20"></div>
+                <div class="row row-no-padding">
+                  <div class="col col-100 no-padding">
+                    <button class="backBtn-return" ng-click="GoTo(0)"> 
+                      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#2283c1" version="1.1" id="Capa_1" 
+                      width="18px" height="24px" viewBox="0 0 36.438 36.438" xml:space="preserve" class="svgRotate">
+                            <g>
+                                  <path d="M26.58,17.594c0.417,0.417,0.962,0.625,1.508,0.625s1.091-0.208,1.508-0.625l5.332-5.331   c0.001-0.002,0.002-0.002,0.002-0.002l1.508-1.508l-1.507-1.507c0,0-0.002-0.002-0.003-0.003l-4.977-4.977   c-0.832-0.833-2.182-0.833-3.016,0c-0.834,0.834-0.834,2.184,0,3.017l1.336,1.336H12.088C5.422,8.619,0,14.043,0,20.708   c0,6.666,5.423,12.089,12.088,12.089h21.333c1.179,0,2.133-0.955,2.133-2.134c0-1.178-0.954-2.133-2.133-2.133H12.088   c-4.313,0-7.822-3.51-7.822-7.822c0-4.312,3.509-7.821,7.822-7.821h16.184l-1.691,1.691C25.746,15.411,25.746,16.761,26.58,17.594z   "/>
+                            </g>
+                      </svg>
+                      Back To Login</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div ng-if="IsLoginForm==2">
+              <form role="FormReg" class="cForm ccForm w-70 mx-auto" id="FormReg" name="FormReg">
+                <div>
+                  <input type="text" name="UserName" ng-model="modelRegister.Name" class="formControl" ng-required="true"
+                    placeholder="Please Enter UserName*">
+                  <span class="errorMsg text-center"
+                    ng-show="formsubmitRegister && (FormReg.UserName.$dirty || FormReg.UserName.$invalid)">
+                    <span ng-show="FormReg.UserName.$error.required">
+                      Please Enter Name
+                    </span>
+                  </span>
+                </div>
+                <div class="s10" ng-if="!formsubmitRegister"></div>
+                <div>
+                  <input type="email" id="Email" class="formControl" maxlength="100" ng-maxlength="100" name="Email"
+                    ng-required="true" placeholder="Email Address*" ng-model="modelRegister.EmailAddress">
+                  <span class="errorMsg text-center"
+                    ng-show="formsubmitRegister && (FormReg.Email.$dirty || FormReg.Email.$invalid)">
+                    <span ng-show="FormReg.Email.$error.required">
+                      Please Enter Email
+                    </span>
+                    <span ng-show="FormReg.Email.$error.email">
+                      Please Enter Valid Email
+                    </span>
+                </div>
+                <div class="s10" ng-if="!formsubmitRegister"></div>
+                <div>
+                  <input type="tel" id="PhoneNumber" class="formControl" name="PhoneNumber"
+                    ng-model="modelRegister.PhoneNumber" placeholder="+11234567890*" required>
+                  <span class="errorMsg text-center"
+                    ng-show="formsubmitRegister && (FormReg.PhoneNumber.$dirty || FormReg.PhoneNumber.$invalid)">
+                    <span ng-show="FormReg.PhoneNumber.$error.required">
+                      Please Enter Phone Number
+                    </span>
+                  </span>
+                </div>
+                <div class="s10" ng-if="!formsubmitRegister"></div>
+                <div>
+                  <input type="password" name="password" class="formControl" ng-required="true" placeholder="Enter Password*"
+                    maxlength="100" ng-maxlength="100" ng-model="modelRegister.password">
+                  <span class="errorMsg text-center"
+                    ng-show="formsubmitRegister && (FormReg.password.$dirty || FormReg.password.$invalid)">
+                    <span ng-show="FormReg.password.$error.required">
+                      Please Enter Password
+                    </span>
+                    <span ng-show="FormReg.password.$error.maxlength">
+                      Maximum length is 100.
+                    </span>
+                  </span>
+                </div>
+                <div class="s10" ng-if="!formsubmitRegister"></div>
+                <div>
+                  <input type="password" name="Cpassword" class="formControl" ng-required="true"
+                    placeholder="Enter Confirm Password*" ng-model="modelRegister.ConfirmPassword">
+                  <span class="errorMsg text-center"
+                    ng-show="formsubmitRegister && (FormReg.Cpassword.$dirty || FormReg.Cpassword.$invalid)">
+                    <span ng-show="FormReg.Cpassword.$error.required">
+                      Please Enter Confirm Password
+                    </span>
+                  </span>
+                </div>
+                <div class="s10" ng-if="!formsubmitRegister"></div>
+                <div>
+                  <input type="text" id="ReferenceByCode" required class="formControl" name="ReferenceByCode"
+                    placeholder="Reference Customer Code*" ng-model="modelRegister.ReferenceByCode">
+                  <span class="errorMsg text-center"
+                    ng-show="formsubmitRegister && (FormReg.ReferenceByCode.$dirty || FormReg.ReferenceByCode.$invalid)">
+                    <span ng-show="FormReg.ReferenceByCode.$error.required">
+                      Please Enter Reference By Code
+                    </span>
+                  </span>
+                </div>
+                <div class="s10" ng-if="!formsubmitRegister"></div>
+                <button type="button" class="cBtn cBtn-block cBtn-blue"
+                  ng-click="Register(FormReg,modelRegister)">Register</button>
+  
+                <div class="row row-no-padding">
+                  <div class="col col-100 no-padding">
+                    <button class="backBtn-return mt-2" ng-click="GoTo(0)"> 
+                      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#2283c1" version="1.1" id="Capa_1" 
+                      width="18px" height="24px" viewBox="0 0 36.438 36.438" xml:space="preserve" class="svgRotate">
+                            <g>
+                                  <path d="M26.58,17.594c0.417,0.417,0.962,0.625,1.508,0.625s1.091-0.208,1.508-0.625l5.332-5.331   c0.001-0.002,0.002-0.002,0.002-0.002l1.508-1.508l-1.507-1.507c0,0-0.002-0.002-0.003-0.003l-4.977-4.977   c-0.832-0.833-2.182-0.833-3.016,0c-0.834,0.834-0.834,2.184,0,3.017l1.336,1.336H12.088C5.422,8.619,0,14.043,0,20.708   c0,6.666,5.423,12.089,12.088,12.089h21.333c1.179,0,2.133-0.955,2.133-2.134c0-1.178-0.954-2.133-2.133-2.133H12.088   c-4.313,0-7.822-3.51-7.822-7.822c0-4.312,3.509-7.821,7.822-7.821h16.184l-1.691,1.691C25.746,15.411,25.746,16.761,26.58,17.594z   "/>
+                            </g>
+                      </svg>
+                      Back To Login</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>        
+      </div>
+    </div>
+   </ion-content>
+</ion-view>

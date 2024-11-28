@@ -1,0 +1,55 @@
+<ion-view class="patternBg">
+    <ion-content>
+        <div class="container">
+            <div class="s10"></div>
+            <div class="row row-center">
+                <div class="col">
+                    <div class="searchBox">
+                        <input id="mytext" type="text" ng-model="Searchmodel.Search" class="formControl"
+                            ng-model-options="{ debounce: 1500 }" ng-change="FilterData()" placeholder="Filter by Code,Name, Description, Total or P/0 No">
+                        <button type="button" class="cBtn cBtn-blue" ng-click="FilterData()">
+                            <span>Search</span>
+                        </button>
+                        <!-- <a ng-click="EnableFilterOption()" class="cBtn cBtn-green cBtn-autoWidth">
+                            <i class="ion-ios-cloud-download-outline" title="Advance Search"><span> Advance Search</span></i>
+                        </a> -->
+                        <a ng-click="EnableFilterOption()" class="cBtn cBtn-green cbtn-onlyicon" title="Advance Search">
+                            <i class="ion-ios-arrow-down" title="Advance Search"></i>
+                        </a>
+                        <!-- <a ng-click="Export()" class="cBtn cBtn-green cBtn-autoWidth">
+                            <i class="ion-ios-cloud-download-outline" title="Export Purchase Report"></i> <span>Export Purchase Report</span>
+                        </a> -->
+                        <a ng-click="Export()" class="cBtn cBtn-green cbtn-onlyicon" title="Export Excel">
+                            <i class="ion-ios-cloud-download-outline" title="Download Excel"></i>
+                        </a>
+                        <a ng-click="ExportGSTPurchase()" class="cBtn cBtn-green cbtn-onlyicon" title="Export GST Purchase">
+                            <i class="ion-ios-cloud-download-outline" title="Export GST Purchase"></i>
+                        </a>
+                    </div>
+                    <div class="CustFilter" style="display:none;">
+                        <my-widget status='false'></my-widget>
+                    </div>
+                </div>
+            </div>
+            <div class="s20"></div>
+            <div class="cDataTable">
+                <table id="PurchaseReportTable" class="cell-border" width="100%">
+                    <thead>
+                        <tr>
+                            <th class="all">No</th>
+                            <th>P/R No </th>
+                            <th>Purchase Date</th>
+                            <th>Customer Code</th>
+                            <th>Customer Name</th>
+                            <th>Description</th>
+                            <th>Branch Code</th>
+                            <th>Sub Total</th>
+                            <th>Tax</th>
+                            <th>Final Total</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

@@ -1,0 +1,64 @@
+<ion-view class="patternBg">
+    <ion-content>
+        <div>
+            <div class="container">
+                <div class="s10"></div>
+                <div class="row row-center">
+                    <div class="col">
+                        <div class="searchBox">
+                            <input id="mytext" type="text" ng-model="Searchmodel.Search" class="formControl"
+                                ng-model-options="{ debounce: 1500 }" ng-change="FilterData()" placeholder="Filter by Datetime or Filename">
+                            <button type="button" class="cBtn cBtn-blue" ng-click="FilterData()">
+                                <span>Search</span>
+                            </button>
+                            <a ng-click="CreateBackUp()" class="cBtn cBtn-green cBtn-autoWidth">
+                                <i class="ion-ios-download-outline" title="Create Backup"></i> <span>Create
+                                    Backup</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="s20"></div>
+                <div class="cDataTable">
+                    <table id="DBTable" class="cell-border" style="width:100%;">
+                        <thead>
+                            <tr>
+                                <th class="all">
+                                    No
+                                </th>
+                                <th>Date Time </th>
+                                <th>File Name </th>
+                                <th>
+                                    Created By
+                                </th>
+                                <th>
+                                    Created Date
+                                </th>
+                                <th>
+                                    Action
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-if="lstMySql.length>0" ng-repeat="o in lstMySql">
+                                <td>{{$index + 1}}</td>
+                                <td>{{o.datetime | date:'dd-MM-yyyy hh:mm a'}}</td>
+                                <td>{{o.backupfile || "N/A"}}</td>
+                                <td>{{o.createdby || "N/A"}}</td>
+                                <td>{{o.createddate | date:'dd-MM-yyyy hh:mm a'}}</td>
+                                <td>
+                                    <a ng-click="RestoreBackup(o)" class="btnAction btnAction-edit">
+                                        <i class="ion-ios-upload-outline" title="Restore">
+                                        </i>
+                                    </a>
+
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- END .container -->
+        </div>
+    </ion-content>
+</ion-view>

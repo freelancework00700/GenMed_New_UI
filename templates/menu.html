@@ -1,0 +1,180 @@
+<ion-side-menus enable-menu-with-back-views="true" class="sideMenu">
+    <ion-side-menu-content drag-content="false" edge-drag-threshold="true">
+        <ion-nav-bar class="bar-calm hide-show">
+            <ion-nav-buttons class="" side="left">
+                <button class="button hide-show button-icon ion-navicon button-assertive" style="top: 40px; color: #000"
+                    menu-toggle="left">
+                </button>
+            </ion-nav-buttons>
+        </ion-nav-bar>
+        <ion-header-bar align-title="left" class="customPgHeader" ng-show="IsHideMainHeader==false">
+            <div class="col01">
+                <button class="button button-icon button-clear ion-navicon" menu-toggle="left"
+                    style="color:transparent">
+                </button>
+                <a ng-click="ResetAll()" class="pgBack" ng-if="!BackButton">
+                    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12l4-4m-4 4 4 4"/>
+                      </svg>                      
+                </a>
+                <div class="d-flex item-center gap-2 breadcrumb-wrapper">
+                    <div>App</div>
+                    <span>»</span>
+                    <div>{{GetPageTitle()}}</div>
+                    <div></div>
+                </div>
+            </div>
+            <div class="col02">
+                <a href="javascript:;" class="userMenu">
+                    <img src="img/icon-user.png" alt="">
+                    <span>{{UserName}}</span>
+                    <i class="ion-chevron-down"></i>
+                </a>
+                <ul class="userMenu_list">
+                    <li>
+                        <a href="#/app/LogOut"><strong>Logout</strong></a>
+                    </li>
+                </ul>
+            </div>
+        </ion-header-bar>
+        <ion-nav-view name="menuContent"></ion-nav-view>
+    </ion-side-menu-content>
+    <ion-side-menu side="left" width="230" expose-aside-when="large" class="custoMenu">
+        <ion-header-bar class="bar-stable" class=" item-icon-left">
+            <span>
+                <img src="img/logo-blue.png" alt="" style="width: 50px;height: 50px;">
+            </span>
+            <div class="logo-Name">Empathy <span class="logo-Name-inner">Healthcare</span></div>
+        </ion-header-bar>
+        <ion-content>
+            <ion-list>
+                <ion-item class="active item-icon-left" href="#/app/DashBoard" ng-if="ObjPemission.Dashboard">
+                    <img src="img/icon-menu-dashboard-active.png" class="menuImg" alt="">
+                    <img src="img/icon-menu-dashboard-hover.png" class="menuImgHover" alt="">
+                    <img src="img/icon-menu-dashboard-active.png" class="menuImgActive" alt="">
+                    <span>DASHBOARD</span>
+                </ion-item>
+                <ion-item ng-click="showSubMenu('Manage')" class="item-complex item-icon-left"
+                    ng-class="{'hover' : IsHoverMenu=='Manage'}" ng-if="ObjPemission.Manage">
+                    <div class="item-content">
+                        <img src=" img/icon-menu-manage-active.png" class="menuImg" alt="">
+                        <img src="img/icon-menu-manage-hover.png" class="menuImgHover" alt="">
+                        <img src="img/icon-menu-manage-active.png" class="menuImgActive" alt="">
+                        <span>MANAGE</span>
+                    </div>
+                </ion-item>
+                <ion-item ng-click="showSubMenu('Product')" class="item-complex item-icon-left"
+                    ng-class="{'hover' : IsHoverMenu=='Product'}" ng-if="ObjPemission.Product">
+                    <div class="item-content">
+                        <img src=" img/icon-menu-purchase-active.png" class="menuImg" alt="">
+                        <img src="img/icon-menu-purchase-hover.png" class="menuImgHover" alt="">
+                        <img src="img/icon-menu-purchase-active.png" class="menuImgActive" alt="">
+                        <span>PRODUCT</span>
+                    </div>
+                </ion-item>
+                <ion-item ng-click="showSubMenu('Purchase')" class="item-complex item-icon-left"
+                    ng-class="{'hover' : IsHoverMenu=='Purchase'}" ng-if="ObjPemission.Purchase">
+                    <div class="item-content">
+                        <img src=" img/icon-menu-postill-active.png" class="menuImg" alt="">
+                        <img src="img/icon-menu-postill-hover.png" class="menuImgHover" alt="">
+                        <img src="img/icon-menu-postill-active.png" class="menuImgActive" alt="">
+                        <span>PURCHASE</span>
+                    </div>
+                </ion-item>
+                <ion-item ng-click="showSubMenu('Sales')" class="item-complex item-icon-left"
+                    ng-class="{'hover' : IsHoverMenu=='Sales'}" ng-if="ObjPemission.Sales">
+                    <div class="item-content">
+                        <img src=" img/icon-menu-purchase-active.png" class="menuImg" alt="">
+                        <img src="img/icon-menu-purchase-hover.png" class="menuImgHover" alt="">
+                        <img src="img/icon-menu-purchase-active.png" class="menuImgActive" alt="">
+                        <span>SALES</span>
+                    </div>
+                </ion-item>
+                <ion-item ng-click="showSubMenu('Report')" class="item-complex item-icon-left"
+                    ng-class="{'hover' : IsHoverMenu=='Report'}" ng-if="ObjPemission.Report">
+                    <div class="item-content">
+                        <img src=" img/icon-menu-report-active.png" class="menuImg" alt="">
+                        <img src="img/icon-menu-report-hover.png" class="menuImgHover" alt="">
+                        <img src="img/icon-menu-report-active.png" class="menuImgActive" alt="">
+                        <span>REPORT</span>
+                    </div>
+                </ion-item>
+                <ion-item href="#/app/Pos_Till_Login" class="item-complex item-icon-left" ng-if="ObjPemission.PosTill">
+                    <img src=" img/icon-menu-postill-active.png" class="menuImg" alt="">
+                    <img src="img/icon-menu-postill-hover.png" class="menuImgHover" alt="">
+                    <img src="img/icon-menu-postill-active.png" class="menuImgActive" alt="">
+                    <span>Pos-Till</span>
+                </ion-item>
+                <ion-item ng-click="showSubMenu('Settings')" class="item-complex item-icon-left"
+                    ng-class="{'hover' : IsHoverMenu=='Settings'}" ng-if="ObjPemission.Settings">
+                    <div class="item-content">
+                        <img src=" img/icon-menu-settings-active.png" class="menuImg" alt="">
+                        <img src="img/icon-menu-settings-hover.png" class="menuImgHover" alt="">
+                        <img src="img/icon-menu-settings-active.png" class="menuImgActive" alt="">
+                        <span>SETTINGS</span>
+                    </div>
+                </ion-item>
+                <ion-item ng-click="showSubMenu('Ecommerce')" class="item-complex item-icon-left"
+                    ng-class="{'hover' : IsHoverMenu=='Ecommerce'}" ng-if="ObjPemission.Ecommerce">
+                    <div class="item-content">
+                        <img src=" img/icon-menu-manage-active.png" class="menuImg" alt="">
+                        <img src="img/icon-menu-manage-hover.png" class="menuImgHover" alt="">
+                        <img src="img/icon-menu-manage-active.png" class="menuImgActive" alt="">
+                        <span>Ecommerce </span>
+                    </div>
+                </ion-item>
+                <ion-item href="#/app/Message" class="iitem-complex tem-icon-left" ng-if="ObjPemission.Message">                    
+                        <img src=" img/icon-menu-postill-active.png" class="menuImg" alt="">
+                        <img src="img/icon-menu-postill-hover.png" class="menuImgHover" alt="">
+                        <img src="img/icon-menu-postill-active.png" class="menuImgActive" alt="">
+                        <span>Message</span>                    
+                </ion-item>
+                <ion-item ng-click="showSubMenu('Site')" class="item-complex item-icon-left"
+                    ng-class="{'hover' : IsHoverMenu=='Site'}" ng-if="ObjPemission.Site">
+                    <div class="item-content">
+                        <img src=" img/icon-menu-settings-active.png" class="menuImg" alt="">
+                        <img src="img/icon-menu-settings-hover.png" class="menuImgHover" alt="">
+                        <img src="img/icon-menu-settings-active.png" class="menuImgActive" alt="">
+                        <span>Site</span>
+                    </div>
+                </ion-item>
+                <ion-item href="#/app/Appointment" class="item-complex item-icon-left">
+                    <img src=" img/icon-menu-postill-active.png" class="menuImg" alt="">
+                    <img src="img/icon-menu-postill-hover.png" class="menuImgHover" alt="">
+                    <img src="img/icon-menu-postill-active.png" class="menuImgActive" alt="">
+                    <span>Appointment</span>
+                </ion-item>
+            </ion-list>
+
+        </ion-content>
+        <script id="SideSubMenu.html" type="text/ng-template">
+            <ion-popover-view class="custom-side-submenu">
+                        <!-- <ion-list>
+                            <ion-item class="sidemenu-title">
+                                <div class="logo-white">Empathy <span class="">Healthcare</span></div>
+                            </ion-item>
+                        </ion-list> -->
+                        <ion-content>
+                            <ion-list>
+                                <ion-item ng-repeat="o in ListSubMenu" class="menulist" ng-click="hideSubMenu(o,$event)" ng-if="o.items == ''">
+                                    <img src=" img/{{o.icon}}" alt="">
+                                    <div class="sidesubmenu-text" style="font-size: medium;font-weight: bold" >{{o.name}}</div>
+                                </ion-item>
+                                <ion-item ng-repeat="o in ListSubMenu" class="menulist" ng-if="o.items != ''">
+                                    <img src=" img/{{o.icon}}" alt="">
+                                    <div class="sidesubmenu-text" style="font-size: medium;font-weight: bold">{{o.name}}</div>
+                                    <div class="submenu_list">
+                                        <img src=" img/side_submenu_vertical_line.png" class="Vertical_line" alt="">
+                                        <div class="sublist-item" ng-repeat="p in o.items">
+                                            <img src=" img/side_submenu_horizontal_line.png" class="horizontal_line" alt="">
+                                            <a ng-click="hideSubMenu(p,$event)" style="cursor: pointer" > <span style="font-size: medium;font-weight: bold">{{p.title}}</span></a>
+                                        </div>
+                                    </div>
+                                </ion-item>
+                              
+                            </ion-list>
+                        </ion-content>
+                    </ion-popover-view>
+        </script>
+    </ion-side-menu>
+</ion-side-menus>

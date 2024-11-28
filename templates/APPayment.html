@@ -1,0 +1,392 @@
+<ion-view class="patternBg">
+    <ion-content>
+        <div ng-if="IsList">
+            <div class="container">
+                <div class="s10"></div>
+                <div class="row row-center">
+                    <div class="col">
+                        <div class="searchBox">
+                            <input id="mytext" type="text" ng-model="Searchmodel.Search" class="formControl"
+                                ng-model-options="{ debounce: 1500 }" ng-change="FilterData()" placeholder="Filter by Code, Description, Payment Amount or PVH No">
+                            <button type="button" class="cBtn cBtn-blue" ng-click="FilterData()">
+                                <span>Search</span>
+                            </button>
+                            <a ng-click="EnableFilterOption()" class="cBtn cBtn-green cbtn-onlyicon" title="Advance Search">
+                                <i class="ion-ios-arrow-down" title="Advance Search"></i>
+                            </a>
+                            <a ng-click="Add()" class="cBtn cBtn-green cBtn-autoWidth d-flex items-center justify-center gap-2">
+                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                </svg>
+                                <span>Add AP Payment</span>
+                            </a>
+                        </div>
+                        <div class="CustFilter" style="display:none;">
+                            <my-widget status='false' idlocations='false'></my-widget>
+                        </div>
+                    </div>
+                </div>
+                <div class="s20"></div>
+                <div class="cDataTable">
+                    <table id="APPaymentTable" class="cell-border" width="100%">
+                        <thead>
+                            <tr>
+                                <th class="all">No</th>
+                                <th>PVH No </th>
+                                <th>Payment Date</th>
+                                <th>Customer Code</th>
+                                <th>Description</th>
+                                <th>Payment Amount</th>
+                                <th>KnockOff Amount</th>
+                                <th>Note</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div ng-if="!IsList">
+            <form name="FormAPPayment" class="cForm light">
+                <div class="row responsive-sm">
+                    <div class="col">
+                        <div class="infoBox02">
+                            <div class="row responsive-sm">
+                                <div class="col col-33">
+                                    <div class="row">
+                                        <div class="col col-25">
+                                            <label for="CustomerCode">Customer* </label>
+                                        </div>
+                                        <div class="col col-75">
+                                            <select class="formControl" name="CustomerCode" ng-required="true" ng-model="model.CustomerCode"
+                                                ng-change="SelectCustomer()">
+                                                <option value="">Select Customer</option>
+                                                <option value="{{o.AccountNumbder}}" ng-repeat="o in lstCustomer">
+                                                    {{o.AccountNumbder}}-{{o.Name}}</option>
+                                            </select>
+                                            <span class="errorMsg text-center" ng-show="formsubmit && (FormAPPayment.CustomerCode.$dirty || FormAPPayment.CustomerCode.$invalid)">
+                                                <span ng-show="FormAPPayment.CustomerCode.$error.required">
+                                                    Please Select Customer
+                                                </span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col col-33">
+                                    <div class="row">
+                                        <div class="col col-30" style="text-align:right">
+                                            <label for="CustomerCode">Payment's Currency* </label>
+                                        </div>
+                                        <div class="col col-70">
+                                            <select class="formControl" name="CurrencyCode" ng-required="true" ng-model="model.CurrencyCode">
+                                                <option value="">Select Currency</option>
+                                                <option ng-repeat="o in lstCurrency" value={{o.CurrencyCode}}>
+                                                    {{o.CurrencyWord}}</option>
+                                            </select>
+                                            <span class="errorMsg text-center" ng-show="formsubmit && (FormAPPayment.CurrencyCode.$dirty || FormAPPayment.CurrencyCode.$invalid)">
+                                                <span ng-show="FormAPPayment.CurrencyCode.$error.required">
+                                                    Please Select Payment Currency
+                                                </span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col col-33" ng-if="model.CustomerCode">
+                                    <div class="row">
+                                        <div class="col col-30" style="text-align:right">
+                                            <label for="CustomerCode">Customer's Currency* </label>
+                                        </div>
+                                        <div class="col col-70">
+                                            <input type="text" class="formControl" ng-model="model.CustomerCurrency"
+                                                disabled>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="s20"></div>
+                <hr size=2 style="margin:0px">
+                <div class="row">
+                    <div class="md-form col-md-12">
+                        <button ng-class="SelectedTab == 1?'cBtn cBtn-skyblue':'cBtn cBtn-green'" ng-click="ChangeTab(1)"
+                            type="button">Main</button>
+                        <button ng-class="SelectedTab == 2?'cBtn cBtn-skyblue':'cBtn cBtn-green'" ng-click="ChangeTab(2)"
+                            type="button">Note
+                        </button>
+                    </div>
+                </div>
+
+                <hr size=2 style="margin:0px">
+                <div class="s20"></div>
+
+                <span ng-show="SelectedTab==1">
+                    <div class="row responsive-sm" style="color:#000000;">
+                        <div class="col col-60">
+                            <div class="infoBox02">
+                                <div class="row responsive-sm">
+                                    <div class="col col-25">
+                                        <label>Paid By</label>
+                                    </div>
+                                    <div class="col col-75">
+                                        {{model.PaidBy}}
+                                    </div>
+                                </div>
+
+                                <div class="row responsive-sm">
+                                    <div class="col col-25">
+                                        <label for="Description">Description </label>
+                                    </div>
+                                    <div class="col col-75">
+                                        <input type="text" id="Description" class="formControl" readonly name="Description"
+                                            ng-model="model.Description">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col col-40">
+                            <div class="infoBox02">
+                                <div class="row responsive-sm">
+                                    <div class="col col-20">
+                                        <label>PVH No</label>
+                                    </div>
+                                    <div class="col col-80">
+                                        <input type="text" id="DocNo" class="formControl" readonly name="DocNo"
+                                            ng-model="model.DocNo">
+                                    </div>
+                                </div>
+                                <div class="row responsive-sm">
+                                    <div class="col col-20">
+                                        <label for="Date">Date*</label>
+                                    </div>
+                                    <div class="col col-80">
+                                        <input ng-model="model.DocDate" ng-required="true" value=" {{model.DocDate | date: 'dd-MM-yyyy'}}"
+                                            name="DocDate" class="formControl" date ion-datetime-picker>
+                                        <span class="errorMsg text-center" ng-show="formsubmit && (FormAPPayment.DocDate.$dirty || FormAPPayment.DocDate.$invalid)">
+                                            <span ng-show="FormAPPayment.DocDate.$error.required">
+                                                Please Select Date
+                                            </span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="s20"></div>
+                    <div class="row responsive-sm">
+                        <a ng-click="AddPaymentMainList()" class="custlablebtn">
+                            <span>Add New</span>
+                        </a>
+                    </div>
+                    <div class="row responsive-sm">
+                        <div class="infoBox02">
+                            <div class="row responsive-sm">
+                                <div class="col col-9">
+                                    <label>Payment method*</label>
+                                </div>
+                                <div class="col col-9">
+                                    <label>Cheque No</label>
+                                </div>
+                                <div class="col col-9">
+                                    <label>Payment Amount*</label>
+                                </div>
+                                <div class="col col-9">
+                                    <label>Bank Charge</label>
+                                </div>
+                                <div class="col col-9">
+                                    <label>Bank Charge Tax Code</label>
+                                </div>
+                                <div class="col col-9">
+                                    <label>Bank Charge Tax </label>
+                                </div>
+                                <div class="col col-9">
+                                    <label>Bank Charge Bill No For Gst</label>
+                                </div>
+                                <div class="col col-9">
+                                    <label>Payment By</label>
+                                </div>
+                                <div class="col col-9">
+                                    <label>IS RCHQ</label>
+                                </div>
+                                <div class="col col-9">
+                                    <label>RCHQ Date</label>
+                                </div>
+                            </div>
+                            <div class="row responsive-sm" ng-repeat="o in lstSelectedPaymentMain">
+                                <div class="col col-9">
+                                    <select class="formControl" ng-model="o.PaymentMethod">
+                                        <option value="{{p.Paymentmethod}}" ng-selected="o.PaymentMethod == p.Paymentmethod"
+                                            ng-repeat="p in lstPaymentMethod">{{p.Paymentmethod}}</option>
+                                    </select>
+                                </div>
+                                <div class="col col-9">
+                                    <input type="text" class="formControl" ng-model="o.ChequeNo">
+                                </div>
+                                <div class="col col-9">
+                                    <input type="text" class="formControl" ng-model="o.PaymentAmount"
+                                        manage-Dynamicfraction="{{Dynamicfraction}}" ng-change="ChangePaymentAmount(o)">
+                                </div>
+                                <div class="col col-9">
+                                    <input type="text" class="formControl" ng-model="o.BankCharge"
+                                        manage-Dynamicfraction="{{Dynamicfraction}}">
+                                </div>
+                                <div class="col col-9">
+                                    <input type="text" class="formControl" ng-model="o.BankChargeTaxType">
+                                </div>
+                                <div class="col col-9">
+                                    <input type="text" class="formControl" ng-model="o.BankChargeTax"
+                                        manage-Dynamicfraction="{{Dynamicfraction}}">
+                                </div>
+                                <div class="col col-9">
+                                    <input type="text" class="formControl" ng-model="o.BankChargeTaxRefNo">
+                                </div>
+                                <div class="col col-9">
+                                    <input type="text" class="formControl" ng-model="o.PaymentBy">
+                                </div>
+                                <div class="col col-9">
+                                    <input type="checkbox" class="formControl" ng-model="o.IsRCHQ" ng-change="SelectRCHQ(o)">
+                                </div>
+                                <div class="col col-9">
+                                    <input type="text" class="formControl" ng-model="o.RCHQDate" value=" {{o.RCHQDate | date: 'dd-MM-yyyy'}}"
+                                        date ion-datetime-picker>
+                                </div>
+                                <a ng-click="RemovePurchaseInvoiceMainItemInList($index)" class="RemoveBtn">
+                                    <i class="ion-trash-a" title="Remove Item"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="s20"></div>
+                    <div class="row responsive-sm" style="color:#000000;">
+                        <div class="col col-60"></div>
+                        <div class="col col-40">
+                            <div class="infoBox02">
+                                <div class="row responsive-sm">
+                                    <div class="col col-20">
+                                        <label>Amount</label>
+                                    </div>
+                                    <div class="col col-80">
+                                        <input type="text" id="PaymentAmount" class="formControl" name="PaymentAmount"
+                                            readonly ng-model="model.PaymentAmount" manage-Dynamicfraction="{{Dynamicfraction}}">
+                                    </div>
+                                </div>
+                                <div class="row responsive-sm">
+                                    <div class="col col-20">
+                                        <label for="Date">UnApplied Amount </label>
+                                    </div>
+                                    <div class="col col-80">
+                                        <input type="text" id="LocalUnappliedAmount" class="formControl" name="LocalUnappliedAmount"
+                                            readonly ng-model="model.LocalUnappliedAmount" manage-Dynamicfraction="{{Dynamicfraction}}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="s20"></div>
+                    <hr size=2 style="margin:0px">
+                    <div class="row responsive-sm " style="color:#000000;">
+                        <div class="col text-center">
+                            <span>Knock-off Invoices / Debit Note</span>
+                        </div>
+                    </div>
+
+                    <hr size=2 style="margin:0px">
+                    <div class="s20"></div>
+                    <div class="row responsive-sm">
+                        <div class="infoBox02" style="width: inherit;">
+                            <div class="row responsive-sm">
+                                <div class="col col-13">
+                                    <label>Type</label>
+                                </div>
+                                <div class="col col-13">
+                                    <label>Date</label>
+                                </div>
+                                <div class="col col-13">
+                                    <label>No</label>
+                                </div>
+                                <div class="col col-13">
+                                    <label>Org. Amt.</label>
+                                </div>
+                                <div class="col col-13">
+                                    <label>OutStanding</label>
+                                </div>
+                                <div class="col col-13">
+                                    <label>Pay</label>
+                                </div>
+                                <div class="col col-13">
+                                    <label>KnockOff Date</label>
+                                </div>
+                                <div class="col col-9">
+                                    <label>Select</label>
+                                </div>
+                            </div>
+                            <div class="row responsive-sm" ng-repeat="p in lstKnockOff">
+                                <div class="col col-13">
+                                    <input type="text" class="formControl" ng-model="p.KnockOffDocType" ng-disabled="true">
+                                </div>
+                                <div class="col col-13">
+                                    <input type="text" class="formControl" ng-model="p.APInvoiceDate" ng-disabled="true">
+                                </div>
+                                <div class="col col-13">
+                                    <input type="text" class="formControl" ng-model="p.DocNo" ng-disabled="true">
+                                </div>
+                                <div class="col col-13">
+                                    <input type="text" class="formControl" ng-model="p.Total" manage-Dynamicfraction="{{Dynamicfraction}}"
+                                        ng-disabled="true">
+                                </div>
+                                <div class="col col-13">
+                                    <input type="text" class="formControl" ng-model="p.Outstanding"
+                                        manage-Dynamicfraction="{{Dynamicfraction}}" ng-disabled="true">
+                                </div>
+                                <div class="col col-13">
+                                    <input type="text" class="formControl" ng-model="p.Amount" manage-Dynamicfraction="{{Dynamicfraction}}"
+                                        ng-disabled="true">
+                                </div>
+                                <div class="col col-13">
+                                    <input type="text" class="formControl" ng-model="p.KnockOffDate" value=" {{p.KnockOffDate | date: 'dd-MM-yyyy'}}"
+                                        date ion-datetime-picker ng-disabled="true">
+                                </div>
+                                <div class="col col-9">
+                                    <input type="checkbox" class="formControl" ng-model="p.IsSelected" ng-change="SelectKnockOff(p)">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </span>
+
+                <span ng-show="SelectedTab==2">
+                    <div class="row responsive-sm">
+                        <div class="col">
+                            <div class="infoBox02">
+                                <div class="row responsive-sm">
+                                    <div class="col col-10">
+                                        <label>Note</label>
+                                    </div>
+                                    <div class="col col-90">
+                                        <textarea type="text" id="Note" class="formControl md-textarea" rows="3" name="Note"
+                                            ng-model="model.Note" maxlength="500" ng-maxlength="500"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </span>
+
+                <div class="s20"></div>
+                <div class="row">
+                    <div class="col">
+                        <button class="cBtn cBtn-green cBtn-block cBtn-shadow" ng-click="SaveAPPayment(FormAPPayment)"
+                            type="submit">
+                            <i class="ion-document-text" title="Save"></i>
+                            Save
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </ion-content>
+</ion-view>

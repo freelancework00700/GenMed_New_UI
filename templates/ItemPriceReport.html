@@ -1,0 +1,152 @@
+<ion-view class="patternBg">
+    <ion-content>
+        <div class="container">
+            <div class="s10"></div>
+            <!-- <div class="row row-center">
+                <div class="col">
+                    <select name="Type" class="formControl" ng-model="Searchmodel.Type" ng-change="FilterData()">
+                        <option value="Sales">Sales</option>
+                        <option value="Purchase">Purchase</option>
+                    </select>
+                </div>
+            </div> -->
+            <!-- <div class="s5"></div> -->
+            <div class="row row-center">
+                <div class="col">
+                    <div class="searchBox">
+                        <input id="mytext" type="text" ng-model-options="{ debounce: 1500 }"
+                            ng-model="Searchmodel.Search" class="formControl" ng-change="FilterData()"
+                            placeholder="Filter by Code,Name, Description, Item Code, UOM, Batch No, Price or Doc No">
+                        <button type="button" class="cBtn cBtn-blue" ng-click="FilterData()">
+                            <span>Search</span>
+                        </button>
+                        <!-- <a ng-click="EnableFilterOption()" class="cBtn cBtn-green cbtn-onlyicon" title="Advance Search">
+                            <i class="ion-ios-arrow-down" title="Advance Search"></i>
+                        </a> -->
+                        <a ng-click="Export()" class="cBtn cBtn-green cbtn-onlyicon" title="Export Excel">
+                            <i class="ion-ios-cloud-download-outline" title="Download Excel"></i>
+                        </a>
+                    </div>
+                    <div class="row responsive-sm  cForm light">
+                        <div class="col col-100">
+                            <div class="infoBox02">
+                                <div class="container">
+                                    <div class="row responsive-sm">
+                                        <div class="col">
+                                            <label>Main Company</label>
+                                            <select class="formControl" name="MainCompany" ng-required="true"
+                                                ng-model="Filtermodel.MainCompany" ng-change="FilterData()">
+                                                <option value="">All</option>
+                                                <option value="{{o.id}}" ng-repeat="o in lstBrand">
+                                                    {{o.Brand}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="col">
+                                            <label>Sub Company</label>
+                                            <select class="formControl" name="SubCompany" ng-required="true"
+                                                ng-model="Filtermodel.SubCompany" ng-change="FilterData()">
+                                                <option value="">All</option>
+                                                <option value="{{o.id}}" ng-repeat="o in lstSubBrand">
+                                                    {{o.SubBrandName}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="col">
+                                            <label>Product Group</label>
+                                            <select class="formControl" name="ProductGroup" ng-required="true"
+                                                ng-model="Filtermodel.ProductGroup" ng-change="FilterData()">
+                                                <option value="">All</option>
+                                                <option value="{{o.Name}}" ng-repeat="o in lstParentItemCategory">
+                                                    {{o.Name}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="col-10">
+                                            <div style="text-align: center;margin-bottom: 10px;">
+                                                <label for="SaleRate">Sale Rate</label>
+                                            </div>
+                                            <div style="text-align: center;">
+                                                <input type="checkbox" class="formControl_checkbox" id="SaleRate"
+                                                    ng-model="Filtermodel.SaleRate" ng-change="ShowHideCol()">
+                                            </div>
+                                        </div>
+                                        <div class="col-10" ng-if="Group != 'Shop'">
+                                            <div style="text-align: center;margin-bottom: 10px;">
+                                                <label for="PurRate">Purchase Rate</label>
+                                            </div>
+                                            <div style="text-align: center;">
+                                                <input type="checkbox" class="formControl_checkbox" id="PurRate"
+                                                    ng-model="Filtermodel.PurRate" ng-change="ShowHideCol()">
+                                            </div>
+                                        </div>
+                                        <div class="col-10">
+                                            <div style="text-align: center;margin-bottom: 10px;">
+                                                <label for="MRP">MRP</label>
+                                            </div>
+                                            <div style="text-align: center;">
+                                                <input type="checkbox" class="formControl_checkbox" id="MRP"
+                                                    ng-model="Filtermodel.MRP" ng-change="ShowHideCol()">
+                                            </div>
+                                        </div>
+                                        <div class="col-10">
+                                            <div style="text-align: center;margin-bottom: 10px;">
+                                                <label for="Contain">Contain</label>
+                                            </div>
+                                            <div style="text-align: center;">
+                                                <input type="checkbox" class="formControl_checkbox" id="Contain"
+                                                    ng-model="Filtermodel.Contain" ng-change="ShowHideCol()">
+                                            </div>
+                                        </div>
+                                        <div class="col-10">
+                                            <div style="text-align: center;margin-bottom: 10px;">
+                                                <label for="GST">GST</label>
+                                            </div>
+                                            <div style="text-align: center;">
+                                                <input type="checkbox" class="formControl_checkbox" id="GST"
+                                                    ng-model="Filtermodel.GST" ng-change="ShowHideCol()">
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="s20"></div>
+                                            <a class="cBtn cBtn-blue" ng-click="FilterData()">
+                                                <i class="icon ion-search" title="Search"></i>
+                                            </a>
+                                            <a class="cBtn cBtn-green" ng-click="ResetFilter()">
+                                                <i class="icon ion-refresh" title="Search"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- <div class="CustFilter" style="display:none;">
+                <my-widget status='false'></my-widget>
+            </div> -->
+            <div class="s10"></div>
+            <div class="cDataTable">
+                <table id="ItemPriceReportTable" class="cell-border" width="100%">
+                    <thead>
+                        <tr>
+                            <th class="all">No</th>
+                            <th>ItemName </th>
+                            <th>ItemCode</th>
+                            <th ng-show="Filtermodel.Contain">Contain</th>
+                            <th>Company</th>
+                            <th>UOM</th>
+                            <th ng-show="Filtermodel.PurRate">Purchase Rate</th>
+                            <th ng-show="Filtermodel.SaleRate">Sales Rate</th>
+                            <th ng-show="Filtermodel.MRP">MRP</th>
+                            <th ng-show="Filtermodel.GST">GST</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

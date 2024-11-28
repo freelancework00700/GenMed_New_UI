@@ -1,0 +1,343 @@
+<ion-view class="patternBg">
+    <ion-content>
+        <div ng-if="IsList">
+            <div class="container">
+                <div class="s10"></div>
+                <div class="row row-center">
+                    <div class="col">
+                        <div class="searchBox">
+                            <input id="mytext" type="text" ng-model="Searchmodel.Search" ng-model-options="{ debounce: 1500 }"
+                                class="formControl" ng-change="FilterData()" placeholder="Filter by User Name, User Code, Email, Phone Number, Location or Department">
+                            <button type="button" class="cBtn cBtn-blue" ng-click="FilterData()">
+                                <span>Search</span>
+                            </button>
+                            <a ng-click="EnableFilterOption()" class="cBtn cBtn-green cbtn-onlyicon" title="Advance Search">
+                                <i class="ion-ios-arrow-down" title="Advance Search"></i>
+                            </a>
+                            <a ng-click="Add()" class="cBtn cBtn-green cBtn-autoWidth d-flex items-center justify-center gap-2">
+                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                </svg>
+                                <span>Add User</span>
+                            </a>
+                        </div>
+                        <div class="CustFilter" style="display:none;">
+                            <div class="row responsive-sm  cForm light">
+                                <div class="col col-100">
+                                    <div class="infoBox02">
+                                        <div class="container">
+                                            <div class="col col-20">
+                                                <label>Role</label>
+                                                <select class="formControl" name="SearchRole" ng-model="modelSearch.SearchRole"
+                                                    ng-change="GetAllUsers(modelSearch.SearchRole)">
+                                                    <option value="">Select Role</option>
+                                                    <option value="{{o.id}}" ng-repeat="o in lstRoles">{{o.Name}}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="s20"></div>
+                <div class="cDataTable">
+                    <table id="UserTable" class="cell-border" style="width:100%;">
+                        <thead>
+                            <tr>
+                                <th class="all">
+                                    No
+                                </th>
+                                <th>User Code </th>
+                                <th>User Name </th>
+                                <th>
+                                    Email
+                                </th>
+                                <th>
+                                    Phone Number
+                                </th>
+                                <th>
+                                    Location
+                                </th>
+                                <th>
+                                    Department
+                                </th>
+                                <th>
+                                    Is Active
+                                </th>
+                                <th class="all">
+                                    Action
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-if="lstUser.length>0" ng-repeat="o in lstUser">
+                                <td>{{$index + 1}}</td>
+                                <td>{{o.UserCode || "N/A"}}</td>
+                                <td>{{o.username || "N/A"}}</td>
+                                <td>{{o.EmailAddress || "N/A"}}</td>
+                                <td>{{o.PhoneNumber || "N/A"}}</td>
+                                <td>{{o.location.Name || "N/A"}}</td>
+                                <td>{{o.department.Name || "N/A"}}</td>
+                                <td><span style="font-size: 20px;color: green" ng-if="o.isActive==1" class="ng-scope">✔</span>
+                                    <span style="font-size: 20px;color: red" ng-if="o.isActive==0" class="ng-scope">✖</span>
+                                </td>
+                                <td>
+                                    <a ng-click="CopyToModel(o)" class="btnAction btnAction-edit">
+                                        <i class="ion-edit" title="Edit">
+                                        </i>
+                                    </a>
+
+                                    <a ng-click="DeleteUser(o.id)" class="btnAction btnAction-error" title="Delete">
+                                        <i class="ion-trash-a" title="Delete">
+                                        </i>
+                                    </a>
+                                    <a ng-click="OpenModelLocation(o.id)" class="btnAction btnAction-edit">
+                                        <i class="ion-plus" title="Assign User Location">
+                                        </i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- END .container -->
+        </div>
+        </div>
+        <!-- ng-if="!IsList" -->
+        <div class="container" ng-if="!IsList">
+            <div class="s20"></div>
+            <!-- <a ng-click="ResetAll()" class="cBtn cBtn-blue">
+                <i class="ion-arrow-left-c" title="Back">
+                    Return To List
+                </i>
+            </a>
+
+            <div class="s10"></div> -->
+            <form name="FormUser" class="cForm light">
+                <div class="infoBox02">
+                    <div class="container">
+                        <div class="s25"></div>
+                        <div class="row responsive-sm">
+                            <div class="col col-33">
+                                <label for="">Username*</label>
+                                <input type="text" id="username" class="formControl" name="username" ng-required="true"
+                                    placeholder="User Name" maxlength="100" ng-maxlength="100" ng-model="model.username">
+                                <span class="errorMsg text-center" ng-show="formsubmit && (FormUser.username.$dirty || FormUser.username.$invalid)">
+                                    <span ng-show="FormUser.username.$error.required">
+                                        Please Enter UserName
+                                    </span>
+                                    <span ng-show="FormUser.username.$error.maxlength">
+                                        Maximum length is 100.
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="col col-33" ng-if="model.id==0">
+                                <label for="">Password*</label>
+                                <input type="password" name="password" class="formControl" ng-required="true"
+                                    placeholder="Enter Password" maxlength="100" ng-maxlength="100" ng-model="model.password">
+                                <span class="errorMsg text-center" ng-show="formsubmit && (FormUser.password.$dirty || FormUser.password.$invalid)">
+                                    <span ng-show="FormUser.password.$error.required">
+                                        Please Enter Password
+                                    </span>
+                                    <span ng-show="FormUser.password.$error.maxlength">
+                                        Maximum length is 100.
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="col col-33" ng-if="model.id==0">
+                                <label for="">Confirm Password*</label>
+                                <input type="password" name="Cpassword" class="formControl" ng-required="true"
+                                    placeholder="Enter Confirm Password" ng-model="model.ConfirmPassword">
+                                <span class="errorMsg text-center" ng-show="formsubmit && (FormUser.Cpassword.$dirty || FormUser.Cpassword.$invalid)">
+                                    <span ng-show="FormUser.Cpassword.$error.required">
+                                        Please Enter Confirm Password
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row responsive-sm">
+                            <div class="col col-33">
+                                <label for="">Email Address*</label>
+                                <input type="email" name="EmailAddress" class="formControl" maxlength="100"
+                                    ng-maxlength="100" ng-required="true" placeholder="Enter Email Address" ng-model="model.EmailAddress"
+                                    ng-disabled="IsEdit">
+                                <span class="errorMsg text-center" ng-show="formsubmit && (FormUser.EmailAddress.$dirty || FormUser.EmailAddress.$invalid)">
+                                    <span ng-show="FormUser.EmailAddress.$error.required">
+                                        Please Enter Email Address
+                                    </span>
+                                    <span ng-show="FormUser.EmailAddress.$error.email">
+                                        Please Enter Valid Email Address
+                                    </span>
+                                    <span ng-show="FormUser.EmailAddress.$error.maxlength">
+                                        Maximum length is 100.
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="col col-33">
+                                <label for="">Phone Number*</label>
+                                <input type="tel" id="PhoneNumber" class="formControl" name="PhoneNumber" ng-model="model.PhoneNumber"
+                                    placeholder="+11234567890" required>
+                                <span class="errorMsg text-center" ng-show="formsubmit && (FormUser.PhoneNumber.$dirty || FormUser.PhoneNumber.$invalid)">
+                                    <span ng-show="FormUser.PhoneNumber.$error.required">
+                                        Please Enter Phone Number
+                                    </span>
+                                </span>
+                                <!-- <span class="errorMsg" ng-show="isValidMobile">
+                                    Please Enter Valid Phone Number
+                                </span> -->
+                            </div>
+                            <div class="col col-33">
+                                <label for="">Select Department*</label>
+                                <select name="DefaultDepartment" class="formControl" ng-required="true" ng-model="model.DefaultDepartment">
+                                    <option value="">Select Department</option>
+                                    <option ng-repeat="o in lstDepartment" value="{{o.id}}">{{o.Name}}</option>
+                                </select>
+                                <span class="errorMsg text-center" ng-show="formsubmit && (FormUser.DefaultDepartment.$dirty || FormUser.DefaultDepartment.$invalid)">
+                                    <span ng-show="FormUser.DefaultDepartment.$error.required">
+                                        Please Enter Department
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row responsive-sm">
+                            <div class="col col-100">
+                                <label for="">Select Role</label>
+                                <div class="row">
+                                    <div ng-repeat="o in lstRoles">
+                                        <label class="formCheck" style="padding-right: 5px;" for="{{o.Name}}"><input
+                                                type="checkbox" id="{{o.Name}}" ng-model="o.checked" ng-change="changeRole()"><span>{{o.Name}}</span></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="s10"></div>
+                        <div ng-if="IsSelectPosUser">
+                            <div class="row responsive-sm">
+                                <div class="col col-33">
+                                    <label for="">Pos Passcode</label>
+                                    <input type="password" id="pospasscode" class="formControl" name="pospasscode"
+                                        minlength="6" ng-minlength="6" maxlength="6" ng-maxlength="6" ng-required="true"
+                                        placeholder="Pos Passcode" ng-model="model.pospasscode" passcodenumbers-only>
+                                    <span class="errorMsg text-center" ng-show="formsubmit && (FormUser.pospasscode.$dirty || FormUser.pospasscode.$invalid)">
+                                        <span ng-show="FormUser.pospasscode.$error.required">
+                                            Please Enter Passcode
+                                        </span>
+                                        <span ng-show="FormUser.pospasscode.$error.minlength">
+                                            Enter 6 Digit Passcode
+                                        </span>
+                                    </span>
+                                </div>
+                                <div class="col col-33">
+                                    <label for="">Confirm Pos Passcode</label>
+                                    <input type="password" id="cpospasscode" class="formControl" maxlength="6"
+                                        ng-maxlength="6" name="cpospasscode" ng-required="true" placeholder="Confirm Pos Passcode"
+                                        ng-model="model.cpospasscode" passcodenumbers-only>
+                                    <span class="errorMsg text-center" ng-show="formsubmit && (FormUser.cpospasscode.$dirty || FormUser.cpospasscode.$invalid)">
+                                        <span ng-show="FormUser.cpospasscode.$error.required">
+                                            Please Enter Confirm Passcode
+                                        </span>
+                                        <span ng-show="FormUser.pospasscode.$error.minlength">
+                                            Enter 6 Digit Passcode
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row responsive-sm">
+                            <div class="col">
+                                <label class="formCheck" for="Active"><input type="checkbox" id="Active" ng-model="model.isActive"><span>Active</span></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="s20"></div>
+                <div class="row">
+                    <div class="col">
+                        <button class="cBtn cBtn-green cBtn-block cBtn-shadow" ng-click="SaveUser(FormUser)" type="submit"><i
+                                class="ion-document-text"></i>
+                            Save</button>
+                    </div>
+                    <!-- <div class="col col-50">
+                        <button class="cBtn cBtn-skyblue cBtn-block cBtn-shadow" ng-click="init()" type="submit"><i class="ion-close-circled"></i>
+              Cancel</button>
+                    </div> -->
+                </div>
+            </form>
+
+
+
+        </div>
+
+    </ion-content>
+    <script id="UserLocation.html" type="text/ng-template">
+        <ion-modal-view class="patternBg">
+            <ion-header-bar class="customPgHeader">
+                <div class="col01">
+                    <span class="pgTitle">User Location</span>
+                </div>
+                <div class="col02">
+                    <button class="cBtn cBtn-skyblue cBtn-block cBtn-shadow" ng-click="closeModal()" type="submit"><i class="ion-close-circled"></i>
+                      Cancel</button>
+                </div>
+            </ion-header-bar>
+            <ion-content padding="true">
+                <div class="container">
+                    <div class="s10"></div>
+                    <div class="row row-center">
+                        <div class="col 0">
+                            <div class="searchBox">
+                                <input type="text" ng-model="Searchmodel.SearchLocation" class="formControl" placeholder="Filter by Location" ng-eneter="FilterDataLocation()">
+                                <button type="button" class="cBtn cBtn-blue" ng-click="FilterDataLocation()">
+                    <span>Search</span>
+                  </button>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="s20"></div>
+                    <div class="cDataTable">
+                        <table id="LocationTable" class="cell-border" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        No
+                                    </th>
+                                    <th>Location</th>
+
+                                    <th>
+                                        Action
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="o in lstLocation">
+                                    <td>{{$index + 1}}</td>
+                                    <td>{{o.Name}}</td>
+                                    <td>
+                                        <input type="checkbox" ng-model="o.isSelect" value="o.isSelect" ng-true-value="1" ng-false-value="0" ng-change="">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="s20"></div>
+                    <div class="row text-center">
+                        <div class="col">
+                            <button class="cBtn cBtn-green cBtn-block cBtn-shadow" ng-click="SaveAssignLocation(FormUser)" type="submit"><i class="ion-document-text"></i>
+                  Save</button>
+                        </div>
+                        <!-- <div class="col col-50">
+                            <button class="cBtn cBtn-skyblue cBtn-block cBtn-shadow" ng-click="closeModal()" type="submit"><i class="ion-close-circled"></i>
+                  Cancel</button>
+                        </div> -->
+                    </div>
+                </div>
+
+            </ion-content>
+        </ion-modal-view>
+    </script>
+</ion-view>

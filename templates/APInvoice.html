@@ -1,0 +1,44 @@
+<ion-view class="patternBg">
+    <ion-content>
+        <div class="container">
+            <div class="s10"></div>
+            <div class="row row-center">
+                <div class="col">
+                    <div class="searchBox">
+                        <input id="mytext" type="text" ng-model="Searchmodel.Search" class="formControl"
+                            ng-model-options="{ debounce: 1500 }" ng-change="FilterData()" placeholder="Filter by Code,Name, Description, Total or P/I No">
+                        <button type="button" class="cBtn cBtn-blue" ng-click="FilterData()">
+                            <span>Search</span>
+                        </button>
+                        <a ng-click="EnableFilterOption()" class="cBtn cBtn-green cbtn-onlyicon" title="Advance Search">
+                            <i class="ion-ios-arrow-down" title="Advance Search"></i>
+                        </a>
+                    </div>
+                    <div class="CustFilter" style="display:none;">
+                        <my-widget status='false' idlocations='false'></my-widget>
+                    </div>
+                </div>
+            </div>
+            <div class="s20"></div>
+            <div class="cDataTable">
+                <table id="APInvoiceTable" class="cell-border" width="100%">
+                    <thead>
+                        <tr>
+                            <th class="all">No</th>
+                            <th>P/I No </th>
+                            <th>APInvoice Date</th>
+                            <th>Customer Code</th>
+                            <th>Customer Name</th>
+                            <th>Description</th>
+                            <th>Branch Code</th>
+                            <th>Sub Total</th>
+                            <th>Tax</th>
+                            <th>Final Total</th>
+                            <th>Outstanding</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

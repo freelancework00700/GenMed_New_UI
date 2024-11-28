@@ -1,0 +1,219 @@
+<ion-view class="patternBg">
+    <ion-content>
+        <div ng-if="IsList">
+            <div class="container">
+                <div class="s10"></div>
+                <div class="row row-center">
+                    <div class="col">
+                        <div class="searchBox">
+                            <input type="text" ng-model="Searchmodel.Search" class="formControl" ng-model-options="{ debounce: 1500 }"
+                                ng-change="FilterData()" placeholder="Filter by Task, User,Description or Status">
+                            <button type="button" class="cBtn cBtn-blue" ng-click="FilterData()">
+                                <span>Search</span>
+                            </button>
+                            <a ng-if="IsAdmin" ng-click="Add()" class="cBtn cBtn-green cBtn-autoWidth d-flex items-center justify-center gap-2">
+                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                </svg> <span>Add Site Task</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="s20"></div>
+                <div class="cDataTable">
+
+                    <table id="SiteTaskTable" class=" cell-border" width="100%">
+                        <thead>
+                            <tr>
+                                <th class="all">No</th>
+                                <th>Assign To </th>
+                                <th>Assign By</th>
+                                <th>Site</th>
+                                <th>Description</th>
+                                <th>Status</th>
+                                <th class="all">
+                                    Action
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="o in lstTask">
+                                <td>{{$index + 1}}</td>
+                                <td>{{o.AssignTo.username|| "N/A"}}</td>
+                                <td>{{o.AssignBy.username|| "N/A"}}</td>
+                                <td>{{o.tblsite.Name|| "N/A"}}</td>
+                                <td>
+                                    <span ng-if="o.Description.length<=50">{{o.Description || "N/A"}}</span>
+                                    <span ng-if="o.Description.length>50" title=" {{o.Description}}">{{o.Description |
+                                        limitTo:50}}...</span>
+                                </td>
+                                <td>{{o.Status|| "N/A"}}</td>
+                                <td>
+                                    <a ng-if="IsAdmin" ng-click="CopyToModel(o)" class="btnAction btnAction-edit">
+                                        <i class="ion-edit" title="Edit">
+                                        </i>
+                                    </a>
+                                    <a ng-if="IsAdmin" ng-click="DeleteSiteTask(o.id)" class="btnAction btnAction-error">
+                                        <i class="ion-trash-a" title="Delete">
+                                        </i>
+                                    </a>
+                                    <a ng-if="!IsAdmin && o.Status=='Pending'" ng-click="ChangeStatus(o.id,'Checking')"
+                                        class="btnAction btnAction-info">
+                                        <i class="ion-android-done" title="Checking">
+                                        </i>
+                                    </a>
+                                    <a ng-if="IsAdmin && o.Status=='Checking'" ng-click="ChangeStatus(o.id,'Complete')"
+                                        class="btnAction btnAction-info">
+                                        <i class="ion-android-done-all" title="Complete">
+                                        </i>
+                                    </a>
+                                    <a ng-click="openCommentModal(o.id)" class="btnAction btnAction-alert">
+                                        <i class="ion-ios-chatbubble" title="Comment">
+                                        </i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="container" ng-if="!IsList">
+            <div class="s10"></div>
+            <form name="FormTask" class="cForm light">
+                <div class="infoBox02">
+                    <div class="container">
+                        <div class="s25"></div>
+                        <div class="row responsive-sm">
+                            <div class="col col-33">
+                                <label for="Site">Site*</label>
+                                <select class="formControl" name="idSite" ng-model="model.idSite" ng-required="true"
+                                    ng-options="p.id as p.Name for p in lstSite" ng-change="GetAllUserBySiteId(model.idSite)">
+                                </select>
+                                <span class="errorMsg text-center" ng-show="formsubmit && (FormTask.idSite.$dirty || FormTask.idSite.$invalid)">
+                                    <span ng-show="FormTask.idSite.$error.required">
+                                        Please Select Site
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="col col-33">
+                                <label for="User">User*</label>
+                                <select class="formControl" name="idUser" ng-model="model.idUser" ng-required="true"
+                                    ng-options="o.id as o.username for o in lstUser">
+                                </select>
+                                <span class="errorMsg text-center" ng-show="formsubmit && (FormTask.idUser.$dirty || FormTask.idUser.$invalid)">
+                                    <span ng-show="FormTask.idUser.$error.required">
+                                        Please Select User
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="col col-33">
+                                <label for="Task">Task*</label>
+                                <input type="text" class="formControl" name="Description" ng-required="true"
+                                    placeholder="Task" ng-model="model.Description">
+                                <span class="errorMsg text-center" ng-show="formsubmit && (FormTask.Description.$dirty || FormTask.Description.$invalid)">
+                                    <span ng-show="FormTask.Description.$error.required">
+                                        Please Enter Task
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="s20"></div>
+                <div ng-if="model.ImageUrl">
+                    <div style="text-align: center;color:black;">Image</div>
+                    <div class="row responsive-sm">
+                        <div class="col col-20">
+                            <div class="row">
+                                <img src="{{model.DisplayImageUrl}}" style="height: 100px;width: 100px;" err-SRC="img/no-image-found.gif">
+                            </div>
+                            <div class="s10"></div>
+                            <div class="row text-center">
+                                <button class="cBtn cBtn-skyblue cBtn-block cBtn-shadow" ng-click="RemoveImage()" type="submit">Remove
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div ng-if="!model.ImageUrl">
+                    <div class="s10"></div>
+                    <div style="text-align: center;color:black;">Image Upload</div>
+                    <div class="s10"></div>
+                    <div>
+                        <div id="dropzone1" class="dropzone" options="dzOptions" callbacks="dzCallbacks" ng-dropzone>
+                        </div>
+                    </div>
+                </div>
+                <div class="s20"></div>
+                <div class="row">
+                    <div class="col">
+                        <button class="cBtn cBtn-green cBtn-block cBtn-shadow" ng-click="SaveSiteTask(FormTask,$event)"
+                            type="submit"><i class="ion-document-text"></i>
+                            Save</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </ion-content>
+
+    <script id="comment-modal.html" type="text/ng-template">
+        <ion-modal-view>
+            <ion-header-bar class="modalheader">
+                <button class="button button-icon icon ion-close-round" ng-click="closeModal()"></button>
+            </ion-header-bar>
+            <ion-content delegate-handle="modalContent">
+                <div class="container">
+                    <div>
+                        <ul style="padding-bottom: 10%;">
+                            <li ng-repeat="o in lstComment">
+                                <div class="chatcontainer">
+
+                                    <img ng-if="o.IsImage" src="{{o.DisplayImage}}" err-SRC="img/no-image-found.gif">
+                                    <p>{{o.Comment}}</p>
+                                    <span class="time-right">{{o.tbluserinformation.username}}, {{o.CreatedDate | date:'dd-MM-yyyy HH:mm'}}</span>
+                                </div>
+                                <li>
+                        </ul>
+                    </div>
+                </div>
+            </ion-content>
+            <ion-footer-bar class="footercust">
+                <div class="container">
+                    <form name="FormComment" class="cForm light">
+
+                        <div class="row responsive-sm">
+                            <div class="col col-90">
+                                <div>
+                                    <div id="dropzone2" class="dropzone" options="dzOptions" callbacks="dzCallbacks" ng-dropzone style="min-height: 70px !important;"></div>
+                                </div>
+                                <div class="s10"></div>
+                                <div>
+                                    <input type="text" class="formControl" name="Comment" placeholder="Comment" ng-model="modelComment.Comment">
+                                </div>
+                            </div>
+                            <div class="col col-10">
+                                <button class="cBtn cBtn-green  cBtn-shadow" ng-disabled="!modelComment.Comment" ng-click="SaveComment(FormComment,$event)" type="submit"><i
+                                                    class="icon ion-android-send" title="Send"></i>
+                                                </button>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </ion-footer-bar>
+        </ion-modal-view>
+    </script>
+</ion-view>
+<style>
+    .footercust {
+        /* margin-top: 5%; */
+        background: #fff;
+        height: 150px;
+    }
+
+    .footercust .dropzone .dz-preview .dz-image {
+        height: 60px !important;
+    }
+</style>

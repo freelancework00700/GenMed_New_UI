@@ -1,0 +1,131 @@
+<ion-view class="patternBg">
+    <ion-content>
+        <div ng-if="IsList">
+            <div class="container">
+                <div class="row row-center">
+                    <div class="col">
+                        <div class="searchBox">
+                            <input id="mytext" type="text" ng-model="Searchmodel.Search" class="formControl"
+                                ng-model-options="{ debounce: 1500 }" ng-change="FilterData()" placeholder="Filter by Type, Description or Short Code">
+                            <button type="button" class="cBtn cBtn-blue" ng-click="FilterData()">
+                                <span>Search</span>
+                            </button>
+                            <a ng-click="Add()" class="cBtn cBtn-green cBtn-autoWidth d-flex items-center justify-center gap-2">
+                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                </svg>
+                                <span>Add Item Type</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                <div class="cDataTable">
+                    <table id="ItemTypeTable" class=" cell-border" width="100%">
+                        <thead>
+                            <tr>
+                                <th class="all">
+                                    No
+                                </th>
+                                <th>Type </th>
+                                <th>
+                                    Description
+                                </th>
+                                <th>
+                                    Short Code
+                                </th>
+                                <th class="all">
+                                    Action
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="o in lstItemType">
+                                <td>{{$index + 1}}</td>
+                                <td>
+                                    <span ng-if="o.Type.length<=50">{{o.Type || "N/A"}}</span>
+                                    <span ng-if="o.Type.length>50" title=" {{o.Type}}">{{o.Type | limitTo:50}}...</span>
+                                </td>
+                                <td>
+                                    <span ng-if="o.Descriptions.length<=50">{{o.Descriptions|| "N/A"}}</span>
+                                    <span ng-if="o.Type.length>50" title=" {{o.Descriptions}}">{{o.Descriptions |
+                                        limitTo:50}}...</span>
+                                </td>
+                                <td>
+                                    <span ng-if="o.ShortCode.length<=50">{{o.ShortCode|| "N/A"}}</span>
+                                    <span ng-if="o.ShortCode.length>50" title=" {{o.ShortCode}}">{{o.ShortCode |
+                                        limitTo:50}}...</span>
+                                </td>
+                                <td>
+                                    <a ng-click="CopyToModel(o)" class="btnAction btnAction-edit">
+                                        <i class="ion-edit" title="Edit">
+                                        </i>
+                                    </a>
+                                    <a ng-click="DeleteItemType(o.id)" class="btnAction btnAction-error">
+                                        <i class="ion-trash-a" title="Delete">
+                                        </i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="container" ng-if="!IsList">
+            <form name="FormItemType" class="cForm light">
+                <div class="infoBox02">
+                    <div class="container">
+                        <div class="row responsive-sm">
+                            <div class="col col-33">
+                                <label for="Type">Type*</label>
+                                <input type="text" class="formControl" name="Type" ng-required="true" maxlength="100"
+                                    ng-maxlength="100" placeholder="Item Type" ng-model="model.Type">
+                                <span class="errorMsg text-center" ng-show="formsubmit && (FormItemType.Type.$dirty || FormItemType.Type.$invalid)">
+                                    <span ng-show="FormItemType.Type.$error.required">
+                                        Please Enter Type
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="col col-33">
+                                <label for="Description">Description</label>
+                                <input type="text" class="formControl" name="Descriptions" maxlength="100" ng-maxlength="100"
+                                    class="formControl" placeholder="Descriptions" ng-model="model.Descriptions">
+                            </div>
+                            <div class="col col-33">
+                                <label for="ShortCode">Short Code*</label>
+                                <input type="text" class="formControl" name="ShortCode" ng-required="true" maxlength="100"
+                                    ng-maxlength="100" class="formControl" placeholder="Short Code" ng-model="model.ShortCode">
+                                <span class="errorMsg text-center" ng-show="formsubmit && (FormItemType.ShortCode.$dirty || FormItemType.ShortCode.$invalid)">
+                                    <span ng-show="FormItemType.ShortCode.$error.required">
+                                        Please Enter Short Code
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row responsive-sm">
+                            <div class="col col-33">
+                                <label for="Note">Note</label>
+                                <input type="text" class="formControl" name="Note" maxlength="600" ng-maxlength="600"
+                                    class="formControl" placeholder="Note" ng-model="model.Note">
+                            </div>
+                        </div>                        
+                        <div class="row">
+                            <div class="col">
+                                <button class="cBtn cBtn-green cBtn-block cBtn-shadow" ng-click="SaveItemType(FormItemType)"
+                                    type="submit"><i class="ion-document-text"></i>
+                                    Save</button>
+                            </div>
+                        </div>
+                        <div class="s10"></div>
+                    </div>
+                </div>
+                
+            </form>
+        </div>
+    </ion-content>
+</ion-view>

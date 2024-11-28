@@ -1,0 +1,225 @@
+<ion-view class="patternBg">
+    <ion-content>
+        <div ng-if="IsList">
+            <div class="container">
+                <div class="row row-center">
+                    <div class="col">
+                        <div class="searchBox">
+                            <input id="mytext" type="text" ng-model="Searchmodel.Search" class="formControl"
+                                ng-model-options="{ debounce: 1500 }" ng-change="FilterData()" placeholder="Filter by Doc No, From Doc Type Key No or Description">
+                            <button type="button" class="cBtn cBtn-blue" ng-click="FilterData()">
+                                <span>Search</span>
+                            </button>
+                            <a ng-click="Add()" class="cBtn cBtn-green cBtn-autoWidth d-flex items-center justify-center gap-2">
+                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                </svg>
+                                <span>Add UOM Conversion</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="cDataTable">
+                            <table id="UOMTable" class="cell-border" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th class="all">
+                                            No.
+                                        </th>
+                                        <th>Doc No.</th>
+                                        <th>Date </th>
+                                        <th>
+                                            Description
+                                        </th>
+                                        <th>
+                                            From Doc. Type
+                                        </th>
+                                        <th>
+                                            From Doc. Key
+                                        </th>
+                                        <th>
+                                            From Doc. No
+                                        </th>
+                                        <!--<th>
+                                                        Cancelled
+                                                    </th>-->
+                                        <th class="all">
+                                            Action
+                                        </th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div ng-if="!IsList">
+            <div class="container">
+                <form name="FormUOMConv" class="cForm light">
+                    <div class="infoBox02">
+                        <div class="container">
+                            <div class="row responsive-sm">
+                                <div class="col col-33">
+                                    <label for="Description">Description*</label>
+                                    <textarea type="text" id="Description" maxlength="100" ng-maxlength="100" class="formControl"
+                                        rows="1" name="Description" placeholder="Description" ng-model="model.Description"
+                                        ng-required="true"></textarea>
+                                    <span class="errorMsg text-center" ng-show="formsubmit && (FormUOMConv.Description.$dirty || FormUOMConv.Description.$invalid)">
+                                        <span ng-show="FormUOMConv.Description.$error.required">
+                                            Please Enter Description
+                                        </span>
+                                    </span>
+                                </div>
+                                <div class="col col-33">
+                                    <label for="DocNo">Stock UOM Conversion No.</label>
+                                    <input type="text" id="DocNo" class="formControl" name="DocNo" readonly placeholder="UOM Conversion No"
+                                        ng-model="model.DocNo">
+                                </div>
+                                <div class="col col-33">
+                                    <label for="Date">Date*</label>
+                                    <input ng-model="model.DocDate" name="DocDate" value="{{model.DocDate | date: 'dd-MM-yyyy'}}"
+                                        ng-required="true" class="formControl" date ion-datetime-picker>
+                                    <span class="errorMsg text-center" ng-show="formsubmit && (FormUOMConv.DocDate.$dirty || FormUOMConv.DocDate.$invalid)">
+                                        <span ng-show="FormUOMConv.DocDate.$error.required">
+                                            Please Select Date
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="row responsive-sm">
+                                <div class="col">
+                                    <label for="Notes">Notes</label>
+                                    <textarea type="text" id="Note" maxlength="100" ng-maxlength="100" class="formControl"
+                                        rows="5" name="Note" placeholder="Notes" ng-model="model.Note">{{model.Note}}</textarea><br>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row responsive-sm">
+                        <a ng-click="AddUOMItemInList()" class="custlablebtn">
+                            <span>Add New</span>
+                        </a>
+                    </div>
+                    <div class="row responsive-sm">
+                        <div class="col">
+                            <div class="infoBox02">
+                                <div class="container">
+                                    <div class="row responsive-sm">
+                                        <div class="col col-14">
+                                            <label>Item Code*</label>
+                                        </div>
+                                        <div class="col col-14">
+                                            <label>Location*</label>
+                                        </div>
+                                        <div class="col col-14">
+                                            <label>Batch No</label>
+                                        </div>
+                                        <div class="col col-14">
+                                            <label>From Qty*</label>
+                                        </div>
+                                        <div class="col col-14">
+                                            <label>From UOM*</label>
+                                        </div>
+                                        <div class="col col-14">
+                                            <label>To UOM*</label>
+                                        </div>
+                                        <div class="col col-14">
+                                            <label>To Qty*</label>
+                                        </div>
+                                    </div>
+                                    <div class="row responsive-sm" ng-repeat="item in lstSelectedUOM">
+                                        <div class="col col-14" hide-reset="true" modal-title="Select Item"
+                                            modal-select="" ng-model="item.ItemCode" options="lstItems" on-select="GetAllItemBachNo(item)"
+                                            option-property="ItemCode" has-search="true">
+                                            <div class="row itemdrp" style="padding:0">
+                                                <input class="formControl" ng-model="item.ItemCode" readonly style="cursor: pointer !important;float: left;border-right: none;border-top-right-radius:0px;border-bottom-right-radius: 0px; ">
+                                                <button style="padding: 2px"> <i class="icon ion-arrow-down-b" title="Select"></i>
+                                                    <div class="option">
+
+                                                        <div class="row" style="font-weight: bold;font-size: 12px;"
+                                                            ng-show="$index==0">
+                                                            <div class="col" style="padding: 0" class="text-center">Item
+                                                                Code</div>
+                                                            <div class="col" style="padding: 0" class="text-center">Item
+                                                                Name</div>
+                                                            <div class="col" style="padding: 0" class="text-center">
+                                                                Description</div>
+                                                            <div class="col" style="padding: 0" class="text-center">
+                                                                Description2</div>
+                                                            <div class="col" style="padding: 0" class="text-center">Bal
+                                                                Qty</div>
+                                                        </div>
+                                                        <div class="row" style="font-size: 14px;">
+                                                            <div class="col" class="text-center">{{option.ItemCode}}
+                                                            </div>
+                                                            <div class="col" class="text-center">{{option.ItemName}}
+                                                            </div>
+                                                            <div class="col" class="text-center">
+                                                                {{option.Descriptions || "N/A"}} </div>
+                                                            <div class="col" class="text-center">
+                                                                {{option.Descriptions2 || "N/A"}}</div>
+                                                            <div class="col" class="text-center">
+                                                                {{option.itembatches[0].BalQty || "N/A"}}</div>
+                                                        </div>
+                                                    </div>
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <div class="col col-14">
+                                            <select ng-model="item.Location" class="formControl" ng-change="CalculateToQty(item,0,$index)">
+                                                <option value="">Select Location</option>
+                                                <option ng-repeat="o in lstLocation" value="{{o.id}}">{{o.Name}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="col col-14">
+                                            <select ng-model="item.BatchNo" class="formControl">
+                                                <option value="">Select Batch No</option>
+                                                <option ng-repeat="o in item.lstBatch" value="{{o.BatchNumber}}">
+                                                    {{o.BatchNumber}}</option>
+                                            </select>
+                                        </div>
+                                        <div class="col col-14">
+                                            <input id="name" ng-model="item.FromQty" class="formControl" ng-change="CalculateToQty(item,0,$index)">
+                                        </div>
+                                        <div class="col col-14">
+                                            <select ng-model="item.FromUOM" class="formControl" ng-change="CalculateToQty(item,'FromUOM',$index)">
+                                                <option value="">Select Item</option>
+                                                <option ng-repeat="o in item.lstUOM | orderBy : 'UOM'" value="{{o.UOM}}">{{o.UOM}}</option>
+                                            </select>
+                                        </div>
+                                        <div class="col col-14">
+                                            <select ng-model="item.ToUom" class="formControl" ng-change="CalculateToQty(item,'ToUom',$index)">
+                                                <option value="">Select Item</option>
+                                                <option ng-repeat="o in item.lstUOM | orderBy : 'UOM'" value="{{o.UOM}}">{{o.UOM}}</option>
+                                            </select>
+                                        </div>
+                                        <div class="col col-14">
+                                            <input id="name" ng-model="item.ToQty" class="formControl" readonly>
+                                        </div>
+                                        <a ng-click="RemoveUOMItemInList($index)" class="RemoveBtn">
+                                            <i class="ion-trash-a" title="Remove Item"></i>
+                                        </a>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <button class="cBtn cBtn-green cBtn-block cBtn-shadow" ng-click="SaveItem(FormUOMConv)"
+                                                type="submit"><i class="ion-document-text"></i>
+                                                Save
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="s10"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>                   
+                </form>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

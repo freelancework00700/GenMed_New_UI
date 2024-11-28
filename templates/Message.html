@@ -1,0 +1,326 @@
+<ion-view>
+    <div class="bar bar-subheader chatdetail" style="top:75px !important;">
+        <div ng-if="!IsChatDetail">
+            <div ng-click="GoToStep(1)" ng-if="Step==0">
+                <a class="Backbtn">
+                    <i class="ion-chatbox-working" title="New Chat">
+                        </i>
+                </a>
+                <span>{{UserName}}</span>
+            </div>
+            <div ng-click="GoToStep(0)" ng-if="Step==1">
+                <a class="Backbtn">
+                    <i class="ion-arrow-left-c" title="Backbtn">
+                    </i>
+                </a>
+                <span>New Chat</span>
+            </div>
+        </div>
+        <div ng-click="ManageModel()" ng-if="IsChatDetail">
+            <a class="Backbtn">
+                <i class="ion-arrow-left-c" title="Backbtn">
+                    </i>
+            </a>
+            <span>{{DisplayName}}</span>
+        </div>
+    </div>
+    <ion-content style="top: 130px !important;">
+        <div ng-if="!IsChatDetail">
+            <div>
+                <div ng-if="Step==0">
+                    <!-- <header class="chatdetail">
+                        <div ng-click="GoToStep(1)">
+                            <a class="Backbtn">
+                                <i class="ion-chatbox-working" title="New Chat">
+                                </i>
+                            </a>
+                            <span>{{UserName}}</span>
+                        </div>
+                    </header> -->
+                    <div class="s10"></div>
+                    <div class="row row-center">
+                        <div class="col">
+                            <div class="searchBox">
+                                <input type="text" ng-model="modelSearch.Search" class="formControl" placeholder="Search Here">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="s20"></div>
+                    <ul ng-if="lstChats.length>0" class="commentList">
+                        <li ng-repeat="o in lstChats | filter: modelSearch.Search" ng-click="OpenChatDetail(o)">
+                            <a href="" class="{{o.classname}}" ng-class="o.active==true ? 'active' :''">
+                                <span>{{o.Name}}</span><br />
+                                <ion-badge ng-if="o.UnreadMsg > 0" id="notifications-badge" color="danger">{{o.UnreadMsg}}</ion-badge>
+                            </a>
+                        </li>
+                    </ul>
+                    <ul style="text-align:center;" ng-if="lstChats.length==0">
+                        "No Message Available"
+                    </ul>
+                </div>
+
+                <div ng-if="Step==1">
+                    <!-- <header class="chatdetail" ion-fixed>
+                        <div ng-click="GoToStep(0)">
+                            <a class="Backbtn">
+                                <i class="ion-arrow-left-c" title="Backbtn">
+                                </i>
+                            </a>
+                            <span>New Chat</span>
+                        </div>
+                    </header> -->
+                    <div class="s10"></div>
+                    <div class="row row-center">
+                        <div class="col">
+                            <div class="searchBox">
+                                <input type="text" ng-model="modelSearch.Search" class="formControl" placeholder="Search Here">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="s20"></div>
+                    <ul class="usernameList" ng-if="lstUser.length>0">
+                        <li ng-repeat="o in lstUser | filter: modelSearch.Search" ng-click="OpenChatDetail(o)">
+                            <a href="" class="{{o.classname}}" ng-class="o.active==true ? 'active' :''">
+                                <span>{{o.username}}</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <ul style="text-align:center;" ng-if="lstUser.length==0">
+                        "No User Available"
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div ng-if="IsChatDetail">
+            <!-- <header class="chatdetail">
+                <div ng-click="ManageModel()">
+                    <a class="Backbtn">
+                        <i class="ion-arrow-left-c" title="Backbtn">
+                        </i>
+                    </a>
+                    <span>{{DisplayName}}</span>
+                </div>
+            </header> -->
+
+            <div style="color:white;display: block;background-color: #42a3aa;margin-left: auto;font-weight: 500;margin-right: auto;margin-top:5px;width: 96px;text-align: center;border-radius: 15px;height: 36px;line-height: 36px;" ng-if="lstmessage.length>0">
+                {{lstmessage[0].SendDate | date:'dd-MM-yyyy' }}
+            </div>
+
+            <div ng-repeat="message in lstmessage" ng-class="{other: message.SenderId == CurrentUserId}" class="messages">
+
+                <div style="color:white;display: block;background-color: #42a3aa;margin-left: 47%;margin-bottom:75px;width: 96px;text-align: center;border-radius: 15px;height: 36px;line-height: 36px;" ng-if="$index>1 && ((message.SendDate | date :'dd') != (lstmessage[$index-1].SendDate | date :'dd'))">
+                    {{message.SendDate | date:'dd-MM-yyyy' }}
+                </div>
+
+
+                <div ng-class="{other: message.SenderId == CurrentUserId}" class="message">
+                    <span ng-if="!message.IsFile">{{ message.Message }}</span>
+                    <span ng-if="message.IsFile">
+                        <a href="{{message.FileUrl}}" target="_blank">
+                            {{message.Message}}
+                        </a>
+                    </span>
+                    <div class="timedisplay">{{message.SendDate | date:"hh:mm a"}}</div>
+                </div>
+            </div>
+        </div>
+    </ion-content>
+
+    <ion-footer-bar keyboard-attach class="bar-stable item-input-inset" ng-if="IsChatDetail">
+        <div class="Outbox" ng-click="OpenUpload()">
+            <img src="img/outbox.png">
+        </div>
+        <input type="file" class="FileUploads" name="FUpload" id="FUpload" accept=".csv,application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel,text/plain,.jpg,.png,.pdf"
+            onchange="angular.element(this).scope().ReadFile(this)" style="display: none">
+        <label class="item-input-wrapper">
+            <input type="text" placeholder="Type your message" ng-enter="SendMessage();" ng-model="model.Message"
+                on-focus="inputUp()" on-blur="inputDown()" />
+        </label>
+        <button class="button button-clear" ng-click="SendMessage()">
+            Send
+        </button>
+    </ion-footer-bar>
+
+    <script id="FilePreview.html" type="text/ng-template">
+        <ion-modal-view>
+            <ion-header-bar>
+                <div class="row text-center">
+                    <div class="col">
+                        File Preview
+                    </div>
+                </div>
+            </ion-header-bar>
+            <ion-content>
+                <div class="container">
+                    <div class="row text-center">
+                        <div class="col">
+                            <img src="{{FileIcon}}" style="height:128px;width:128px;">
+                        </div>
+                    </div>
+                    <div class="row text-center">
+                        <div class="col">
+                            {{FileName}}
+                        </div>
+                    </div>
+                    <div class="row text-center">
+                        <div class="col">
+                            <button class="cBtn cBtn-green cBtn-block cBtn-shadow" ng-click="SendFileMessage()">
+                                        Send
+                             </button>
+                        </div>
+                        <div class="col">
+                            <button class="cBtn cBtn-green cBtn-block cBtn-shadow" ng-click="CloseModel()">
+                                            Cancel
+                                 </button>
+                        </div>
+                    </div>
+            </ion-content>
+        </ion-modal-view>
+    </script>
+</ion-view>
+<style>
+    .chatinput {
+        height: 70px !important;
+    }
+    
+    .Outbox {
+        padding: 10px 10px 0 0;
+    }
+    
+    .Outbox img {
+        height: 24px;
+        width: 24px;
+        display: block;
+        cursor: pointer;
+    }
+    
+    .chatUserList li {
+        padding: 5px;
+    }
+    
+    .scroll {
+        padding: 0px 0 50px !important;
+    }
+    
+    .messages {
+        display: -webkit-box !important;
+        display: -moz-box !important;
+        display: -ms-flexbox !important;
+        display: -webkit-flex !important;
+        display: flex !important;
+        -webkit-align-content: center !important;
+        -ms-flex-line-pack: center !important;
+        align-content: center !important;
+        -webkit-box-align: center !important;
+        -moz-box-align: center !important;
+        -webkit-align-items: center !important;
+        -ms-flex-align: center !important;
+        align-items: center !important;
+        margin-bottom: 20px !important;
+        font-weight: 500;
+    }
+    
+    .messages .message {
+        -webkit-box-flex: 1 !important;
+        -moz-box-flex: 1 !important;
+        -webkit-flex: 1 1 auto !important;
+        -ms-flex: 1 1 auto !important;
+        flex: 1 1 auto !important;
+        padding: 10px !important;
+        -webkit-transition: all 250ms ease-in-out !important;
+        transition: all 250ms ease-in-out !important;
+        overflow: hidden !important;
+        text-align: left !important;
+        -webkit-transform: translate3d(0, 0, 0) !important;
+        -moz-transform: translate3d(0, 0, 0) !important;
+        transform: translate3d(0, 0, 0) !important;
+    }
+    
+    .message .timedisplay {
+        font-size: 12px;
+        padding: 5px
+    }
+    
+    .messages.other .message {
+        -webkit-transform: translate3d(0, 0, 0) !important;
+        -moz-transform: translate3d(0, 0, 0) !important;
+        transform: translate3d(0, 0, 0) !important;
+        text-align: right !important;
+    }
+    
+    .messages.other .message.slide-right {
+        -webkit-transform: translate3d(120px, 0, 0) !important;
+        -moz-transform: translate3d(120px, 0, 0) !important;
+        transform: translate3d(120px, 0, 0) !important;
+    }
+    
+    .messages.other span {
+        color: black !important;
+        background-color: #c7c7cc !important;
+    }
+    
+    .messages span {
+        background: #007aff !important;
+        display: inline-block !important;
+        color: white !important;
+        padding: 10px !important;
+        border-radius: 10px !important;
+        text-align: left !important;
+        max-width: 240px !important;
+    }
+    
+    .messages a:before {
+        margin: 0 10px 0 5px;
+    }
+    
+    .messages span a {
+        text-decoration: none;
+        color: white;
+    }
+    
+    .messages.other span a {
+        text-decoration: none;
+        color: #111;
+    }
+    
+    .messages a:hover {
+        text-decoration: underline;
+    }
+    
+    .messages.other a:hover {
+        text-decoration: underline;
+    }
+    
+    .messages a[href$=".docx"]:before {
+        content: url(img/icon-word.png);
+    }
+    
+    .messages a[href$=".pttx"]:before {
+        content: url(img/PowerPoint-icon.png);
+    }
+    
+    .messages a[href$=".xlsx"]:before {
+        content: url(img/Excel-icon.png);
+    }
+    
+    .messages a[href$=".csv"]:before {
+        content: url(img/Excel-icon.png);
+    }
+    
+    .messages a[href$=".pdf"]:before {
+        content: url(img/pdf_icon.gif);
+    }
+    
+    .messages a[href$=".jpg"]:before {
+        content: url(img/jpg.png);
+    }
+    
+    .messages a[href$=".png"]:before {
+        content: url(img/png.png);
+    }
+    
+    .messages a[href$=".txt"]:before {
+        content: url(img/txt.png);
+    }
+</style>

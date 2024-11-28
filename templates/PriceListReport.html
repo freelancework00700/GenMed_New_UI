@@ -1,0 +1,261 @@
+<ion-view class="patternBg">
+    <ion-content>
+        <div class="container">
+            <div class="s10"></div>
+            <div class="row row-center">
+                <div class="col">
+                    <div class="searchBox">
+                        <input id="mytext" type="text" ng-model="Searchmodel.Search" class="formControl"
+                            ng-model-options="{ debounce: 1500 }" ng-change="FilterData()" placeholder="Filter by Code, Name, Batch Number, Group Name, Company, Sub Company, Purchase Party, Pack or Pur Rate ">
+                        <button type="button" class="cBtn cBtn-blue" ng-click="FilterData()">
+                            <span>Search</span>
+                        </button>
+                        <!-- <a ng-click="EnableFilterOption()" class="cBtn cBtn-green cbtn-onlyicon" title="Advance Search">
+                            <i class="ion-ios-arrow-down" title="Advance Search"></i>
+                        </a> -->
+                        <a ng-click="Export()" class="cBtn cBtn-green cbtn-onlyicon" title="Export Excel">
+                            <i class="ion-ios-cloud-download-outline" title="Download Excel"></i>
+                        </a>
+                    </div>
+                    <!-- <div class="CustFilter" style="display:none;">
+                        <my-widget startdate='false' enddate='false' customercode='false' branchcode='false'
+                            status='false'></my-widget>
+                    </div> -->
+
+                    <div class="row responsive-sm  cForm light">
+                        <div class="col col-100">
+                            <div class="infoBox02">
+                                <div class="container">
+                                    <div class="row responsive-sm">
+                                        <div class="col">
+                                            <label>Main Company</label>
+                                            <select class="formControl" name="MainCompany" ng-required="true" ng-model="Filtermodel.MainCompany">
+                                                <option value="">All</option>
+                                                <option value="{{o.Brand}}" ng-repeat="o in lstBrand">
+                                                    {{o.Brand}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="col">
+                                            <label>Sub Company</label>
+                                            <select class="formControl" name="SubCompany" ng-required="true" ng-model="Filtermodel.SubCompany">
+                                                <option value="">All</option>
+                                                <option value="{{o.id}}" ng-repeat="o in lstSubBrand">
+                                                    {{o.SubBrandName}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="col">
+                                            <label>From Date</label>
+                                            <input ng-model="Filtermodel.StartDate" value="{{Filtermodel.StartDate | date: 'dd-MM-yyyy' }}"
+                                                ng-required="true" name="StartDate" class="formControl" date
+                                                ion-datetime-picker>
+                                        </div>
+                                        <div class="col">
+                                            <label>To Date</label>
+                                            <input ng-model="Filtermodel.EndDate" value="{{Filtermodel.EndDate  | date: 'dd-MM-yyyy'}}"
+                                                ng-required="true" name="EndDate" class="formControl" date
+                                                ion-datetime-picker>
+                                        </div>
+                                        <div class="col">
+                                            <label>Product Group</label>
+                                            <select class="formControl" name="ProductGroup" ng-required="true" ng-model="Filtermodel.ProductGroup"
+                                                ng-change="GetAllSubItemCategory(Filtermodel.ProductGroup)">
+                                                <option value="">All</option>
+                                                <option value="{{o.Name}}" ng-repeat="o in lstParentItemCategory">
+                                                    {{o.Name}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <!-- <div class="col col-10">
+                                            <label>Product Sub Group</label>
+                                            <select class="formControl" name="ProductSubGroup"
+                                                ng-model="Filtermodel.ProductSubGroup">
+                                                <option value="">All</option>
+                                                <option value="{{o.id}}" ng-repeat="o in lstSubItemCategory">
+                                                    {{o.Name}}
+                                                </option>
+                                            </select>
+                                        </div> -->
+
+                                        <div class="col">
+                                            <div class="s20"></div>
+                                            <a class="cBtn cBtn-blue" ng-click="FilterTableData(Filtermodel)">
+                                                <i class="icon ion-search" title="Search"></i>
+                                            </a>
+                                            <a class="cBtn cBtn-green" ng-click="ResetFilterData(null)">
+                                                <i class="icon ion-refresh" title="Search"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row responsive-sm  cForm light">
+                        <div class="col col-100">
+                            <div class="infoBox02">
+                                <div class="container">
+                                    <div class="row responsive-sm">
+                                        <div class="col-10">
+                                            <div style="text-align: center;margin-bottom: 10px;">
+                                                <label for="SaleRate">Sale Rate</label>
+                                            </div>
+                                            <div style="text-align: center;">
+                                                <input type="checkbox" class="formControl_checkbox" id="SaleRate"
+                                                    ng-model="checkboxmodel.SaleRate" ng-change="ShowHideCol()">
+                                            </div>
+                                        </div>
+                                        <div class="col-10">
+                                            <div style="text-align: center;margin-bottom: 10px;">
+                                                <label for="PurRate">Purchase Rate</label>
+                                            </div>
+                                            <div style="text-align: center;">
+                                                <input type="checkbox" class="formControl_checkbox" id="PurRate"
+                                                    ng-model="checkboxmodel.PurRate" ng-change="ShowHideCol()">
+                                            </div>
+                                        </div>
+                                        <div class="col-10">
+                                            <div style="text-align: center;margin-bottom: 10px;">
+                                                <label for="MRP">M.R.P.</label>
+                                            </div>
+                                            <div style="text-align: center;">
+                                                <input type="checkbox" class="formControl_checkbox" id="MRP"
+                                                    ng-model="checkboxmodel.StockP" ng-change="ShowHideCol()">
+                                            </div>
+                                        </div>
+                                        <div class="col-10">
+                                            <div style="text-align: center;margin-bottom: 10px;">
+                                                <label for="Contain">Contain</label>
+                                            </div>
+                                            <div style="text-align: center;">
+                                                <input type="checkbox" class="formControl_checkbox" id="Contain" ng-model="checkboxmodel.Contain"
+                                                    ng-change="ShowHideCol()">
+                                            </div>
+                                        </div>
+                                        <div class="col-10">
+                                            <div style="text-align: center;margin-bottom: 10px;">
+                                                <label for="GST">GST</label>
+                                            </div>
+                                            <div style="text-align: center;">
+                                                <input type="checkbox" class="formControl_checkbox" id="GST"
+                                                    ng-model="checkboxmodel.GST" ng-change="ShowHideCol()">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="s20"> -->
+            <!-- </div> -->
+            <div class="cDataTable">
+                <table id="StockBalanceReportTable" class="cell-border" width="100%">
+                    <thead>
+                        <tr>
+                            <th class="all">No</th>
+                            <th style="white-space: normal;">Company</th>
+                            <th>Prouduct Name</th>
+                            <th>Sales Rate</th>
+                            <th>Purchase Rate</th>
+                            <th ng-show="checkboxmodel.DrugMaster">GST</th>
+                            <th style="white-space: normal;">CONTAIN</th>
+
+                            <th>PACK</th>
+                            <!-- <th  ng-show="checkboxmodel.SubGroup">Sub Group</th> -->
+                            <!-- <th>SALES RATE</th>
+                            <th ng-show="checkboxmodel.SubCompany">Sub Company</th>
+
+                            <th style="white-space: normal;" ng-show="checkboxmodel.PurParty">Purchase Party</th>
+                            <th ng-show="checkboxmodel.Pack">Pack</th> -->
+                            <!-- <th ng-show="checkboxmodel.BoxPack">Box Pack</th> -->
+
+                            <!-- <th>Opening</th> -->
+<!-- 
+                            <th style="white-space: normal;">Pur QTY</th>
+                            <th style="white-space: normal;" ng-show="checkboxmodel.PurRate">Pur Rate</th>
+                            <th style="white-space: normal;" ng-show="checkboxmodel.PurGSTRate"> Pur GST Rate</th>
+                            <th style="white-space: normal;">Pur AMT</th>
+
+                            <th style="white-space: normal;">Sale QTY</th>
+                            <th style="white-space: normal;" ng-show="checkboxmodel.SaleRate">Sale Rate</th>
+                            <th style="white-space: normal;">Sale AMT</th>
+
+                            <th>Opening</th>
+
+                            <th>Closing</th>
+                            <th>Amount</th> -->
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <div class="s20">
+            </div>
+            <div class="row row-center">
+                <div class="row responsive-sm  cForm light">
+                    <div class="col col-80">
+                        <div class="infoBox02">
+                            <div class="container">
+                                <div class="row responsive-sm">
+                                    <div class="col">
+                                        <div style="text-align: center;margin-bottom: 10px;">
+                                            <label for="Purchase">Purchase Count</label>
+                                        </div>
+                                        <div style="text-align: center;">
+                                            <input ng-model="FinalTotalmodel.PurCount" class="formControl" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div style="text-align: center;margin-bottom: 10px;">
+                                            <label for="PAmount">Amount</label>
+                                        </div>
+                                        <div style="text-align: center;">
+                                            <input ng-model="FinalTotalmodel.PurAmount" class="formControl" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div style="text-align: center;margin-bottom: 10px;">
+                                            <label for="Sales">Sales Count</label>
+                                        </div>
+                                        <div style="text-align: center;">
+                                            <input ng-model="FinalTotalmodel.SaleCount" class="formControl" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div style="text-align: center;margin-bottom: 10px;">
+                                            <label for="Samount">Amount</label>
+                                        </div>
+                                        <div style="text-align: center;">
+                                            <input ng-model="FinalTotalmodel.SaleAmount" class="formControl" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div style="text-align: center;margin-bottom: 10px;">
+                                            <label for="Closing">Closing Count</label>
+                                        </div>
+                                        <div style="text-align: center;">
+                                            <input ng-model="FinalTotalmodel.ClosingCount" class="formControl" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div style="text-align: center;margin-bottom: 10px;">
+                                            <label for="CAmount">Amount</label>
+                                        </div>
+                                        <div style="text-align: center;">
+                                            <input ng-model="FinalTotalmodel.ClosingAmount" class="formControl"
+                                                readonly>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

@@ -1,0 +1,110 @@
+<ion-view class="patternBg">
+    <ion-content>
+        <div ng-if="IsList">
+            <div class="container">
+                <div class="s10"></div>
+                <div class="row row-center">
+                    <div class="col">
+                        <div class="searchBox">
+                            <input id="mytext" type="text" ng-model="Searchmodel.Search" class="formControl"
+                                ng-model-options="{ debounce: 1500 }" ng-change="FilterData()" placeholder="Filter by Name, Code or Location">
+                            <button type="button" class="cBtn cBtn-blue" ng-click="FilterData()">
+                                <span>Search</span>
+                            </button>
+                            <a ng-click="Add()" class="cBtn cBtn-green cBtn-autoWidth d-flex items-center justify-center gap-2">
+                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                </svg>
+                                 <span>Add Sub Location</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="cDataTable">
+                            <table id="SubLocationTable" class="cell-border" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th class="all">
+                                            No
+                                        </th>
+
+                                        <th>
+                                            Location
+                                        </th>
+                                        <th>
+                                            Code
+                                        </th>
+                                        <th>
+                                            Name
+                                        </th>
+
+                                        <th class="all">
+                                            Action
+                                        </th>
+                                    </tr>
+                                </thead>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="container" ng-if="!IsList">
+            <form name="FormSubLocation" class="cForm light">
+                <div class="infoBox02">
+                    <div class="container">
+                        <div class="row responsive-sm">
+                            <div class="col col-33">
+                                <label for="Location">Location*</label>
+                                <select class="formControl" name="Location" ng-model="model.idLocation" ng-required="true">
+                                    <option value="" disabled>Select Location</option>
+                                    <option value="{{o.id}}" ng-repeat="o in lstLocation">{{o.Name}}</option>
+                                </select>
+                                <span class="errorMsg text-center" ng-show="formsubmit && (FormSubLocation.Location.$dirty || FormSubLocation.Location.$invalid)">
+                                    <span ng-show="FormSubLocation.Location.$error.required">
+                                        Please Enter Location
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="col col-33">
+                                <label for="Name">Name*</label>
+                                <input type="text" id="Name" class="formControl" maxlength="100" ng-maxlength="100"
+                                    name="Name" ng-required="true" placeholder="Name" ng-model="model.Name">
+                                <span class="errorMsg text-center" ng-show="formsubmit && (FormSubLocation.Name.$dirty || FormSubLocation.Name.$invalid)">
+                                    <span ng-show="FormSubLocation.Name.$error.required">
+                                        Please Enter Name
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="col col-33">
+                                <label for="">Code*</label>
+                                <input type="text" id="Code" class="formControl" maxlength="100" ng-maxlength="100"
+                                    name="Code" ng-required="true" placeholder="Code" ng-model="model.Code">
+                                <span class="errorMsg text-center" ng-show="formsubmit && (FormSubLocation.Code.$dirty || FormSubLocation.Code.$invalid)">
+                                    <span ng-show="FormSubLocation.Code.$error.required">
+                                        Please Enter Code
+                                    </span>
+                                </span>
+                            </div>                            
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <button class="cBtn cBtn-green cBtn-block cBtn-shadow" ng-click="SaveSubLocation(FormSubLocation)"
+                                    type="submit"><i class="ion-document-text"></i>
+                                    Save</button>
+                            </div>
+                        </div>
+                        <div class="s10"></div>
+                    </div>
+                </div>
+                
+            </form>
+        </div>
+
+    </ion-content>
+
+</ion-view>

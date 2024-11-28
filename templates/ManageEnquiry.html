@@ -1,0 +1,74 @@
+<ion-view class="patternBg">
+    <ion-content>
+        <!-- ng-if="!IsList" -->
+        <div class="container">
+            <div class="s20"></div>
+            <form name="fromEnquiry" class="cForm light">
+                <div class="infoBox02">
+                    <div class="container">
+                        <div class="s25"></div>
+                        <div class="row responsive-sm">
+                            <div class="col col-50">
+                                <label for="">Name*</label>
+                                <input type="text" class="formControl" maxlength="45" ng-maxlength="45" name="Name" ng-required="true" placeholder="Name" ng-model="model.name">
+                                <span class="errorMsg text-center" ng-show="formsubmit && (fromEnquiry.Name.$dirty || fromEnquiry.Name.$invalid)">
+                                    <span ng-show="fromEnquiry.Name.$error.required">
+                                        Please Enter Name
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="col col-50">
+                                <label for="">Email Address*</label>
+                                <input type="email" name="EmailAddress" class="formControl" maxlength="100" ng-maxlength="100" ng-required="true" placeholder="Enter Email Address" ng-model="model.email">
+                                <span class="errorMsg text-center" ng-show="formsubmit && (fromEnquiry.EmailAddress.$dirty || fromEnquiry.EmailAddress.$invalid)">
+                                            <span ng-show="fromEnquiry.EmailAddress.$error.required">
+                                                Please Enter Email Address
+                                            </span>
+                                <span ng-show="fromEnquiry.EmailAddress.$error.email">
+                                                Please Enter Valid Email Address
+                                            </span>
+                                <span ng-show="fromEnquiry.EmailAddress.$error.maxlength">
+                                                Maximum length is 100.
+                                            </span>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="row responsive-sm">
+                            <div class="col col-100">
+                                <label for="">Message*</label>
+                                <textarea type="text" id="Message" class="formControl md-textarea" rows="10" cols="50" name="Message" ng-model="model.Message" required></textarea>
+                                <span class="errorMsg text-center" ng-show="formsubmit && (fromEnquiry.Message.$dirty || fromEnquiry.Message.$invalid)">
+                                    <span ng-show="fromEnquiry.Name.$error.required">
+                                        Please Enter Message
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="s20"></div>
+                <div class="row">
+                    <div class="col">
+                        <button class="cBtn cBtn-green cBtn-block cBtn-shadow" ng-click="SendEnquiry(fromEnquiry)" type="submit"><i
+                                class="ion-document-text"></i>
+                            Save</button>
+
+                    </div>
+                    <div class="col">
+                        <button class="cBtn cBtn-skyblue cBtn-block cBtn-shadow" ng-click="ManageModel()" type="submit"><i
+                        class="ion-refresh"></i>
+                    Reset</button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </ion-content>
+</ion-view>
+
+<style>
+    #TableDays {
+        color: #000000;
+    }
+</style>

@@ -1,0 +1,225 @@
+<ion-view class="patternBg">
+    <ion-content>
+        <div ng-if="IsList">
+            <div class="container">
+                <div class="s10"></div>
+                <div class="row row-center">
+                    <div class="col">
+                        <div class="searchBox">
+                            <input type="text" ng-model="Searchmodel.Search" class="formControl" ng-model-options="{ debounce: 1500 }"
+                                ng-change="FilterData()" placeholder="Filter by Name  Location or Address">
+                            <button type="button" class="cBtn cBtn-blue" ng-click="FilterData()">
+                                <span>Search</span>
+                            </button>
+                            <a ng-click="Add()" class="cBtn cBtn-green cBtn-autoWidth d-flex items-center justify-center gap-2">
+                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                </svg> <span>Add Site</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="s20"></div>
+                <div class="cDataTable">
+                    <table id="SiteTable" class="cell-border" width="100%">
+                        <thead>
+                            <tr>
+                                <th class="all">
+                                    No
+                                </th>
+                                <th class="all">
+                                    Name
+                                </th>
+                                <th>Location </th>
+                                <th>Address </th>
+                                <th class="all">
+                                    Action
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-if="lstSite.length>0" ng-repeat="o in lstSite">
+                                <td>{{$index + 1}}</td>
+                                <td>
+                                    {{o.Name}}
+                                </td>
+                                <td>
+                                    {{o.Location}}
+                                </td>
+                                <td>
+                                    {{o.Address}}
+                                </td>
+                                <td>
+                                    <a ng-click="CopyToModel(o)" class="btnAction btnAction-edit">
+                                        <i class="ion-edit" title="Edit">
+                                        </i>
+                                    </a>
+                                    <a ng-click="DeleteSite(o.id)" class="btnAction btnAction-error">
+                                        <i class="ion-trash-a" title="Delete">
+                                        </i>
+                                    </a>
+                                    <a ng-click="OpenModelForSiteUser(o.id)" class="btnAction btnAction-edit">
+                                        <i class="ion-plus" title="Assign Site User">
+                                        </i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- END .container -->
+        </div>
+        </div>
+        <!-- ng-if="!IsList" -->
+        <div class="container" ng-if="!IsList">
+            <div class="s20"></div>
+            <!-- <a ng-click="ResetAll()" class="cBtn cBtn-blue">
+                <i class="ion-arrow-left-c" title="Back">
+              Return To List
+            </i>
+            </a> -->
+
+            <div class="s10"></div>
+            <form name="FormSite" class="cForm light">
+                <div class="infoBox02">
+                    <div class="container">
+                        <div class="s20"></div>
+                        <div class="row responsive-sm">
+                            <div class="col col-50">
+                                <label for="">Name*</label>
+                                <input type="text" class="formControl" maxlength="100" ng-maxlength="100" name="SiteName"
+                                    ng-required="true" placeholder="Name" ng-model="model.Name">
+                                <span class="errorMsg text-center" ng-show="formsubmit && (FormSite.SiteName.$dirty || FormSite.SiteName.$invalid)">
+                                    <span ng-show="FormSite.SiteName.$error.required">
+                                        Please Enter Name
+                                    </span>
+
+                                    <!-- <span ng-show="FormSite.Name.$error.maxlength">
+                                        Maximum length is 100.
+                                    </span> -->
+                                </span>
+                            </div>
+                            <div class="col col-50">
+                                <label for="Location">Location*</label>
+                                <div class="row itemdrp" style="padding:0" hide-reset="true" modal-title="Select Location"
+                                    modal-select="" ng-model="model.Location" options="lstLocation" option-property="Name"
+                                    has-search="true">
+                                    <input class="formControl" name="Location" ng-model="model.Location" required
+                                        readonly style="cursor: pointer !important;float: left;border-right: none;border-top-right-radius:0px;border-bottom-right-radius: 0px; ">
+                                    <button style="padding: 2px"> <i class="icon ion-arrow-down-b" title="Select"></i>
+                                        <div class="option">
+                                            <div class="row" style="font-weight: bold;font-size: 12px;" ng-show="$index==0">
+                                                <div class="col" style="padding: 0" class="text-center">Location</div>
+                                                <div class="col" style="padding: 0" class="text-center">Description
+                                                </div>
+                                            </div>
+                                            <div class="row" style="font-size: 14px;">
+                                                <div class="col" class="text-center">{{option.Name}}</div>
+                                                <div class="col" class="text-center">{{option.Description}}</div>
+                                            </div>
+                                        </div>
+                                    </button>
+
+                                </div>
+                                <span class="errorMsg text-center" ng-show="formsubmit && (FormSite.Location.$dirty || FormSite.Location.$invalid)">
+                                    <span ng-show="FormSite.Location.$error.required">
+                                        Please Select Location
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="s10"></div>
+                        <div class="row responsive-sm">
+                            <div class="col col-100">
+                                <label for="Address">Address</label>
+                                <textarea type="text" id="Address" class="formControl md-textarea" rows="3" name="Address"
+                                    ng-model="model.Address"></textarea>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+                <div class="s20"></div>
+                <div class="row">
+                    <div class="col">
+                        <button class="cBtn cBtn-green cBtn-block cBtn-shadow" ng-click="SaveSite(FormSite)" type="submit"><i
+                                class="ion-document-text"></i>
+                            Save</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </ion-content>
+    <script id="SiteUser.html" type="text/ng-template">
+        <ion-modal-view class="patternBg">
+            <ion-header-bar class="customPgHeader">
+                <div class="col01">
+                    <span class="pgTitle">Assign Site User</span>
+                </div>
+                <div class="col02">
+                    <button class="cBtn cBtn-skyblue cBtn-block cBtn-shadow" ng-click="closeModal()" type="submit"><i class="ion-close-circled"></i>
+                      Cancel</button>
+                </div>
+            </ion-header-bar>
+            <ion-content padding="true">
+                <div class="container">
+                    <div class="s10"></div>
+                    <div class="row row-center">
+                        <div class="col 0">
+                            <div class="searchBox">
+                                <input type="text" ng-model="Searchmodel.SearchUser" class="formControl" placeholder="Filter by Username,Email or Phone">
+                                <button type="button" class="cBtn cBtn-blue" ng-click="FilterDataSiteUser()">
+                    <span>Search</span>
+                  </button>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="s20"></div>
+                    <div class="cDataTable">
+                        <table id="SiteUserTable" class="cell-border" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        No
+                                    </th>
+                                    <th>User Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>
+                                        Action
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="o in lstSiteUser">
+                                    <td>{{$index + 1}}</td>
+                                    <td>{{o.username}}</td>
+                                    <td>{{o.EmailAddress}}</td>
+                                    <td>{{o.PhoneNumber}}</td>
+                                    <td>
+                                        <input type="checkbox" ng-model="o.isSelect" value="o.isSelect" ng-true-value="1" ng-false-value="0" ng-change="">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="s20"></div>
+                    <div class="row text-center">
+                        <div class="col">
+                            <button class="cBtn cBtn-green cBtn-block cBtn-shadow" ng-click="SaveAssignSiteUser()" type="submit"><i class="ion-document-text"></i>
+                  Save</button>
+                        </div>
+                        <!-- <div class="col col-50">
+                            <button class="cBtn cBtn-skyblue cBtn-block cBtn-shadow" ng-click="closeModal()" type="submit"><i class="ion-close-circled"></i>
+                  Cancel</button>
+                        </div> -->
+                    </div>
+                </div>
+
+            </ion-content>
+        </ion-modal-view>
+    </script>
+</ion-view>

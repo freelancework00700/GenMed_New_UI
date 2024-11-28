@@ -1,0 +1,81 @@
+<ion-view class="patternBg">
+    <ion-content>
+        <div class="container">
+            <div class="s10"></div>
+            <div class="row row-center">
+                <div class="col">
+                    <div class="searchBox">
+                        <input id="mytext" type="text" ng-model="Searchmodel.Search" class="formControl"
+                            ng-model-options="{ debounce: 1500 }" ng-change="FilterData()"
+                            placeholder="Filter by Code, Name, Batch Number, Group Name, Company, Sub Company, Purchase Party, Pack or Pur Rate ">
+                        <button type="button" class="cBtn cBtn-blue" ng-click="FilterData()">
+                            <span>Search</span>
+                        </button>
+                        <!-- <a ng-click="EnableFilterOption()" class="cBtn cBtn-green cbtn-onlyicon" title="Advance Search">
+                            <i class="ion-ios-arrow-down" title="Advance Search"></i>
+                        </a> -->
+                        <a ng-click="Export()" class="cBtn cBtn-green cbtn-onlyicon" title="Export Excel">
+                            <i class="ion-ios-cloud-download-outline" title="Download Excel"></i>
+                        </a>
+                    </div>
+                    <!-- <div class="CustFilter" style="display:none;">
+                        <my-widget startdate='false' enddate='false' customercode='false' branchcode='false'
+                            status='false'></my-widget>
+                    </div> -->
+
+                    <div class="row responsive-sm  cForm light">
+                        <div class="col col-100">
+                            <div class="infoBox02">
+                                <div class="container">
+                                    <div class="row responsive-sm">
+                                        <div class="col">
+                                            <label>From Date</label>
+                                            <input ng-model="Filtermodel.StartDate"
+                                                value="{{Filtermodel.StartDate | date: 'dd-MM-yyyy' }}"
+                                                ng-required="true" name="StartDate" class="formControl" date
+                                                ion-datetime-picker>
+                                        </div>
+                                        <div class="col">
+                                            <label>To Date</label>
+                                            <input ng-model="Filtermodel.EndDate"
+                                                value="{{Filtermodel.EndDate  | date: 'dd-MM-yyyy'}}" ng-required="true"
+                                                name="EndDate" class="formControl" date ion-datetime-picker>
+                                        </div>
+                                        <div class="col">
+                                            <div class="s20"></div>
+                                            <a class="cBtn cBtn-blue" ng-click="FilterTableData(Filtermodel)">
+                                                <i class="icon ion-search" title="Search"></i>
+                                            </a>
+                                            <a class="cBtn cBtn-green" ng-click="ResetFilterData(null)">
+                                                <i class="icon ion-refresh" title="Search"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="s20"> -->
+            <!-- </div> -->
+            <div class="cDataTable">
+                <table id="StockBalanceReportTable" class="cell-border" width="100%">
+                    <thead>
+                        <tr>
+                            <th class="all">No</th>
+                            <th style="white-space: normal;">Item Code </th>
+                            <th>Prouduct Name</th>
+                            <th style="white-space: normal;">Batch Number</th>
+                            <th>Pack</th>
+                            <th>Type</th>
+                            <th>Price</th>
+                            <th>Qty</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

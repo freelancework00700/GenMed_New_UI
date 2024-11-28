@@ -1,0 +1,152 @@
+<ion-view class="patternBg">
+    <ion-content>
+        <div ng-if="IsList">
+            <div class="container">
+                <div class="row row-center">
+                    <div class="col">
+                        <div class="searchBox">
+                            <input type="text" ng-model="Searchmodel.Search" class="formControl" ng-model-options="{ debounce: 1500 }"
+                                ng-enter="FilterData()" placeholder="Filter by Combo name or Item name">
+                            <button type="button" class="cBtn cBtn-blue" ng-click="FilterData()">
+                                <span>Search</span>
+                            </button>
+                            <a ng-click="Add()" class="cBtn cBtn-green cBtn-autoWidth d-flex items-center justify-center gap-2">
+                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                </svg>
+                                <span>Add Item Combo</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="cDataTable">
+                            <table id="ItemComboTable" class="cell-border" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th class="all">No</th>
+                                        <th>Combo Name</th>
+                                        <th>Item Name</th>
+                                        <th>Item Code</th>
+                                        <th>UOM</th>
+                                        <th>Batch No</th>
+                                        <th>Qty</th>
+                                        <th class="all">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="o in lstItemCombo">
+                                        <td>{{$index + 1}}</td>
+                                        <td>{{o.ComboItem.ItemName || "N/A" }}</td>
+                                        <td>{{o.Item.ItemName || "N/A"}}</td>
+                                        <td>{{o.ItemCode || "N/A"}}</td>
+                                        <td>{{o.UOM || "N/A"}}</td>
+                                        <td>{{o.BatchNo || "N/A"}}</td>
+                                        <td>{{o.Qty || "N/A"}}</td>
+                                        <td>
+                                            <a ng-click="CopyToModel(o)" class="btnAction btnAction-edit">
+                                                <i class="ion-edit" title="Edit">
+                                                </i>
+                                            </a>
+                                            <a ng-click="DeleteItemCombo(o.id)" class="btnAction btnAction-error">
+                                                <i class="ion-trash-a" title="Delete">
+                                                </i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container" ng-if="!IsList">
+            <form name="FormItemCombo" class="cForm light">
+                <div class="infoBox02">
+                    <div class="container">
+                        <div class="row responsive-sm">
+                            <div class="col col-33">
+                                <label for="Combo">Combo*</label>
+                                <select class="formControl" name="IdCombo" ng-model="model.IdCombo" ng-required="true"
+                                    ng-options="o.id as o.DisplayData for o in lstCombo">
+                                </select>
+                                <span class="errorMsg text-center" ng-show="formsubmit && (FormItemCombo.IdCombo.$dirty || FormItemCombo.IdCombo.$invalid)">
+                                    <span ng-show="FormItemCombo.IdCombo.$error.required">
+                                        Please Select Combo
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="col col-33">
+                                <label for="Item">Item*</label>
+                                <select class="formControl" name="IdItem" ng-model="model.IdItem" ng-required="true"
+                                    ng-options="p.id as p.DisplayData for p in lstItem" ng-change="SelectItem(model.IdItem)">
+                                </select>
+                                <span class="errorMsg text-center" ng-show="formsubmit && (FormItemCombo.IdItem.$dirty || FormItemCombo.IdItem.$invalid)">
+                                    <span ng-show="FormItemCombo.IdItem.$error.required">
+                                        Please Select Item
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="col col-33">
+                                <label for="ItemCode">Item Code*</label>
+                                <input class="formControl" name="ItemCode" ng-model="model.ItemCode" ng-required="true"
+                                    ng-disabled="true">
+                                <span class="errorMsg text-center" ng-show="formsubmit && (FormItemCombo.ItemCode.$dirty || FormItemCombo.ItemCode.$invalid)">
+                                    <span ng-show="FormItemCombo.ItemCode.$error.required">
+                                        Please Enter Item Code
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row responsive-sm">
+                            <div class="col col-33">
+                                <label for="UOM">UOM*</label>
+                                <select class="formControl" name="UOM" ng-model="model.UOM" ng-required="true"
+                                    ng-options="o.UOM as o.UOM for o in ListUOM">
+                                </select>
+                                <span class="errorMsg text-center" ng-show="formsubmit && (FormItemCombo.UOM.$dirty || FormItemCombo.UOM.$invalid)">
+                                    <span ng-show="FormItemCombo.UOM.$error.required">
+                                        Please Select UOM
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="col col-33">
+                                <label for="Item">Batch No</label>
+                                <select class="formControl" name="BatchNo" ng-model="model.BatchNo" ng-options="p.BatchNumber as p.BatchNumber for p in ListBatch">
+                                </select>
+                                <span class="errorMsg text-center" ng-show="formsubmit && (FormItemCombo.BatchNo.$dirty || FormItemCombo.BatchNo.$invalid)">
+                                    <span ng-show="FormItemCombo.BatchNo.$error.required">
+                                        Please Select Batch No
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="col col-33">
+                                <label for="Qty">Qty*</label>
+                                <input class="formControl" name="Qty" ng-model="model.Qty" ng-required="true"
+                                    numbers-Only>
+                                <span class="errorMsg text-center" ng-show="formsubmit && (FormItemCombo.Qty.$dirty || FormItemCombo.Qty.$invalid)">
+                                    <span ng-show="FormItemCombo.Qty.$error.required">
+                                        Please Enter Qty
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <button class="cBtn cBtn-green cBtn-block cBtn-shadow" ng-click="SaveItemCombo(FormItemCombo)"
+                                    type="submit">
+                                    <i class="ion-document-text"></i>
+                                    Save
+                                </button>
+                            </div>
+                        </div>
+                        <div class="s10"></div>
+                    </div>
+                </div>
+                
+            </form>
+        </div>
+    </ion-content>
+</ion-view>

@@ -1,0 +1,56 @@
+<ion-view class="patternBg">
+    <ion-content>
+        <div>
+            <div class="container">
+                <div class="s10"></div>
+                <div class="row row-center">
+                    <div class="col">
+                        <div class="searchBox">
+                            <input id="mytext" type="text" ng-model="Searchmodel.Search" class="formControl"
+                                ng-model-options="{ debounce: 1500 }" ng-change="FilterData()" placeholder="Filter by Code, Payment Method, Payment Amount or ORP No">
+                            <button type="button" class="cBtn cBtn-blue" ng-click="FilterData()">
+                                <span>Search</span>
+                            </button>&nbsp;
+                            <button type="button" class="cBtn cBtn-green" ng-click="UpdatePayment()">
+                                <span>Save</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="s20"></div>
+                <div class="cDataTable">
+                    <table id="ChequeListingTable" class="cell-border" width="100%">
+                        <thead>
+                            <tr>
+                                <th class="all">No</th>
+                                <th>ORP No </th>
+                                <th>Payment Date</th>
+                                <th>Customer Code</th>
+                                <th>Payment Method</th>
+                                <th>Payment Amount</th>
+                                <th>Cheque No</th>
+                                <th>Payment By</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="o in ListCheque">
+                                <td>{{$index + 1}}</td>
+                                <td>{{o.ar_payment.DocNo|| "N/A"}}</td>
+                                <td>{{o.ar_payment.DocDate}}</td>
+                                <td>{{o.ar_payment.CustomerCode|| "N/A"}}</td>
+                                <td>{{o.PaymentMethod|| "N/A"}}</td>
+                                <td class="right-aligned-cell">{{o.PaymentAmount| number}}</td>
+                                <td>{{o.ChequeNo|| "N/A"}}</td>
+                                <td>{{o.PaymentBy|| "N/A"}}</td>
+                                <td>
+                                    <input type="checkbox" ng-model="o.IsSelected">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

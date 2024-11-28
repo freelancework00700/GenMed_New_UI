@@ -1,0 +1,216 @@
+<ion-view class="patternBg">
+    <ion-content>
+        <div ng-if="IsList">
+            <div class="container">
+                <div class="s10"></div>
+                <div class="row row-center">
+                    <div class="col">
+                        <div class="searchBox">
+                            <input type="text" ng-model="Searchmodel.Search" class="formControl" ng-model-options="{ debounce: 1500 }"
+                                ng-enter="FilterData()" placeholder="Filter by Name, Email Or Message">
+                            <button type="button" class="cBtn cBtn-blue" ng-click="FilterData()">
+                                <span>Search</span>
+                            </button>
+                            <a ng-click="EnableFilterOption()" class="cBtn cBtn-green cbtn-onlyicon" title="Advance Search">
+                                <i class="ion-ios-arrow-down" title="Advance Search"></i>
+                            </a>
+                        </div>
+                        <div class="CustFilter" style="display:none;">
+                            <div class="row responsive-sm  cForm light">
+                                <div class="col col-100">
+                                    <div class="infoBox02">
+                                        <div class="container">
+                                            <div class="row responsive-sm">
+                                                <div class="col col-30">
+                                                    <label>Start Date</label>
+                                                    <input ng-model="Searchmodel.StartDate" value="{{Searchmodel.StartDate | date: 'dd-MM-yyyy' }}"
+                                                        ng-required="true" name="StartDate" class="formControl" date
+                                                        ion-datetime-picker>
+                                                </div>
+                                                <div class="col col-30">
+                                                    <label>End Date</label>
+                                                    <input ng-model="Searchmodel.EndDate" value="{{Searchmodel.EndDate  | date: 'dd-MM-yyyy'}}"
+                                                        ng-required="true" name="EndDate" class="formControl" date
+                                                        ion-datetime-picker>
+                                                </div>
+                                                <div class="col col-30">
+                                                    <div class="s20"></div>
+                                                    <a class="cBtn cBtn-blue" ng-click="FilterData()">
+                                                        <i class="icon ion-search" title="Search"></i>
+                                                    </a>
+                                                    <a class="cBtn cBtn-green" ng-click="ResetFilterData()">
+                                                        <i class="icon ion-refresh" title="Search"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="cDataTable">
+                            <table id="EnquiryTable" class="cell-border" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th class="all">
+                                            No
+                                        </th>
+                                        <th>
+                                            Name
+                                        </th>
+                                        <th>Email </th>
+
+                                        <th>
+                                            Message
+                                        </th>
+                                        <th>
+                                            Status
+                                        </th>
+                                        <th>
+                                            Created On
+                                        </th>
+                                        <th class="all text-center">
+                                            Action
+                                        </th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ion-content>
+    <script id="ReplayViaEmail-modal.html" type="text/ng-template">
+        <ion-modal-view class="patternBg">
+            <ion-header-bar class="customPgHeader">
+                <div class="col01">
+                    <span class="pgTitle">Compose Email</span>
+                </div>
+                <div class="col02">
+                    <button class="cBtn cBtn-skyblue cBtn-block cBtn-shadow" ng-click="closeModal()" type="submit"><i class="ion-close-circled"></i>
+                        Cancel
+                    </button>
+                </div>
+            </ion-header-bar>
+            <ion-content padding="true" overflow-scroll='false'>
+                <div class="container">
+                    <form name="FormEmail" class="cForm light">
+                        <div class="row responsive-sm">
+                            <div class="col col-20">
+                                <label for="Email">Email</label>
+                            </div>
+                            <div class="col col-80">
+                                <input type="text" id="email" class="formControl" name="email" ng-required="true" ng-model="EmailModel.Email" disabled>
+                            </div>
+                        </div>
+                        <div class="row responsive-sm">
+                            <div class="col col-20">
+                                <label for="EmailText">Email Subject*</label>
+                            </div>
+                            <div class="col col-80">
+                                <input type="text" id="EmailSubject" class="formControl" name="EmailSubject" ng-required="true" ng-model="EmailModel.EmailSubject">
+                                <span class="errorMsg text-center" ng-show="FormSubmit && (FormEmail.EmailSubject.$dirty || FormEmail.EmailSubject.$invalid)">
+                                    <span ng-show="FormEmail.EmailSubject.$error.required">
+                                        Please Enter Email Subject
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row responsive-sm">
+                            <div class="col col-20">
+                                <label for="EmailText">Email Text*</label>
+                            </div>
+                            <div class="col col-80">
+                                <textarea type="text" id="EmailText" class="formControl" rows="10" cols="50" name="EmailText" ng-model="EmailModel.EmailText" required ckeditor></textarea>
+                                <span class="errorMsg text-center" ng-show="FormSubmit && (FormEmail.EmailText.$dirty || FormEmail.EmailText.$invalid)">
+                                    <span ng-show="FormEmail.EmailText.$error.required">
+                                        Please Enter Email Text
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <button class="cBtn cBtn-green cBtn-block cBtn-shadow text-center" ng-click="SendEmail(FormEmail)" type="submit"><i class="ion-document-text"></i>
+                                    Send Email
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </ion-content>
+        </ion-modal-view>
+    </script>
+
+    <script id="EnquiryLog-modal.html" type="text/ng-template">
+        <ion-modal-view class="patternBg">
+            <ion-header-bar class="customPgHeader">
+                <div class="col01">
+                    <span class="pgTitle">Enquiry Log</span>
+                </div>
+                <div class="col02">
+                    <button class="cBtn cBtn-skyblue cBtn-block cBtn-shadow" ng-click="closeModal()" type="submit"><i class="ion-close-circled"></i>
+                      Cancel</button>
+                </div>
+            </ion-header-bar>
+            <ion-content padding="true">
+                <div class="container">
+                    <div class="s10"></div>
+                    <div class="row row-center">
+                        <div class="col 100">
+                            <div class="searchBox">
+                                <input type="text" ng-model="Searchmodel.Search1" ng-enter="FilterDataLog()" class="formControl" placeholder="Filter by Subject Or Message">
+                                <button type="button" class="cBtn cBtn-blue" ng-click="FilterDataLog()">
+                                    <span>Search</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="s20"></div>
+                    <div class="cDataTable">
+                        <table id="LogTbl" class="cell-border" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        No
+                                    </th>
+                                    <th>
+                                        Subject
+                                    </th>
+                                    <th>Message</th>
+                                    <th>
+                                        Created Date
+                                    </th>
+                                    <th>
+                                        Created By
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="o in lstLog">
+                                    <td>{{$index + 1}}</td>
+                                    <td>{{o.Subject}}</td>
+                                    <td>
+                                        <div ng-bind-html="o.Body"></div>
+                                    </td>
+                                    <td>
+                                        {{o.CreatedDate | date: 'dd-MM-yyyy'}}
+                                    </td>
+                                    <td>
+                                        {{o.CreatedBy}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </ion-content>
+        </ion-modal-view>
+    </script>
+
+</ion-view>

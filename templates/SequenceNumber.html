@@ -1,0 +1,234 @@
+<ion-view>
+    <ion-content>
+        <div class="container">
+            <form name="FormSequenceNumber" class="cForm light">
+                <div class="row responsive-sm">
+                    <div class="col col-50">
+                        <div class="infoBox02">
+                            <div class="row responsive-sm">
+                                <div class="col col-30">
+                                    <label for="UserCode">User Code*</label>
+                                </div>
+                                <div class="col col-70">
+                                    <input type="text" id="UserCode" class="formControl" name="UserCode" ng-required="true" ng-model="model.UserCodeValue">
+                                    <span class="errorMsg text-center" ng-show="formsubmit && (FormSequenceNumber.UserCode.$dirty || FormSequenceNumber.UserCode.$invalid)">
+                                        <span ng-show="FormSequenceNumber.UserCode.$error.required">
+                                            Please Enter User Code
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="row responsive-sm">
+                                <div class="col col-30">
+                                    <label for="PurchaseCode">Purchase Code* </label>
+                                </div>
+                                <div class="col col-70">
+                                    <input type="text" id="PurchaseCode" class="formControl" name="PurchaseCode" ng-required="true" ng-model="model.PurchaseCodeValue">
+                                    <span class="errorMsg text-center" ng-show="formsubmit && (FormSequenceNumber.PurchaseCode.$dirty || FormSequenceNumber.PurchaseCode.$invalid)">
+                                        <span ng-show="FormSequenceNumber.PurchaseCode.$error.required">
+                                            Please Enter Purchase Code
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="row responsive-sm">
+                                <div class="col col-30">
+                                    <label id="SalesCode">Sales Code*</label>
+                                </div>
+                                <div class="col col-70">
+                                    <input type="text" id="SalesCode" class="formControl" name="SalesCode" ng-required="true" ng-model="model.SalesCodeValue">
+                                    <span class="errorMsg text-center" ng-show="formsubmit && (FormSequenceNumber.SalesCode.$dirty || FormSequenceNumber.SalesCode.$invalid)">
+                                        <span ng-show="FormSequenceNumber.SalesCode.$error.required">
+                                            Please Enter Sales Code
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="row responsive-sm">
+                                <div class="col col-30">
+                                    <label for="CustomerRegNo">Customer Reg No*</label>
+                                </div>
+                                <div class="col col-70">
+                                    <input type="text" id="CustomerRegNo" class="formControl" name="CustomerRegNo" ng-required="true" ng-model="model.CustomerRegNoValue">
+                                    <span class="errorMsg text-center" ng-show="formsubmit && (FormSequenceNumber.CustomerRegNo.$dirty || FormSequenceNumber.CustomerRegNo.$invalid)">
+                                        <span ng-show="FormSequenceNumber.CustomerRegNo.$error.required">
+                                            Please Enter Customer Reg No
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="row responsive-sm">
+                                <div class="col col-30">
+                                    <label for="PurchaseReturnCode">Purchase Return Code* </label>
+                                </div>
+                                <div class="col col-70">
+                                    <input type="text" id="PurchaseReturnCode" class="formControl" name="PurchaseReturnCode" ng-required="true" ng-model="model.PurchaseReturnCodeValue">
+                                    <span class="errorMsg text-center" ng-show="formsubmit && (FormSequenceNumber.PurchaseReturnCode.$dirty || FormSequenceNumber.PurchaseReturnCode.$invalid)">
+                                        <span ng-show="FormSequenceNumber.PurchaseReturnCode.$error.required">
+                                            Please Enter Purchase Return Code
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="row responsive-sm">
+                                <div class="col col-30">
+                                    <label id="SalesReturnCode">Sales Return Code*</label>
+                                </div>
+                                <div class="col col-70">
+                                    <input type="text" id="SalesReturnCode" class="formControl" name="SalesReturnCode" ng-required="true" ng-model="model.SalesReturnCodeValue">
+                                    <span class="errorMsg text-center" ng-show="formsubmit && (FormSequenceNumber.SalesReturnCode.$dirty || FormSequenceNumber.SalesReturnCode.$invalid)">
+                                        <span ng-show="FormSequenceNumber.SalesReturnCode.$error.required">
+                                            Please Enter Sales Return Code
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="row responsive-sm">
+                                <div class="col col-30">
+                                    <label for="UOMCode">UOM Code*</label>
+                                </div>
+                                <div class="col col-70">
+                                    <input type="text" id="UOMCode" class="formControl" name="UOMCode" ng-required="true" ng-model="model.UOMCodeValue">
+                                    <span class="errorMsg text-center" ng-show="formsubmit && (FormSequenceNumber.UOMCode.$dirty || FormSequenceNumber.UOMCode.$invalid)">
+                                        <span ng-show="FormSequenceNumber.UOMCode.$error.required">
+                                            Please Enter UOM Code
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="row responsive-sm">
+                                <div class="col col-30">
+                                    <label for="QuotationCode">Quotation Code*</label>
+                                </div>
+                                <div class="col col-70">
+                                    <input type="text" id="QuotationCode" class="formControl" name="QuotationCode" ng-required="true" ng-model="model.QuotationCodeValue">
+                                    <span class="errorMsg text-center" ng-show="formsubmit && (FormSequenceNumber.QuotationCode.$dirty || FormSequenceNumber.QuotationCode.$invalid)">
+                                        <span ng-show="FormSequenceNumber.QuotationCode.$error.required">
+                                            Please Enter Quotation Code
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="row responsive-sm">
+                                <div class="col col-30">
+                                    <label for="InvoiceCode">Invoice Code*</label>
+                                </div>
+                                <div class="col col-70">
+                                    <input type="text" id="InvoiceCode" class="formControl" name="InvoiceCode" ng-required="true" ng-model="model.InvoiceCodeValue">
+                                    <span class="errorMsg text-center" ng-show="formsubmit && (FormSequenceNumber.InvoiceCode.$dirty || FormSequenceNumber.InvoiceCode.$invalid)">
+                                            <span ng-show="FormSequenceNumber.InvoiceCode.$error.required">
+                                                Please Enter Invoice Code
+                                            </span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col col-50">
+                        <div class="infoBox02 seqsetting">
+                            <!-- P/O No -->
+                            <div class="row responsive-sm">
+                                <div class="col">
+                                    <span><b>n</b> - Digits</span>
+                                </div>
+
+                            </div>
+
+                            <div class="row responsive-sm">
+                                <div class="col">
+                                    <span><b>{}</b> - Fix Character</span>
+                                </div>
+                            </div>
+
+                            <div class="row responsive-sm">
+                                <div class="col col-20">
+                                    <span><b>Format</b></span>
+                                </div>
+                                <div class="col col-20">
+                                    <span><b>Result</b></span>
+                                </div>
+                            </div>
+
+                            <div class="row responsive-sm">
+                                <div class="col col-20">
+                                    <span>{ABC}1n</span>
+                                </div>
+                                <div class="col col-20">
+                                    <span>ABC1</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <button class="cBtn cBtn-green cBtn-block cBtn-shadow text-center" ng-click="CreateSequencenumber(FormSequenceNumber,model)" type="submit"><i class="ion-document-text"></i>
+                            Save</button>
+                    </div>
+                </div>
+            </form>
+
+            <div class="s20"></div>
+            <div class="cDataTable">
+                <table id="SeqTable" class="cell-border custTable" width="100%">
+                    <thead>
+                        <tr>
+                            <th class="all">
+                                No.
+                            </th>
+                            <th>Type</th>
+                            <th>value</th>
+                            <th>
+                                Last Sequence Number
+                            </th>
+                            <th class="all">
+                                Action
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-if="lstSequenceSetting.length>0" ng-repeat="o in lstSequenceSetting">
+                            <td>{{$index + 1}}</td>
+                            <td>{{o.Type}}</td>
+                            <td>{{o.value}}</td>
+                            <td>{{o.lastsequenceNumber}}</td>
+                            <td>
+                                <a ng-click="ResetNumber(o.Type)" class="btnAction btnAction-edit">
+                                    <i class="ion-refresh" title="Reset">
+                                    </i>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </ion-content>
+    <style>
+        .seqsetting span {
+            color: black;
+        }
+        
+        .custTable tbody td {
+            border: 1px solid #ddd;
+        }
+        
+        .custTable {
+            margin-bottom: 50px;
+        }
+        
+        button:disabled,
+        button[disabled] {
+            background: #cccccc !important;
+        }
+    </style>
+</ion-view>

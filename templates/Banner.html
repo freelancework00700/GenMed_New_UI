@@ -1,0 +1,168 @@
+<ion-view class="patternBg">
+    <ion-content>
+        <div ng-if="IsList">
+            <div class="container">
+                <div class="s10"></div>
+                <div class="row row-center">
+                    <div class="col">
+                        <div class="searchBox">
+                            <input id="mytext" type="text" ng-model="Searchmodel.Search" class="formControl" ng-change="FilterData()"
+                                ng-model-options="{ debounce: 1500 }" placeholder="Filter by Name, Type or UrlLink">
+                            <button type="button" class="cBtn cBtn-blue" ng-click="FilterData()">
+                                <span>Search</span>
+                            </button>
+                            <a ng-click="Add()" class="cBtn cBtn-green cBtn-autoWidth d-flex items-center justify-center gap-2">
+                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                </svg>
+                                <span>Add Banner</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="s20"></div>
+                <div class="cDataTable">
+                    <table id="BannerTable" class="cell-border" width="100%">
+                        <thead>
+                            <tr>
+                                <th class="all">
+                                    No
+                                </th>
+                                <th>Name </th>
+                                <th>Type</th>
+                                <th>Image</th>
+                                <th>UrlLink</th>
+
+                                <th class="all">
+                                    Action
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="o in lstBanner">
+                                <td>{{$index + 1}}</td>
+                                <td style="text-align:center">
+                                    <span>{{o.Name|| "N/A" }}</span>
+                                </td>
+                                <td style="text-align:center">
+                                    <span>{{o.Type || "N/A" }}</span>
+                                </td>
+                                <td><img src="{{RoutePath}}MediaUploads/ImageUpload/{{o.Image}}" style="height: 50px;width: 50px;"
+                                        err-SRC="img/no-image.jpg">
+                                </td>
+                                <td style="text-align:center">
+                                    <span>{{o.UrlLink || "N/A" }}</span>
+                                </td>
+                                <td style="text-align:center">
+                                    <a ng-click="CopyToModel(o)" class="btnAction btnAction-edit">
+                                        <i class="ion-edit" title="Edit">
+                                        </i>
+                                    </a>
+                                    <a ng-click="DeleteUOM(o.id)" class="btnAction btnAction-error">
+                                        <i class="ion-trash-a" title="Delete">
+                                        </i>
+                                    </a>
+                                </td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- END .container -->
+        </div>
+        </div>
+        <!-- ng-if="!IsList" -->
+        <div class="container" ng-if="!IsList">
+            <div class="s20"></div>
+            <!-- <a ng-click="ResetAll()" class="cBtn cBtn-blue">
+                <i class="ion-arrow-left-c" title="Back">
+              Return To List
+            </i>
+            </a>
+
+            <div class="s10"></div> -->
+            <div class="container" ng-if="!IsList">
+                <div class="s20"></div>
+                <form name="FormUOM" class="cForm light">
+                    <div class="infoBox02">
+                        <div class="container">
+                            <div class="s25"></div>
+                            <div class="row responsive-sm">
+                                <div class="col">
+                                    <label for="">Name</label>
+                                    <input type="text" id="name" maxlength="300" ng-maxlength="300" class="formControl"
+                                        rows="1" name="name" placeholder="Type" ng-model="model.Name" ng-required="true"
+                                        required>
+                                </div>
+                                <!-- <div class="col">
+                                    <label for="">Type</label>
+                                    <select class="formControl" name="type" ng-model="model.Type" id="type">
+                                        <option value="">Select type </option>
+                                        <option value="Mobile">Mobile </option>
+                                        <option value="Web">Web</option>
+
+                                        </option>
+                                    </select>
+                                </div> -->
+                            </div>
+
+                            <!--start image upload -->
+                            <div class="s20"></div>
+                            <div class="s20"></div>
+                            <div class="row responsive-sm" style="margin-top: -50px;">
+                                <div class="col-80">
+                                    <div class="tt-uppercase fw-500 custhedding">Image
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="s20"></div>
+                            <div style="color:black;">
+                                <input type="file" class="FileUploads" name="photo" id="photo" accept=".png, .jpg, .jpeg"
+                                    onchange="angular.element(this).scope().readFile(this)" multiple>
+                            </div>
+                            <div class="s20"></div>
+
+                            <div class="row responsive-sm" ng-if="Mediafiles.length > 0">
+                                <div class="col col-20" ng-repeat="o in Mediafiles">
+                                    <div class="row">
+                                        <img src="{{o[0].image}}" style="height: 180px;width: 180px;" err-SRC="img/no-image.jpg">
+                                    </div>
+                                    <div class="row text-center">
+                                        <button class="cBtn cBtn-skyblue cBtn-block cBtn-shadow" ng-click="RemoveImage($index,o[0])"
+                                            type="submit">Remove
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col col-10">
+                                <label for="PageContent">UrlLink*</label>
+                            </div>
+                            <div class="col col-50">
+                                <input type="text" id="urllink" class="formControl" rows="20" cols="40" name="urllink"
+                                    ng-model="model.UrlLink" required>
+                                <span class="errorMsg text-center" ng-show="formsubmit && (FormUOM.urllink.$dirty || FormUOM.urllink.$invalid)">
+                                    <span ng-show="FormUOM.urllink.$error.required">
+                                        Please Enter url link
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="s20"></div>
+
+
+
+                        </div>
+                    </div>
+                    <div class="s20"></div>
+                    <div class="row">
+                        <div class="col">
+                            <button class="cBtn cBtn-green cBtn-block cBtn-shadow" ng-click="SaveBanner(FormUOM)" type="submit"><i
+                                    class="ion-document-text"></i>
+                                Save</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+    </ion-content>
+</ion-view>

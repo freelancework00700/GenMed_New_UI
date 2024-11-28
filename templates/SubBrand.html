@@ -1,0 +1,138 @@
+<ion-view class="patternBg">
+    <ion-content>
+        <div ng-if="IsList">
+            <div class="container">
+                <div class="row row-center">
+                    <div class="col">
+                        <div class="searchBox">
+                            <input id="mytext" type="text" ng-model="Searchmodel.Search" class="formControl"
+                                ng-model-options="{ debounce: 1500 }" ng-change="FilterData()"
+                                placeholder="Filter by Brand,Sub Brand or Manufacturer">
+                            <button type="button" class="cBtn cBtn-blue" ng-click="FilterData()">
+                                <span>Search</span>
+                            </button>
+                            <a ng-click="Add()" class="cBtn cBtn-green cBtn-autoWidth d-flex items-center justify-center gap-2s">
+                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                </svg> <span>Add SuB Brand</span>
+                            </a>
+                            <a ng-click="Export()" class="cBtn cBtn-green cbtn-onlyicon" title="Export Excel">
+                                <i class="ion-ios-cloud-download-outline" title="Download Excel"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="cDataTable">
+                            <table id="UOMTable" class="cell-border" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th class="all">
+                                            No
+                                        </th>
+                                        <th>Brand</th>
+                                        <th>Sub Brand Name </th>
+                                        <th>Manufacturer </th>
+                                        <th class="all">
+                                            Action
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="o in lstSubBrand">
+                                        <td>{{$index + 1}}</td>
+                                        <td>
+                                            <span ng-if="o.brandmain.Brand.length<=50">{{o.brandmain.Brand || "N/A" }}</span>
+                                            <span ng-if="o.brandmain.Brand.length>50" title=" {{o.brandmain.Brand}}">{{o.brandmain.Brand
+                                                | limitTo:50}}...</span>
+                                        </td>
+                                        <td>
+                                            <span ng-if="o.SubBrandName.length<=50">{{o.SubBrandName || "N/A" }}</span>
+                                            <span ng-if="o.SubBrandName.length>50" title=" {{o.SubBrandName}}">{{o.SubBrandName
+                                                | limitTo:50}}...</span>
+                                        </td>
+                                        <td>
+                                            <span ng-if="o.Manufacturer.length<=50">{{o.Manufacturer || "N/A" }}</span>
+                                            <span ng-if="o.Manufacturer.length>50" title=" {{o.Manufacturer}}">{{o.Manufacturer
+                                                | limitTo:50}}...</span>
+                                        </td>
+                                        <td>
+                                            <a ng-click="CopyToModel(o)" class="btnAction btnAction-edit">
+                                                <i class="ion-edit" title="Edit">
+                                                </i>
+                                            </a>
+                                            <a ng-click="DeleteUOM(o.id)" class="btnAction btnAction-error">
+                                                <i class="ion-trash-a" title="Delete">
+                                                </i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container" ng-if="!IsList">
+            <form name="FormUOM" class="cForm light">
+                <div class="infoBox02">
+                    <div class="container">
+                        <div class="row responsive-sm">
+                                <div class="col">
+                                    <label for="Brand">Brand </label>                              
+                                    <div>
+                                        <select class="formControl" name="Brand" ng-model="model.BrandId">
+                                            <option selected disabled value="">select brand</option>
+                                            <option value="{{o.id}}" ng-repeat="o in lstBrand">{{o.Brand}}</option>
+                                        </select>
+                                        <span class="errorMsg text-center"
+                                            ng-show="formsubmit && (FormUOM.Brand.$dirty || FormUOM.Brand.$invalid)">
+                                            <span ng-show="FormUOM.Brand.$error.required">
+                                                Please Select Brand
+                                            </span>
+                                        </span>
+                                    </div>
+                            </div>                         
+                            <div class="col">
+                                <label for="">Sub Brand Name*</label>
+                                <input type="text" name="SubBrandName" class="formControl" maxlength="255"
+                                    ng-maxlength="255" ng-required="true" placeholder="SubBrandName"
+                                    ng-model="model.SubBrandName">
+                                <span class="errorMsg text-center"
+                                    ng-show="formsubmit && (FormUOM.SubBrandName.$dirty || FormUOM.SubBrandName.$invalid)">
+                                    <span ng-show="FormUOM.SubBrandName.$error.required">
+                                        Please Enter Sub Brand Name
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="col">
+                                <label for="">Manufacturer*</label>
+                                <input type="text" name="Manufacturer" class="formControl" maxlength="255"
+                                    ng-maxlength="255" ng-required="true" placeholder="Manufacturer"
+                                    ng-model="model.Manufacturer">
+                                <span class="errorMsg text-center"
+                                    ng-show="formsubmit && (FormUOM.Manufacturer.$dirty || FormUOM.Manufacturer.$invalid)">
+                                    <span ng-show="FormUOM.Manufacturer.$error.required">
+                                        Please Enter Manufacturer
+                                    </span>
+                                </span>
+                            </div>
+                        </div>                        
+                        <div class="row">
+                            <div class="col">
+                                <button class="cBtn cBtn-green cBtn-block cBtn-shadow" ng-click="SaveUOM(FormUOM)"
+                                    type="submit"><i class="ion-document-text"></i>
+                                    Save</button>
+                            </div>
+                        </div>
+                        <div class="s10"></div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+
+    </ion-content>
+</ion-view>

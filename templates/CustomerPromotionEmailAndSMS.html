@@ -1,0 +1,98 @@
+<ion-view>
+    <ion-content>
+        <div class="container">
+            <div class="row row-center">
+                <div class="col col-10">
+                    <label for="SMSText">Select Customer Group*</label>
+                </div>
+                <div class="col col-90">
+                    <select name="role" class="formControl" ng-model="model.idCustomerGroup">
+                        <option value="All">All</option>
+                        <option ng-repeat="o in lstCustomerGroup" value="{{o.id}}">{{o.Name}}</option>
+                     
+                    </select>
+                </div>
+            </div>
+            <div class="row responsive-sm">
+                <div class="s10"></div>
+                <!-- SMS -->
+                <div class="col col-50">
+                    <form name="FormSMS" class="cForm light">
+                        <div class="row responsive-sm">
+                            <div class="col">
+                                <div class="infoBox02">
+                                    <div class="row responsive-sm">
+                                        <div class="col col-20">
+                                            <label for="SMSText">SMS Text*</label>
+                                        </div>
+                                        <div class="col col-80">
+                                            <textarea type="text" id="SMSText" class="formControl md-textarea" rows="10" cols="50" name="SMSText" ng-model="model.SMSText" required></textarea>
+                                            <span class="errorMsg text-center" ng-show="formsubmit && (FormSMS.SMSText.$dirty || FormSMS.SMSText.$invalid)">
+                                            <span ng-show="FormSMS.SMSText.$error.required">
+                                                Please Enter SMS Text
+                                            </span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <!-- sms -->
+                            <div class="col">
+                                <button class="cBtn cBtn-green cBtn-block cBtn-shadow text-center" ng-click="SendSMS(FormSMS,model)" type="submit"><i class="ion-document-text"></i>
+                                                Send SMS</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Email -->
+                <div class="col col-50">
+                    <form name="FormEmail" class="cForm light">
+                        <div class="row responsive-sm">
+                            <div class="col">
+                                <div class="infoBox02">
+                                    <div class="row responsive-sm">
+                                        <div class="col col-20">
+                                            <label for="EmailText">Email Subject*</label>
+                                        </div>
+                                        <div class="col col-80">
+                                            <input type="text" id="EmailSubject" class="formControl" name="EmailSubject" ng-required="true" ng-model="model.EmailSubject">
+                                            <span class="errorMsg text-center" ng-show="formsubmit_email && (FormEmail.EmailSubject.$dirty || FormEmail.EmailSubject.$invalid)">
+                                                    <span ng-show="FormEmail.EmailSubject.$error.required">
+                                                        Please Enter Email Subject
+                                                    </span>
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="row responsive-sm">
+                                        <div class="col col-20">
+                                            <label for="EmailText">Email Text*</label>
+                                        </div>
+                                        <div class="col col-80">
+                                            <textarea type="text" id="EmailText" class="formControl md-textarea" rows="10" cols="50" name="EmailText" ng-model="model.EmailText" required ckeditor></textarea>
+                                            <span class="errorMsg text-center" ng-show="formsubmit_email && (FormEmail.EmailText.$dirty || FormEmail.EmailText.$invalid)">
+                                                            <span ng-show="FormEmail.EmailText.$error.required">
+                                                                Please Enter Email Text
+                                                            </span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <!-- sms -->
+                            <div class="col">
+                                <button class="cBtn cBtn-green cBtn-block cBtn-shadow text-center" ng-click="SendEmail(FormEmail,model)" type="submit"><i class="ion-document-text"></i>
+                                                    Send Email</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

@@ -1,0 +1,205 @@
+<ion-view class="patternBg">
+    <ion-content>
+        <div ng-if="IsList">
+            <div class="container">
+                <div class="row row-center">
+                    <div class="col">
+                        <div class="searchBox">
+                            <input id="mytext" type="text" ng-model="Searchmodel.Search" class="formControl"
+                                ng-model-options="{ debounce: 1500 }" ng-change="FilterData()" placeholder="Filter by Name or Coupon Code">
+                            <button type="button" class="cBtn cBtn-blue" ng-click="FilterData()">
+                                <span>Search</span>
+                            </button>
+                            <a ng-click="Add()" class="cBtn cBtn-green cBtn-autoWidth d-flex items-center justify-center gap-2">
+                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                </svg>
+                                <span>Add Promotions</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                <div class="cDataTable">
+                    <table id="DiscountTable" class="cell-border" width="100%">
+                        <thead>
+                            <tr>
+                                <th class="all">No</th>
+                                <th>Name</th>
+                                <th>Coupon Code</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Discount Limitation</th>
+                                <th class="all">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="o in lstDiscount">
+                                <td>{{$index + 1}}</td>
+                                <td>{{o.Name || "N/A" }}</td>
+                                <td>{{o.CouponCode || "N/A"}}</td>
+                                <td>{{o.StartDateUtc | date:'dd-MM-yyyy' || "N/A"}}</td>
+                                <td>{{o.EndDateUtc | date:'dd-MM-yyyy' || "N/A"}}</td>
+                                <td>
+                                    <span ng-show="o.DiscountLimitationId==1">Unlimited</span>
+                                    <span ng-show="o.DiscountLimitationId==2">{{o.LimitationTimes}} Times Only</span>
+                                </td>
+                                <td>
+                                    <a ng-click="CopyToModel(o)" class="btnAction btnAction-edit">
+                                        <i class="ion-edit" title="Edit">
+                                        </i>
+                                    </a>
+                                    <a ng-click="DeleteDiscount(o.Id)" class="btnAction btnAction-error">
+                                        <i class="ion-trash-a" title="Delete">
+                                        </i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                </div>
+                </div>
+            </div>
+        </div>
+        <div class="container" ng-if="!IsList">
+            <form name="FormDiscount" class="cForm light">
+                <div class="infoBox02">
+                    <div class="container">
+                        <div class="row responsive-sm">
+                            <div class="col col-33">
+                                <label for="Name">Name*</label>
+                                <input class="formControl" name="Name" ng-model="model.Name" ng-required="true"
+                                    maxlength="50" ng-maxlength="50">
+                                <span class="errorMsg text-center" ng-show="formsubmit && (FormDiscount.Name.$dirty || FormDiscount.Name.$invalid)">
+                                    <span ng-show="FormDiscount.Name.$error.required">
+                                        Please Enter Name
+                                    </span>
+                                    <span ng-show="FormDiscount.Name.$error.maxlength">
+                                        Maximum length is 50.
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="col col-33">
+                                <label for="StartDateUtc">Start Date</label>
+                                <input ng-model="model.StartDateUtc" value="{{model.StartDateUtc | date:'dd/MM/yyyy'}}"
+                                    class="formControl" date ion-datetime-picker>
+                                <span class="errorMsg text-center" ng-show="formsubmit && (FormDiscount.StartDateUtc.$dirty || FormDiscount.StartDateUtc.$invalid)">
+                                    <span ng-show="FormDiscount.StartDateUtc.$error.required">
+                                        Please Select Start Date
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="col col-33">
+                                <label for="EndDateUtc">End Date</label>
+                                <input ng-model="model.EndDateUtc" value="{{model.EndDateUtc | date:'dd/MM/yyyy'}}"
+                                    class="formControl" date ion-datetime-picker>
+                                <span class="errorMsg text-center" ng-show="formsubmit && (FormDiscount.EndDateUtc.$dirty || FormDiscount.EndDateUtc.$invalid)">
+                                    <span ng-show="FormDiscount.EndDateUtc.$error.required">
+                                        Please Select End Date
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row responsive-sm">
+                            <div class="col col-33">
+                                <div>
+                                    <label for="UsePercentage">Use Percentage</label>
+                                </div>
+                                <div>
+                                    <input type="checkbox" class="formControl_checkbox" ng-true-value="1"
+                                        ng-false-value="0" id="UsePercentage" ng-model="model.UsePercentage">
+                                </div>
+                            </div>
+                            <div class="col col-33" ng-if="!model.UsePercentage">
+                                <label for="DiscountAmount">Discount Amount*</label>
+                                <input type="number" class="formControl" name="DiscountAmount" ng-model="model.DiscountAmount"
+                                    ng-required="true" max="9999999999999999" min="0">
+                                <span class="errorMsg text-center" ng-show="formsubmit && (FormDiscount.DiscountAmount.$dirty || FormDiscount.DiscountAmount.$invalid)">
+                                    <span ng-show="FormDiscount.DiscountAmount.$error.required">
+                                        Please Enter Discount Amount
+                                    </span>
+                                    <span ng-show="FormDiscount.DiscountAmount.$error.max">
+                                        Discount Amount can't be longer than 16 number
+                                    </span>
+                                    <span ng-show="FormDiscount.DiscountAmount.$error.min">
+                                        Discount Amount can't be negative
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="col col-33" ng-if="model.UsePercentage">
+                                <label for="DiscountPercentage">Discount Percentage*</label>
+                                <input type="number" class="formControl" name="DiscountPercentage" ng-model="model.DiscountPercentage"
+                                    ng-required="true" max="9999999999999999" min="0">
+                                <span class="errorMsg text-center" ng-show="formsubmit && (FormDiscount.DiscountPercentage.$dirty || FormDiscount.DiscountPercentage.$invalid)">
+                                    <span ng-show="FormDiscount.DiscountPercentage.$error.required">
+                                        Please Enter Discount Percentage
+                                    </span>
+                                    <span ng-show="FormDiscount.DiscountPercentage.$error.max">
+                                        Discount Percentage can't be longer than 16 number
+                                    </span>
+                                    <span ng-show="FormDiscount.DiscountPercentage.$error.min">
+                                        Discount Percentage can't be negative
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="col col-33">
+                                <label for="CouponCode">Coupon Code*</label>
+                                <input class="formControl" name="CouponCode" ng-model="model.CouponCode" ng-required="true"
+                                    maxlength="20" ng-maxlength="20">
+                                <span class="errorMsg text-center" ng-show="formsubmit && (FormDiscount.CouponCode.$dirty || FormDiscount.CouponCode.$invalid)">
+                                    <span ng-show="FormDiscount.CouponCode.$error.required">
+                                        Please Enter Coupon Code
+                                    </span>
+                                    <span ng-show="FormDiscount.CouponCode.$error.maxlength">
+                                        Maximum length is 20.
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row responsive-sm">
+                            <div class="col col-33">
+                                <label for="DiscountLimitationId">Discount Limitation*</label>
+                                <select class="formControl" name="DiscountLimitationId" ng-required="true" ng-model="model.DiscountLimitationId"
+                                    convert-to-number>
+                                    <option value="1">Unlimited</option>
+                                    <option value="2">N Times Only</option>
+                                </select>
+                                <span class="errorMsg text-center" ng-show="formsubmit && (FormDiscount.DiscountLimitationId.$dirty || FormDiscount.DiscountLimitationId.$invalid)">
+                                    <span ng-show="FormDiscount.DiscountLimitationId.$error.required">
+                                        Please Select Discount Limitation
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="col col-33" ng-if="model.DiscountLimitationId==2">
+                                <label for="LimitationTimes">Limitation Times*</label>
+                                <input type="number" class="formControl" name="LimitationTimes" ng-model="model.LimitationTimes"
+                                    ng-required="true" min="0">
+                                <span class="errorMsg text-center" ng-show="formsubmit && (FormDiscount.LimitationTimes.$dirty || FormDiscount.LimitationTimes.$invalid)">
+                                    <span ng-show="FormDiscount.LimitationTimes.$error.required">
+                                        Please Enter Limitation Times
+                                    </span>
+                                    <span ng-show="FormDiscount.LimitationTimes.$error.min">
+                                        Limitation Times can't be negative
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <button class="cBtn cBtn-green cBtn-block cBtn-shadow" ng-click="SaveDiscount(FormDiscount)"
+                                    type="submit">
+                                    <i class="ion-document-text"></i>
+                                    Save
+                                </button>
+                            </div>
+                        </div>
+                        <div class="s10"></div>
+                    </div>
+                </div>
+                
+            </form>
+        </div>
+    </ion-content>
+</ion-view>

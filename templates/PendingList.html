@@ -1,0 +1,198 @@
+<ion-view class="patternBg">
+    <ion-content>
+        <div ng-if="IsList">
+            <div class="container">
+                <div class="row row-center">
+                    <div class="col">
+                        <div class="searchBox">
+                            <input type="text" ng-model="Searchmodel.Search" class="formControl" ng-enter="FilterData()"
+                                placeholder="Filter by Doc No, From Doc Type Key No or Description">
+                            <button type="button" class="cBtn cBtn-blue" ng-click="FilterData()">
+                                <span>Search</span>
+                            </button>
+                            <a ng-click="Add()" class="cBtn cBtn-green cBtn-autoWidth d-flex items-center justify-center gap-2" ng-if="IsGenmed">
+                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                </svg>
+                                <span>Add Item to PendingList</span>
+                            </a>
+                        </div>
+                        <div class="CustFilter">
+                            <my-widget CustomerCode='false' status='false' idlocations='false'></my-widget>
+                        </div>
+                        <div class="row responsive-sm  cForm light"
+                            ng-if="modelAdvanceSearch.BranchCode!='' && IsGenmed">
+                            <div class="col col-100">
+                                <div class="infoBox02">
+                                    <div class="container">
+                                        <div class="row responsive-sm">
+                                            <div class="col" ng-if="modelAdvanceSearch.BranchCode!='' && IsGenmed">
+                                                <a class=" cBtn cBtn-green" ng-click="GenerateBill()">
+                                                    <i title="Search">Generate Bill</i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                <div class="cDataTable">
+                    <table id="PendingListTable" class="cell-border" width="100%">
+                        <thead>
+                            <tr>
+                                <th class="all">
+                                    No.
+                                </th>
+                                <th>Qty</th>
+                                <th>ItemCode </th>
+                                <th>Item Name </th>
+                                <th>
+                                    Branch Name
+                                </th>
+                                <th>
+                                    Sub Company
+                                </th>
+                                <th>
+                                    Order Date
+                                </th>
+                                <th class="all">
+                                    Action
+                                </th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                </div>
+                </div>
+            </div>
+        </div>
+        <div ng-if="!IsList">
+            <div class="s20"></div>
+            <div class="container">
+                <form name="FormPendingList" class="cForm light">
+                    <div class="infoBox02">
+                        <div class="container">
+                            <div class="s25"></div>
+                            <div class="row responsive-sm">
+                                <div class="col col-50">
+                                    <label for="Description">Item Name*</label>
+                                    <input ng-model="model.ItemName" class="formControl" name="ItemName"
+                                        ng-change="GetAllItemSearch(model.ItemName)">
+                                    <div class="list12">
+                                        <ul class="list-group mainfont ulclass"
+                                            style="padding: 0px 5px;font-size: 10px;max-height: 20em;overflow-y: auto;">
+                                            <li class="item" style="border: 1px solid #a2a2a2;height: 0px;"
+                                                ng-click="AddItemCode(t1)" ng-repeat="t1 in lstItemsSearch"
+                                                class="list-group-item mainfont">
+                                                {{t1.ItemName}}</li>
+                                        </ul>
+                                    </div>
+                                    <span class="errorMsg text-center"
+                                        ng-show="formsubmit && (FormPendingList.ItemName.$dirty || FormPendingList.ItemName.$invalid)">
+                                        <span ng-show="FormPendingList.ItemName.$error.required">
+                                            Please Select ItemName
+                                        </span>
+                                    </span>
+                                </div>
+                                <div class="col col-50">
+                                    <label for="Qty">Qty</label>
+                                    <input id="Qty" ng-model="model.Qty" class="formControl" numbers-Only>
+
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row responsive-sm">
+                                <div class="col col-50">
+                                    <label for="UOM">UOM</label>
+                                    <select class="formControl" ng-model="model.UOM" ng-change="FillItemUnitPrice(o)"
+                                        ng-options="item.UOM as item.UOM for item in listUOM | orderBy : 'UOM'">
+                                        <option value="" disabled>Select UOM</option>
+                                    </select>
+                                </div>
+                                <div class="col col-50">
+                                    <label for="Date">Date*</label>
+                                    <input ng-model="model.Date" name="Date" value="{{model.Date | date: 'dd-MM-yyyy'}}"
+                                        ng-required="true" class="formControl" date ion-datetime-picker>
+                                    <span class="errorMsg text-center"
+                                        ng-show="formsubmit && (FormPendingList.Date.$dirty || FormPendingList.Date.$invalid)">
+                                        <span ng-show="FormPendingList.Date.$error.required">
+                                            Please Select Date
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+
+
+                            <div class="row responsive-sm">
+                                <div class="col col-50">
+                                    <label for="BranchCode">Branch</label>
+                                    <select class="formControl" name="BranchCode" ng-model="model.BranchCode">
+                                        <option value="{{o.Name}}" ng-selected="model.BranchCode == o.Name"
+                                            ng-repeat="o in lstBranch">{{o.Name}}</option>
+                                    </select>
+                                    <span class="errorMsg text-center"
+                                        ng-show="formsubmit && (FormPendingList.BranchCode.$dirty || FormPendingList.BranchCode.$invalid)">
+                                        <span ng-show="FormPendingList.BranchCode.$error.required">
+                                            Please Select Branch
+                                        </span>
+                                    </span>
+                                </div>
+                                <!-- <div class="col col-50">
+                                    <label for="idLocations">Location*</label>
+                                    <select class="formControl" name="idLocations" ng-required="true"
+                                        ng-model="model.idLocations" ng-change="ChangeLocation()"
+                                        ng-disabled="isshopCustomer">
+
+                                        <option value="" disabled>Select</option>
+                                        <option value="{{o.id}}" ng-selected="model.idLocations == o.id"
+                                            ng-repeat="o in lstLocations">{{o.Name}}</option>
+                                    </select>
+                                    <span class="errorMsg text-center"
+                                        ng-show="formsubmit && (FormPendingList.idLocations.$dirty || FormPendingList.idLocations.$invalid)">
+                                        <span ng-show="FormPendingList.idLocations.$error.required">
+                                            Please Select Sales Location
+                                        </span>
+                                    </span>
+                                </div> -->
+                            </div>
+
+                        </div>
+                    </div>
+            </div>
+
+
+
+            <div class="s20"></div>
+            <div class="row">
+                <div class="col">
+                    <button class="cBtn cBtn-green cBtn-block cBtn-shadow" ng-click="SavePendingItem(FormPendingList)"
+                        type="submit"><i class="ion-document-text"></i>
+                        Save
+                    </button>
+                </div>
+                <!-- <div class="col col-50">
+                            <button class="cBtn cBtn-skyblue cBtn-block cBtn-shadow" ng-click="init()" type="submit"><i
+                                    class="ion-close-circled"></i>
+                                Cancel</button>
+                        </div> -->
+            </div>
+            </form>
+        </div>
+        </div>
+    </ion-content>
+
+    <style>
+        .list12 {
+            position: fixed;
+            z-index: 1;
+        }
+
+        .list12:hover {
+            display: block;
+        }
+    </style>
+</ion-view>

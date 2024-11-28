@@ -1,0 +1,2066 @@
+<ion-view view-title="Playlists" hide-nav-bar="true">
+    <ion-content scroll="false">
+        <div class="partContainer part">
+            <div class="partA">
+                <header>
+                    <div class="col01" ng-if="!SearchFlg">
+                        <span>Y-Pos - {{CurrentTime}}</span>
+                    </div>
+
+                    <div class="col01" ng-if="SearchFlg">
+                        <div class="passBox" style="overflow: unset !important;width: 100%;"
+                            ng-if="LstMainCategory.length==0">
+                            <input type="text" style="-webkit-text-security: none;" class="inputPass" id=""
+                                placeholder="Search Here" ng-model="SearchModel.SearchText" ng-change="Filter()">
+                        </div>
+                    </div>
+
+                    <div class="col02" style="width:40%;">
+                        <a href="" class="userMenu1">
+                            <img src="img/icon-user.png" alt="">
+                            <span>{{PosUser}}</span>&nbsp;<i class="ion-chevron-down"></i>
+                        </a>
+
+                        <ul class="userMenu_list1">
+                            <li ng-click="LogOutPosTill()" style="cursor: pointer;">
+                                <a><strong>Logout</strong></a>
+                            </li>
+                        </ul>
+
+                        <a href="" class="btnSearch" ng-click="ManageSearchFlg(true)"
+                            ng-if="LstMainCategory.length==0&&!SearchFlg">
+                            <img src="../img/icon-link-search.png" alt="">
+                        </a>
+
+                        <a href="" class="btnSearch" ng-click="ManageSearchFlg(false)"
+                            ng-if="LstMainCategory.length==0&&SearchFlg">
+                            <img src="../img/cancel.png" alt="">
+                        </a>
+                    </div>
+                </header>
+                <!-- header END -->
+
+                <!-- Category List section start -->
+                <section class="container contentHeight" ng-show="DisplayTab==1">
+                    <div class="s10"></div>
+
+                    <!-- <div class="container_10"> -->
+                    <div class="pgTitle">
+                        <ul>
+                            <li ng-if="DisplayCategory.length==0" ng-click="GoToMainCategory()"><a href="">Your
+                                    Categories</a></li>
+                            <li ng-if="DisplayCategory.length>0" ng-click="GoToMainCategory()">Home</li>
+                            <li ng-repeat="o in DisplayCategory" ng-click="ChangeCategory(o.data,$index)">
+                                <div ng-if="!$last" ng-bind-html="o.lable"></div>
+                                <span ng-if="$last" ng-bind-html="o.lable"></span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="s30"></div>
+                    <ul class="categoriesList" ng-if="LstMainCategory.length > 0">
+                        <li ng-repeat="o in LstMainCategory" ng-click="GotoChildCategory(o)">
+                            <a href="javascript:;" class="{{o.classname}}">
+                                <span>{{o.Name}}</span>
+                            </a>
+                        </li>
+                    </ul>
+
+                    <div class="text-center" ng-if="lstItems.length==0&&LstMainCategory.length==0">
+                        No Item Found
+                    </div>
+
+                    <ul class="itemList" ng-if="LstMainCategory.length==0">
+                        <li ng-repeat="o in lstItems" ng-click="SelectItem(o)">
+                            <a href="" class="{{o.classname}}" ng-class="o.active==true ? 'active' :'' ">
+                                <h2>{{o.ItemName}}</h2>
+                                <h2 ng-if="o.ItemName == '' || o.ItemName == null">{{o.ItemCode}}</h2>
+                                <span>£{{o.DisplayPrice}}</span>
+                            </a>
+                        </li>
+
+                    </ul>
+                    <!-- </div> -->
+
+                    <!-- .itemPopup -->
+                    <!-- when u want to close remove "active" class -->
+                    <div class="discountPopup">
+                        <a href="" class="btnClose">
+                            <i class="ion-close-circled"></i>
+                        </a>
+
+                        <div class="contentCenter">
+                            <ul class="pills">
+                                <li>
+                                    <a href="" ng-click="DiscountModel.displayType=2;"
+                                        ng-class="{active:DiscountModel.displayType=='2'}">
+                                        Notes
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="" ng-click="DiscountModel.displayType=1;"
+                                        ng-class="{active:DiscountModel.displayType=='1'}">
+                                        Discount
+                                    </a>
+                                </li>
+                            </ul>
+                            <!-- END .pills -->
+
+                            <div class="passBox" ng-if="DiscountModel.displayType=='1'">
+                                <div ng-if="DiscountTab==1" class="select_cont">
+                                    <h3> <b></b>Select Discount Reason</b></h3>
+                                    <ul>
+                                        <li ng-click="ManageDiscountType(2,'Wastage');"
+                                            style="background: white;width: 100%;padding-left: 15px;">
+                                            Wastage
+                                        </li>
+                                        <li ng-click="ManageDiscountType(2,'Damaged Product');"
+                                            style="background: white;width: 100%;padding-left: 15px;">
+                                            Damaged Product
+                                        </li>
+                                        <li ng-click="ManageDiscountType(2,'Manager Approved');"
+                                            style="background: white;width: 100%;padding-left: 15px;">
+                                            Manager Approved
+                                        </li>
+                                        <li ng-click="ManageDiscountType(2,'Genereal');"
+                                            style="background: white;width: 100%;padding-left: 15px;">
+                                            Genereal
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div ng-if="DiscountTab==2" class="select_cont">
+                                    <h3> <span ng-click="ChangeDiscountTab(1)" style="margin-right: 3px;">
+                                            < </span> <b>{{DiscountText}}</b></h3>
+                                    <ul>
+                                        <li ng-click="ChangeDiscountTab(3);ChangeDiscountType(2)"
+                                            style="background: white;width: 100%;padding-left: 15px;">
+                                            Discount by Percentage
+                                        </li>
+                                        <li ng-click="ChangeDiscountTab(3);ChangeDiscountType(1)"
+                                            style="background: white;width: 100%;padding-left: 15px;">
+                                            Discount by Amount
+                                        </li>
+                                        <li ng-click="ChangeDiscountTab(3);ChangeDiscountType(1)"
+                                            style="background: white;width: 100%;padding-left: 15px;">
+                                            Set New Price
+                                        </li>
+                                        <li ng-click="ChangeDiscountTab(4);ChangeDiscountType(4)"
+                                            style="background: white;width: 100%;padding-left: 15px;">
+                                            Discount By
+                                            <b style="color: black;vertical-align: baseline;font: inherit;font-size: 100%;margin-left: 3px;"
+                                                ng-if="DiscountText=='Wastage'">100%</b>
+                                            <b style="color: black;vertical-align: baseline;font: inherit;font-size: 100%;margin-left: 3px;"
+                                                ng-if="DiscountText=='Damaged Product'">40%</b>
+                                            <b style="color: black;vertical-align: baseline;font: inherit;font-size: 100%;margin-left: 3px;"
+                                                ng-if="DiscountText=='Manager Approved'">0%</b>
+                                            <b style="color: black;vertical-align: baseline;font: inherit;font-size: 100%;margin-left: 3px;"
+                                                ng-if="DiscountText=='Genereal'">10%</b>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="select_cont" ng-if="DiscountTab==3;">
+                                    <!-- <select name="Type" id="Type" ng-model="DiscountModel.Type"
+                                                ng-change="AddDiscountAmount()">
+                                                <option value="1">Fixed Amount Discount</option>
+                                                <option value="2">Percentage Discount</option>
+                                            </select> -->
+
+                                    <h3> <span ng-click="ChangeDiscountTab(2)" style="margin-right: 30px;">
+                                            < </span> <b>{{DiscountText}}</b></h3>
+
+
+                                    <input ng-if="DiscountModel.Type==2" type="text" disabled readonly
+                                        style="-webkit-text-security: none;" class="inputPass" placeholder="%"
+                                        ng-model="DiscountModel.Value">
+
+                                    <input ng-if="DiscountModel.Type==1" type="text" disabled readonly
+                                        style="-webkit-text-security: none;" class="inputPass" placeholder="£"
+                                        ng-model="DiscountModel.Value">
+
+                                    <ul>
+                                        <li ng-click="AddDisValue(1)">
+                                            <span>1</span>
+                                        </li>
+                                        <li ng-click="AddDisValue(2)">
+                                            <span>2</span>
+                                        </li>
+                                        <li ng-click="AddDisValue(3)">
+                                            <span>3</span>
+                                        </li>
+                                        <li ng-click="AddDisValue(4)">
+                                            <span>4</span>
+                                        </li>
+                                        <li ng-click="AddDisValue(5)">
+                                            <span>5</span>
+                                        </li>
+                                        <li ng-click="AddDisValue(6)">
+                                            <span>6</span>
+                                        </li>
+                                        <li ng-click="AddDisValue(7)">
+                                            <span>7</span>
+                                        </li>
+                                        <li ng-click="AddDisValue(8)">
+                                            <span>8</span>
+                                        </li>
+                                        <li ng-click="AddDisValue(9)">
+                                            <span>9</span>
+                                        </li>
+                                        <li ng-click="AddDisValue('.')">
+                                            <span>.</span>
+                                        </li>
+                                        <li ng-click="AddDisValue(0)">
+                                            <span>0</span>
+                                        </li>
+                                        <li ng-click="RemoveDisc()">
+                                            <span><img src="../img/icon-text-delete.png" alt=""></span>
+                                        </li>
+                                    </ul>
+                                    <div class="price" ng-click="AddDiscountAmount()"
+                                        style="background-color:#0e2376;;line-height: 60px;height: 60px;">Apply</div>
+                                </div>
+                                <div class="select_cont" ng-if="DiscountTab==4"
+                                    style="padding-left: 5px;text-align: left">
+                                    <h3> <span ng-click="ChangeDiscountTab(2)" style="margin-right: 30px;">
+                                            < </span> <b>Discount Applied</b></h3>
+
+                                    <h4>Amount</h4>
+                                    <h4>- £ {{ShowDiscount | number : 2}}</h4>
+
+                                    <h4>Percentage</h4>
+                                    <h4 style="padding-bottom: 50px;">
+                                        <b style="color: black;vertical-align: baseline;font: inherit;font-size: 100%;margin-left: 3px;"
+                                            ng-if="DiscountText=='Wastage';">100%</b>
+                                        <b style="color: black;vertical-align: baseline;font: inherit;font-size: 100%;margin-left: 3px;"
+                                            ng-if="DiscountText=='Damaged Product'">40%</b>
+                                        <b style="color: black;vertical-align: baseline;font: inherit;font-size: 100%;margin-left: 3px;"
+                                            ng-if="DiscountText=='Manager Approved'">0%</b>
+                                        <b style="color: black;vertical-align: baseline;font: inherit;font-size: 100%;margin-left: 3px;"
+                                            ng-if="DiscountText=='Genereal'">10%</b>
+                                    </h4>
+
+                                </div>
+
+                                <div ng-if="DiscountTab==4;" class="price" ng-click="RemoveDiscountAmount()"
+                                    style="background-color:#ab3333;line-height: 60px;height: 60px;">Remove Discount
+                                </div>
+
+                                <div ng-if="DiscountTab==4;" class="price" ng-click="DoneDiscount()"
+                                    style="background-color:#358bcc;line-height: 60px;height: 60px;">Done</div>
+
+                            </div>
+
+                            <div class="passBox" ng-if="DiscountModel.displayType=='2'">
+                                <div class="select_cont">
+                                    <input type="text" style="-webkit-text-security: none;" class="inputPass"
+                                        placeholder="Enter Note Here" maxlength="500" ng-maxlength="500"
+                                        ng-model="Discountobj.Descriptions">
+                                </div>
+                            </div>
+
+                            <!-- END .passBox -->
+                            <!-- <div class="price">Max Selling Price {{DiscountModel.MaxSalePrice}}</div>
+    
+                                <div class="price">Min Selling Price {{DiscountModel.MinSalePrice}}</div> -->
+                        </div>
+                    </div>
+                    <!-- END .itemPopup -->
+                    <!-- .itemPopup -->
+                    <!-- when u want to close remove "active" class -->
+                    <div class="itemPopup">
+                        <a href="" class="btnClose">
+                            <i class="ion-close-circled"></i>
+                        </a>
+
+                        <div class="contentCenter">
+                            <h2>{{ImageModel.Name}}</h2>
+                            <div class="imgCont">
+                                <img src="{{ImageModel.ImageUrl}}" alt="">
+                            </div>
+                            <div class="price">
+                                <span>£{{ImageModel.Price}} Per {{ImageModel.UOM}}</span>
+                                <!-- £18.45 M<sup>2</sup> -->
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END .itemPopup -->
+                </section>
+                <!-- Category List section End -->
+
+                <!-- Payment Option Start -->
+                <section class="container_10 contentHeight" ng-show="DisplayTab==2">
+                    <div class="s30"></div>
+                    <a ng-click="ChangeDisplayTab(1)">
+                        <i class="ion-arrow-left-c" title="Back" style="font-size: 30px;"></i>
+                    </a>
+
+                    <div class="container_10">
+
+                        <div class="pgTitle">
+
+                            <ul>
+                                <li><a href="">Payment</a></li>
+                            </ul>
+                        </div>
+
+                        <div class="s20">
+                            <!-- <div class="container_10"> -->
+                            <div class="row">
+                                <button class='cBtn splitbtn cBtn-skyblue' ng-click="ChangeDisplayTab(3)"
+                                    align="center">SPLIT BY ITEM</button>
+                            </div>
+                            <div class="partContainer part">
+
+                                <div class="payboxtop"
+                                    style="background: white;width: 30%;height:430px;margin-right: 20px;padding-left: 2%">
+                                    <h5 style="color: #8b8b8b;margin-bottom: 0;margin-top: 15px">AMOUNT DUE</h5>
+                                    <h4 style="margin-top: 0;">£ {{model.FinalTotal | number : 2}}</h4>
+
+                                    <h5 style="color: #8b8b8b;margin-bottom: 0;margin-top: 15px">TAX</h5>
+                                    <h4 style="margin-top: 0;">£ {{model.Tax | number : 2 }}</h4>
+
+                                    <h5 style="color: #8b8b8b;margin-bottom: 0;margin-top: 15px">ITEM DISCOUNT</h5>
+                                    <h4 style="margin-top: 0;">£ {{model.DisplayDiscount | number : 2}}</h4>
+
+                                </div>
+                                <div class="">
+                                    <div class="payBox">
+                                        <input type="text" placeholder="£" ng-model="FloatModel.amount"
+                                            class="inputPay">
+                                        <ul>
+                                            <li ng-click="SetFloatValue(1)">
+                                                <span>1</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(2)">
+                                                <span>2</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(3)">
+                                                <span>3</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(5)">
+                                                <span>£5</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(4)">
+                                                <span>4</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(5)">
+                                                <span>5</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(6)">
+                                                <span>6</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(10)">
+                                                <span>£10</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(7)">
+                                                <span>7</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(8)">
+                                                <span>8</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(9)">
+                                                <span>9</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(20)">
+                                                <span>£20</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue('.')">
+                                                <span>.</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(0)">
+                                                <span>0</span>
+                                            </li>
+                                            <li ng-click="ClearFloatValue()">
+                                                <span class="show-hide"><img src="../img/icon-text-delete.png"
+                                                        alt=""></span>
+                                                <span class="hide-show"><img src="../img/icon-text-delete.png"
+                                                        width="90%" alt=""></span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(35)">
+                                                <span>£35</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <button class='cBtn splitbtn cBtn-skyblue' ng-click="SaveBill('float')"
+                                        align="center">CASH</button>
+                                </div>
+                            </div>
+                            <!-- </div> -->
+                            <!-- nidhi code start -->
+                        </div>
+                    </div>
+                </section>
+                <!-- Payment Option End -->
+
+                <!-- SPLIT BY ITEM Start -->
+                <section class="container_10 contentHeight" ng-show="DisplayTab==3">
+                    <div class="s30"></div>
+
+                    <a ng-click="ChangeDisplayTab(2)">
+                        <i class="ion-arrow-left-c" title="Back" style="font-size: 30px;"></i>
+                    </a>
+
+                    <div class="container_10">
+                        <div class="pgTitle">
+                            <ul>
+                                <li><a href="">SPLIT BY ITEM</a></li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <div ng-repeat="p in PaymentBill" ng-click="ChangeSelectBillCard(p)"
+                                ng-class="p.Selected ? 'billSelected' : 'billSecond'">
+                                <h4>Bill {{p.BillNo}}</h4>
+                                <hr />
+
+                                <div class="orderItem_cont" style="max-height: 330px">
+                                    <div class="itemTable_head" style="padding-left: 0">
+                                        <div class="col01 show-hide" style="width: 80%">Product</div>
+                                        <div class="col01 hide-show" style="width: 68%">Product</div>
+                                        <div class="col02 show-hide" style="width: 20%;padding-right: 0;">Qty.</div>
+                                        <div class="col02 hide-show" style="width: 32%;padding-right: 0;">Qty.</div>
+                                    </div>
+
+                                    <div ng-repeat="q in p.ListItem" class="itemTable_row" style="padding:0">
+                                        <div class="col01 show-hide"
+                                            style="width: 78%;margin-right: 2px; border-radius: 7px;">
+                                            {{q.ItemCode}}</div>
+                                        <div class="col01 hide-show" style="width: 100%; border-radius: 7px;">
+                                            {{q.ItemCode}}<span style="float: right;">{{q.Qty}}</span>
+                                        </div>
+
+                                        <div class="col01 show-hide" style="width: 20%; border-radius: 7px;">{{q.Qty}}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <hr style="margin-top: 100%;" />
+                                <h4>£ {{p.Total | number : 2}}</h4>
+
+                                <a href="javascript:;" ng-click="SaveBill('split',p.BillNo)" ng-if="p.Selected"
+                                    style="background: #42a3aa;Display: flex;justify-content: center;width: 100%;align-items: center;text-align: center;color: #fff;min-height: 75px;font-size: 1.2em;letter-spacing: 1px;">
+                                    <img src="../img/icon-link-pay.png" alt="">
+                                    <span>Pay</span>
+                                </a>
+                            </div>
+
+                            <div class="billAdd" ng-click="AddBill()">
+                                <div class="addbillplus">
+                                    +</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- SPLIT BY ITEM End -->
+
+                <section class="container contentHeight" ng-show="DisplayTab==4">
+                    <div class="s30"></div>
+
+                    <a ng-click="ChangeDisplayTab(1)">
+                        <i class="ion-arrow-left-c" title="Back" style="font-size: 30px;"></i>
+                    </a>
+
+                    <div class="container_20 show-hide">
+                        <div class="pgTitle">
+                            <ul>
+                                <li><a href="">Refund</a></li>
+                            </ul>
+                        </div>
+
+                        <div class="s30">
+                            <!-- <div class="container_20"> -->
+                            <div class="partContainer part">
+
+                                <div class="row">
+                                    <input type="" maxlength="500" ng-maxlength="500" name="reason" placeholder="Reason"
+                                        ng-model="RefundModel.reason" style="width: 90%;
+                                        height: 40px;
+                                        margin-top: 20px;
+                                        margin-right: 10px;
+                                        padding-left: 2%;
+                                        margin-left: 5%;">
+                                </div>
+                                <div class="row" style="display: block">
+                                    <div
+                                        style="background: white; width: 90%;height:auto;margin-top:20px;margin-right: 10px;padding: 2% 0 2% 5%; margin-left: 5%">
+                                        <h5 style="color: #8b8b8b;margin-bottom: 0;margin-top: 15px">Refund Amount
+                                        </h5>
+                                        <h4 style="margin-top: 0;">£ {{RefundModel.Amount | number : 2}}</h4>
+
+                                        <h5 style="color: #8b8b8b;margin-bottom: 0;margin-top: 15px">Tax</h5>
+                                        <h4 style="margin-top: 0;">£ {{RefundModel.DisplayTax | number : 2 }}</h4>
+
+                                        <h5 style="color: #8b8b8b;margin-bottom: 0;margin-top: 15px">Item Discount
+                                        </h5>
+                                        <h4 style="margin-top: 0;">£ {{RefundModel.DisplayDiscount | number : 2}}
+                                        </h4>
+
+                                    </div>
+
+                                    <div class="row" style="margin-left: 5%;margin-top: 10px">
+                                        <button class='cBtn cBtn-skyblue' ng-click="RefundBill()"
+                                            align="center">Refund</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- nidhi code start -->
+                        <!-- </div> -->
+                    </div>
+                    <div class="hide-show">
+                        <div class="pgTitle">
+                            <ul>
+                                <li><a href="">Refund</a></li>
+                            </ul>
+                        </div>
+
+                        <div class="s30">
+                            <!-- <div class="container_20"> -->
+                            <div class="partContainer part">
+
+                                <div class="row">
+                                    <input type="" maxlength="500" ng-maxlength="500" name="reason" placeholder="Reason"
+                                        ng-model="RefundModel.reason" style="width: 100%;
+                                            height: 40px;
+                                            margin-top: 20px;
+                                            margin-right: 0px;
+                                            padding-left: 2%;
+                                            margin-left: 1%;">
+                                </div>
+                                <div class="row" style="display: block">
+                                    <div
+                                        style="background: white; width: 100%;height:auto;margin-top:20px;margin-right: 10px;padding: 2% 0 2% 3%; margin-left: 1%">
+                                        <h5 style="color: #8b8b8b;margin-bottom: 0;margin-top: 15px">Refund Amount
+                                        </h5>
+                                        <h4 style="margin-top: 0;">£ {{RefundModel.Amount | number : 2}}</h4>
+
+                                        <h5 style="color: #8b8b8b;margin-bottom: 0;margin-top: 15px">Tax</h5>
+                                        <h4 style="margin-top: 0;">£ {{RefundModel.DisplayTax | number : 2 }}</h4>
+
+                                        <h5 style="color: #8b8b8b;margin-bottom: 0;margin-top: 15px">Item Discount
+                                        </h5>
+                                        <h4 style="margin-top: 0;">£ {{RefundModel.DisplayDiscount | number : 2}}
+                                        </h4>
+
+                                    </div>
+
+                                    <!-- <div style="margin-left: 1%;width: 90%;margin-top: 10px"> -->
+                                    <button style="margin-left: 1%;width: 100%;margin-top: 10px"
+                                        class='cBtn cBtn-skyblue' ng-click="RefundBill()" align="center">Refund</button>
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <!-- nidhi code start -->
+                        <!-- </div> -->
+                    </div>
+                </section>
+
+                <!-- Manage Petty cash Start -->
+                <section class="container_10 contentHeight" ng-show="DisplayTab==5">
+                    <div class="s10"></div>
+
+                    <a ng-click="ChangeDisplayTab(1)">
+                        <i class="ion-arrow-left-c" title="Back" style="font-size: 30px;"></i>
+                    </a>
+
+                    <div class="container_10">
+                        <div class="pgTitle">
+                            <ul>
+                                <li><a href="">Manage Petty Cash</a></li>
+                            </ul>
+                        </div>
+
+                        <div class="s30">
+                            <!-- <div class="container_20"> -->
+                            <div class="partContainer part" style="margin-top:20px ">
+                                <div class="partB show-hide">
+                                    <div class="payBox">
+                                        <input type="text" placeholder="£" ng-model="FloatModel.amount"
+                                            class="inputPay">
+                                        <ul>
+                                            <li ng-click="SetFloatValue(1)">
+                                                <span>1</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(2)">
+                                                <span>2</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(3)">
+                                                <span>3</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(5)">
+                                                <span>£5</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(4)">
+                                                <span>4</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(5)">
+                                                <span>5</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(6)">
+                                                <span>6</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(10)">
+                                                <span>£10</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(7)">
+                                                <span>7</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(8)">
+                                                <span>8</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(9)">
+                                                <span>9</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(20)">
+                                                <span>£20</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue('.')">
+                                                <span>.</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(0)">
+                                                <span>0</span>
+                                            </li>
+                                            <li ng-click="ClearFloatValue()">
+                                                <span><img src="../img/icon-text-delete.png" alt=""></span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(35)">
+                                                <span>£35</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="partB hide-show" style="width:100%">
+                                    <div class="payBox">
+                                        <input type="text" placeholder="£" ng-model="FloatModel.amount"
+                                            class="inputPay">
+                                        <ul>
+                                            <li ng-click="SetFloatValue(1)">
+                                                <span>1</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(2)">
+                                                <span>2</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(3)">
+                                                <span>3</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(5)">
+                                                <span>£5</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(4)">
+                                                <span>4</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(5)">
+                                                <span>5</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(6)">
+                                                <span>6</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(10)">
+                                                <span>£10</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(7)">
+                                                <span>7</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(8)">
+                                                <span>8</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(9)">
+                                                <span>9</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(20)">
+                                                <span>£20</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue('.')">
+                                                <span>.</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(0)">
+                                                <span>0</span>
+                                            </li>
+                                            <li ng-click="ClearFloatValue()">
+                                                <span><img src="../img/icon-text-delete.png" width="90%" alt=""></span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(35)">
+                                                <span>£35</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="partB tillreason show-hide" style="margin-left: 50px;">
+                                    <label for="" style="display: block">Reason*</label>
+                                    <input type="text" class="formControl" maxlength="500" ng-maxlength="500"
+                                        name="reason" placeholder="Reason" ng-model="FloatModel.reason"
+                                        style="display: block">
+                                    <div class="row">
+                                        <button class='cBtn col cBtn-skyblue' ng-click="ManagePettyCash('Credit')"
+                                            align="center" style="margin-right: 1px">Credit</button>
+
+                                        <button class='cBtn col cBtn-blue' ng-click="ManagePettyCash('Debit')"
+                                            align="center" style="margin-left: 1px">Debit</button>
+                                    </div>
+                                </div>
+                                <!-- ================================= -->
+                                <div class="partB tillreason hide-show" style="margin-top: 10px; width: 100%">
+                                    <label for="" style="display: block">Reason*</label>
+                                    <input type="text" class="formControl" maxlength="500" ng-maxlength="500"
+                                        name="reason" placeholder="Reason" ng-model="FloatModel.reason"
+                                        style="display: block">
+
+                                    <button class='cBtn cBtnreason cBtn-skyblue' ng-click="ManagePettyCash('Credit')"
+                                        align="center" style="margin-right: 5px; padding: 0 5px">Credit</button>
+
+                                    <button class='cBtn cBtnreason cBtn-blue' ng-click="ManagePettyCash('Debit')"
+                                        align="center" style="padding: 0 5px">Debit</button>
+                                </div>
+                            </div>
+                            <!-- </div> -->
+                        </div>
+                    </div>
+                </section>
+                <!-- Manage petty cash End -->
+
+                <!-- Manage Float cash Start -->
+                <section class="container_10 contentHeight" ng-show="DisplayTab==6">
+                    <div class="s10"></div>
+
+                    <a ng-click="ChangeDisplayTab(1)">
+                        <i class="ion-arrow-left-c" title="Back" style="font-size: 30px;"></i>
+                    </a>
+
+                    <div class="container_10">
+                        <div class="pgTitle">
+                            <ul>
+                                <li><a href="">Manage Float Cash</a></li>
+                            </ul>
+                        </div>
+
+                        <div class="s30">
+                            <!-- <div class="container_20"> -->
+                            <div class="partContainer part" style="margin-top: 20px;">
+                                <div class="partB show-hide">
+                                    <div class="payBox">
+                                        <input type="text" placeholder="£" ng-model="FloatModel.amount"
+                                            class="inputPay">
+                                        <ul>
+                                            <li ng-click="SetFloatValue(1)">
+                                                <span>1</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(2)">
+                                                <span>2</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(3)">
+                                                <span>3</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(5)">
+                                                <span>£5</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(4)">
+                                                <span>4</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(5)">
+                                                <span>5</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(6)">
+                                                <span>6</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(10)">
+                                                <span>£10</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(7)">
+                                                <span>7</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(8)">
+                                                <span>8</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(9)">
+                                                <span>9</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(20)">
+                                                <span>£20</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue('.')">
+                                                <span>.</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(0)">
+                                                <span>0</span>
+                                            </li>
+                                            <li ng-click="ClearFloatValue()">
+                                                <span><img src="../img/icon-text-delete.png" alt=""></span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(35)">
+                                                <span>£35</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="partB tillreason show-hide" style="margin-left: 50px;">
+                                    <label for="" style="display: block">Reason*</label>
+                                    <input type="text" class="formControl" maxlength="500" ng-maxlength="500"
+                                        name="reason" placeholder="Reason" ng-model="FloatModel.reason"
+                                        style="display: block">
+                                    <div class="row">
+                                        <button class='cBtn col cBtn-skyblue' style="margin-right: 1px"
+                                            ng-click="ManageFloatCash('Credit')" align="center">Credit</button>
+
+                                        <button class='cBtn col cBtn-blue' style="margin-left: 1px"
+                                            ng-click="ManageFloatCash('Debit')" align="center">Debit</button>
+                                    </div>
+                                </div>
+
+                                <div class="partB hide-show" style="width: 100%">
+                                    <div class="payBox">
+                                        <input type="text" placeholder="£" ng-model="FloatModel.amount"
+                                            class="inputPay">
+                                        <ul>
+                                            <li ng-click="SetFloatValue(1)">
+                                                <span>1</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(2)">
+                                                <span>2</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(3)">
+                                                <span>3</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(5)">
+                                                <span>£5</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(4)">
+                                                <span>4</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(5)">
+                                                <span>5</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(6)">
+                                                <span>6</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(10)">
+                                                <span>£10</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(7)">
+                                                <span>7</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(8)">
+                                                <span>8</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(9)">
+                                                <span>9</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(20)">
+                                                <span>£20</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue('.')">
+                                                <span>.</span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(0)">
+                                                <span>0</span>
+                                            </li>
+                                            <li ng-click="ClearFloatValue()">
+                                                <span><img src="../img/icon-text-delete.png" width="90%" alt=""></span>
+                                            </li>
+                                            <li ng-click="SetFloatValue(35)">
+                                                <span>£35</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="partB tillreason hide-show" style="margin-top: 10px; width: 100%;">
+                                    <label for="" style="display: block">Reason*</label>
+                                    <input type="text" class="formControl" maxlength="500" ng-maxlength="500"
+                                        name="reason" placeholder="Reason" ng-model="FloatModel.reason"
+                                        style="display: block">
+
+                                    <button class='cBtn cBtnreason cBtn-skyblue' ng-click="ManageFloatCash('Credit')"
+                                        align="center" style="margin-right: 5px;padding: 0 5px">Credit</button>
+
+                                    <button class='cBtn cBtnreason cBtn-blue' ng-click="ManageFloatCash('Debit')"
+                                        align="center" style="padding: 0 5px">Debit</button>
+                                </div>
+
+                            </div>
+                            <!-- </div> -->
+                        </div>
+                    </div>
+                </section>
+                <!-- Manage Float cash End -->
+
+            </div>
+            <!-- END .partA -->
+
+            <div class="partB">
+                <header>
+                    <ul>
+                        <li ng-click="OpenOrder=false;OpenAddSearchCustomerModel()">
+                            <a href="">
+                                <img src="../img/icon-link-customer.png" alt="">
+                                <span>Customers</span>
+                            </a>
+                        </li>
+
+                        <li ng-click="OpenOrder=true;OpenOrderModel()">
+                            <a href="">
+                                <img src="../img/icon-link-orders.png" alt="">
+                                <span>Orders</span>
+                            </a>
+                        </li>
+                    </ul>
+                </header>
+
+                <section class="contentHeight">
+
+
+                    <div>
+                        <div class="container_20">
+                            <div class="row show-hideFlex">
+                                <div class="col col-50" style="font-weight: 500">Customer Name :
+                                    {{model.CustomerName}}
+                                </div>
+                                <div class="col col-50" style="font-weight: 500">Customer Phone :
+                                    {{model.CustomerPhoneNumber}}</div>
+                            </div>
+                            <div class="hide-show">
+                                <div class="row" style="font-weight: 500">Customer Name :
+                                    {{model.CustomerName}}
+                                </div>
+                                <div class="row" style="font-weight: 500">Customer Phone :
+                                    {{model.CustomerPhoneNumber}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div div class="autohight" style="height: 450px">
+
+                        <div class="orderItem_cont" ng-if="SelectedSalesItem.length==0" style="height: 457px">
+                            <div class="noFound_Item">
+                                <span>Add an Item</span>
+                                <img src="../img/icon-no-found-item.png" alt="">
+                                <span class="spanwidth">Select Items to Add &<br>Start your
+                                    Transaction</span>
+                            </div>
+                        </div>
+
+                        <div class="orderItem_cont" ng-if="SelectedSalesItem.length>0">
+                            <div class="itemTable_head">
+                                <div class="col01" style="width: 47%">Product</div>
+                                <div class="col02 show-hide" style="width: 14%">Qty.</div>
+                                <div class="col03 show-hide" style="width: 19%">Per</div>
+                                <div class="col04 show-hide">Total</div>
+                            </div>
+
+                            <div class="itemTable_row"
+                                ng-click="DisplayTab == 3 ? AddPaymentItem(o) : SelectCartItem(o)"
+                                ng-repeat="o in SelectedSalesItem" ng-class="{active: o.Select==true}">
+                                <div class="list hide-show" style="padding-left: 5px; margin-bottom: 0">
+                                    <div class="item item-avatar item-button-right"
+                                        style="padding: 5px 5px; min-height: 52px">
+                                        <h3 ng-if="o.ItemName != null && ItemName != '' ">{{o.ItemName}} <p
+                                                class="item-note ">{{o.Qty}} Qty</p>
+                                        </h3>
+                                        <h3 ng-if="o.ItemName == null || ItemName == '' ">{{o.ItemCode}} <p
+                                                class="item-note ">{{o.Qty}} Qty</p>
+                                        </h3>
+
+                                        <span>£{{o.Price}}/per</span>
+                                        <p class="item-note totelproductrate">£{{o.Total}}</p>
+                                    </div>
+                                </div>
+                                <div class="col01 show-hide" ng-if="o.ItemName != null && ItemName != '' ">
+                                    {{o.ItemName}}</div>
+                                <div class="col01 show-hide" ng-if="o.ItemName == null || ItemName == '' ">
+                                    {{o.ItemCode}}</div>
+                                <div class="col02 show-hide">{{o.Qty}}</div>
+                                <div class="col03 show-hide">£{{o.Price | number : 2}}</div>
+                                <div class="col04 show-hide">£{{o.Total | number : 2}}</div>
+                                <!-- <div class="col_details">
+                                    <div class="col01">
+                                        <a href="javascript:;" class="btnItemAction" ng-click="OpenDiscountPopup(o,'2')"
+                                            ng-hide=(DisplayTab==4)>
+                                            <img src="../img/icon-note.png" alt="">
+                                            <span>Note</span>
+                                        </a>
+                                        <a href="javascript:;" class="btnItemAction" ng-click="OpenDiscountPopup(o,'1')"
+                                            ng-hide=(DisplayTab==4)>
+                                            <img src="../img/icon-discount.png" alt="">
+                                            <span>Discount</span>
+                                        </a>
+                                    </div>
+
+                                    <div class="col02">
+                                        <ul class="item_qty_cont">
+                                            <li ng-click="RemoveQty(o)">
+                                                <a href="javascript:;">
+                                                    <i class="ion-minus-round"></i>
+                                                </a>
+                                            </li>
+
+                                            <li>
+                                                <input type="number" ng-model="o.Qty" min="0" ng-change="EditItem(o)">
+                                            </li>
+
+                                            <li ng-click="AddQty(o)">
+                                                <a href="javascript:;">
+                                                    <i class="ion-plus-round"></i>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                        <span>Quantity</span>
+                                    </div>
+
+                                    <div class="col03">
+                                        <a href="" class="btnItemAction" ng-click="DeleteItem($index,o)"
+                                            ng-hide=(DisplayTab==4)>
+                                            <img src="../img/icon-delete.png" alt="">
+                                            <span>Delete</span>
+                                        </a>
+                                    </div>
+                                </div> -->
+                                <div class="col_details">
+                                    <div class="col01" style="display: contents">
+                                        <a href="javascript:;" class="btnItemAction"
+                                            ng-click="OpenDiscountPopup(o,'2')">
+                                            <img src="../img/icon-note.png" alt="">
+                                            <span class="show-hide">Note</span>
+                                        </a>
+                                        <a href="javascript:;" class="btnItemAction"
+                                            ng-click="OpenDiscountPopup(o,'1')">
+                                            <img src="../img/icon-discount.png" alt="">
+                                            <span class="show-hide">Discount</span>
+                                        </a>
+                                        <a href="" class="btnItemAction" ng-click="DeleteItem($index,o)">
+                                            <img src="../img/icon-delete.png" alt="">
+                                            <span class="show-hide">Delete</span>
+                                        </a>
+                                    </div>
+
+                                    <div class="col02 qtyplussmines">
+                                        <ul class=" item_qty_cont">
+                                            <li ng-click="RemoveQty(o)">
+                                                <a href="javascript:;">
+                                                    <i class="ion-minus-round"></i>
+                                                </a>
+                                            </li>
+
+                                            <li>
+                                                <input type="number" ng-model="o.Qty" min="1" ng-change="EditItem(o)">
+                                            </li>
+
+                                            <li ng-click="AddQty(o)">
+                                                <a href="javascript:;">
+                                                    <i class="ion-plus-round"></i>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                        <span class="show-hide">Quantity</span>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <!-- <div class="itemTable_row">
+                                <div class="col01">Grad Treves Vision</div>
+                                <div class="col02">9999</div>
+                                <div class="col03">£300.45</div>
+                                <div class="col04">£15000.45</div>
+                            </div> -->
+                        </div>
+                    </div>
+
+                    <div class="orderFooter_cont">
+                        <div class="row">
+                            <div class="col">
+                                <div class="orderTotal">
+                                    <div class="col01">
+                                        <ul>
+                                            <li>
+                                                <div class="col01">Items</div>
+                                                <div class="col02">{{SelectedSalesItem.length}}</div>
+                                            </li>
+
+                                            <li>
+                                                <div class="col01">Total Discount</div>
+                                                <div class="col02">£ {{model.DisplayDiscount | number : 2}}</div>
+                                            </li>
+
+                                            <li ng-show="model.RemainAmount>0">
+                                                <div class="col01">Remain Amount</div>
+                                                <div class="col02">£ {{model.RemainAmount | number : 2 }}</div>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                    <div class="col02">
+                                        <ul>
+                                            <li>
+                                                <div class="col01">Total</div>
+                                                <div class="col02 fs-m">£ {{model.Total | number : 2}}</div>
+                                            </li>
+
+                                            <li>
+                                                <div class="col01">Tax</div>
+                                                <div class="col02">£ {{model.Tax | number : 2 }}</div>
+                                            </li>
+
+                                            <li>
+                                                <div class="col01 ts">Final Total</div>
+                                                <div class="col02 tc_blue">£ {{model.FinalTotal | number : 2}}</div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="s20"></div>
+                                <div class="functionbuttons">
+                                    <a href="" class="cpBtn cpBtn-block cpBtn-red cpBtn-sm"
+                                        style="margin-top: 5px; background: #3d55b8;color: #fff"
+                                        ng-click="ChangeDisplayTab(5)">Petty
+                                        Cash</a>
+                                    <a href="" class="cpBtn cpBtn-block cpBtn-red cpBtn-sm"
+                                        style="margin-top: 5px; background: #42a3aa;color: #fff"
+                                        ng-click="ChangeDisplayTab(6)">Adjust
+                                        Float</a>
+                                    <a href="" class="cpBtn cpBtn-block cpBtn-red cpBtn-sm"
+                                        style="margin-top: 5px; background: #0e2376;color: #fff"
+                                        ng-click="Save('Quotation')">Quotation</a>
+
+                                    <a href="" class="cpBtn cpBtn-block cpBtn-red cpBtn-sm" style="margin-top: 5px"
+                                        ng-hide=(DisplayTab==4) ng-click="deleteWholeOrder()">Delete</a>
+                                </div>
+                                <div class="s5"></div>
+                            </div>
+                        </div>
+
+                        <ul class="orderActionBtnList">
+                            <li>
+                                <a href="javascript:;" ng-click="Save('Hold')" ng-hide=(DisplayTab==4)>
+                                    <img src="../img/icon-link-hold.png" alt="">
+                                    <span>Hold</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:;" ng-click="OpenPayment('Pending')" ng-hide=(DisplayTab==4)>
+                                    <img src="../img/icon-link-pay.png" alt="">
+                                    <span>Pay</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </section>
+            </div>
+            <!-- END .partB -->
+        </div>
+        <!-- END .partContainer -->
+    </ion-content>
+
+    <script id="AddSearchCustomerModel.html" type="text/ng-template">
+        <ion-modal-view class="patternBg modelcss">
+                <ion-header-bar class="customPgHeader hide-show " style="background: #3d55b8; display: flex !important;">
+                    <div class="col01">
+                        <span class="pgTitle">Customer</span>
+                    </div>
+                    <div class="col01" style="margin-left:5%">
+                        <button class="cBtn cBtn-skyblue cBtn-block cBtn-shadow" style="border-radius:0px" ng-click="closeAddSearchCustomerModel()" type="submit">
+                            <i class="ion-close-circled"></i>
+                            Cancel
+                        </button>
+                    </div>
+                </ion-header-bar>
+                <ion-header-bar class="customPgHeader show-hide"  style="background: #3d55b8; display: flex !important;" >
+                        <div class="col01">
+                            <span class="pgTitle">Customer</span>
+                        </div>
+                        <div class="col02">
+                            <button class="cBtn cBtn-skyblue cBtn-block cBtn-shadow" style="height:43px;" ng-click="closeAddSearchCustomerModel()" type="submit">
+                                <i class="ion-close-circled"></i>
+                                Cancel
+                            </button>
+                        </div>
+                    </ion-header-bar>
+    
+                <ion-content>
+                    <div class="container">
+                        <div class="s10"></div>    
+                        <div class="row row-center" style="padding-bottom: 0;">
+                            <div class="col col-9" style="padding-bottom: 0;">
+                                <div class="searchBox searchBoxphone">
+                                    <input type="text" name="SearchInput" id="SearchInput" ng-model="SearchModel.SearchInput" ng-keyup="GetAllCustomerForPostill()" class="form-control" />
+                                </div>
+                            </div>    
+                            <div class="col col-3">
+                                <a ng-click="flgaddCustomer=true" class="cBtn cBtn-green cBtn-autoWidth autoWidthphone d-flex items-center justify-center gap-2">
+                                    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                    </svg>
+                                     <span>Add</span>
+                                </a>
+                            </div>
+                        </div>    
+                        <div class="row row-center" style="padding-top: -10px;">
+                            <div class="col col-8" style="padding-top:0px;">
+                                <ul class="list-group ulclass" ng-if="LstCustomerDetail">
+                                    <li name="ListCustomer" class="list-group-item" ng-repeat="customerdata in LstCustomerDetail" ng-click="fillTextbox(customerdata)">{{customerdata.AccountNumbder ? customerdata.AccountNumbder : 'N/A'}} - {{customerdata.Name ? customerdata.Name : 'N/A'}} - {{customerdata.PhoneNumber ? customerdata.PhoneNumber : 'N/A'}} - {{customerdata.EmailAddress ? customerdata.EmailAddress : 'N/A'}}</li>
+                                </ul>
+                            </div>    
+                            <div class="col col-4"></div>
+                        </div>
+                    </div>
+    
+                    <div class="container" ng-if="flgaddCustomer">
+                        <div class="s20"></div>
+                            <form name="FormCustomer" class="cForm light">
+                                <div class="infoBox02">
+                                    <div class="container">
+                                        <div class="s25"></div>    
+                                        <div class="row responsive-sm">
+                                            <div class="col col-33">
+                                                <label for="ACCNO">Account Number*</label>
+                                                <input type="text" id="ACCNO" class="formControl" name="ACCNO" ng-required="true" value="{{LastCustomerCode}}" ng-disabled="true">
+                                            </div>    
+                                            <div class="col col-33">
+                                                <label for="Name">Name*</label>
+                                                <input type="text" id="Name" class="formControl" maxlength="100" ng-maxlength="100" name="Name" ng-required="true" placeholder="Name" ng-model="custModel.Name">
+                                                <span class="errorMsg text-center" ng-show="formsubmit && (FormCustomer.Name.$dirty || FormCustomer.Name.$invalid)">
+                                                    <span ng-show="FormCustomer.Name.$error.required">
+                                                        Please Enter Name
+                                                    </span>
+                                                </span>
+                                            </div>    
+                                            <div class="col col-33">
+                                                <label for="">Registration No*</label>
+                                                <input type="text" id="Registration" class="formControl" maxlength="100" ng-maxlength="100" name="Registration" ng-required="true" placeholder=" Registration No" ng-model="custModel. RegistrationNo">
+                                                <span class="errorMsg text-center" ng-show="formsubmit && (FormCustomer.Registration.$dirty || FormCustomer.Registration.$invalid)">
+                                                    <span ng-show="FormCustomer.Registration.$error.required">
+                                                        Please Enter Registration No
+                                                    </span>
+                                                </span>
+                                            </div>
+                                        </div>    
+                                        <div class="row responsive-sm">
+                                            <div class="col">
+                                                <label for="">Billing Address</label>
+                                            </div>
+                                        </div>    
+                                        <div class="row responsive-sm">
+                                            <div class="col col-33">
+                                                <textarea type="text" id="BillAdd" class="formControl" maxlength="100" ng-maxlength="100" rows="1" name="BillAdd" placeholder="Billing Address" ng-model="custModel.BillingAddress1"></textarea>
+                                            </div>
+                                            <div class="col col-33">
+                                                <textarea type="text" id="BillAdd2" class="formControl" maxlength="100" ng-maxlength="100" rows="1" name="BillAdd2" placeholder="Billing Address" ng-model="custModel.BillingAddress2"></textarea>
+                                            </div>
+                                            <div class="col col-33">
+                                                <textarea type="text" id="BillAdd3" class="formControl" maxlength="100" ng-maxlength="100" rows="1" name="BillAdd3" placeholder="Billing Address" ng-model="custModel.BillingAddress3"></textarea>
+                                            </div>
+                                        </div>    
+                                        <div class="row responsive-sm">
+                                            <div class="col col-33">
+                                                <label for="">Billing Post Code</label>
+                                                <input type="number" id="PostCode" class="formControl" maxlength="100" ng-maxlength="100" name="PostCode" placeholder="Billing Post Code" ng-model="custModel.BiilingPostCode">
+                                            </div>    
+                                            <div class="col col-33">
+                                                <label for="">Email*</label>
+                                                <input type="email" id="Email" class="formControl" maxlength="100" ng-maxlength="100" name="Email" ng-required="true" placeholder="Email Address" ng-model="custModel.EmailAddress">
+                                                <span class="errorMsg text-center" ng-show="formsubmit && (FormCustomer.Email.$dirty || FormCustomer.Email.$invalid)">
+                                                    <span ng-show="FormCustomer.Email.$error.required">
+                                                        Please Enter Email
+                                                    </span>
+                                                    <span ng-show="FormCustomer.Email.$error.email">
+                                                        Please Enter Valid Email
+                                                    </span>
+                                                </span>
+                                            </div>    
+                                            <div class="col col-33">
+                                                <label for="">Phone Number*</label>
+                                                <input type="tel" id="PhoneNumber" class="formControl" name="PhoneNumber" ng-model="custModel.PhoneNumber" placeholder="+11234567890" required>
+                                                <span class="errorMsg text-center" ng-show="formsubmit && (FormCustomer.PhoneNumber.$dirty || FormCustomer.PhoneNumber.$invalid)">
+                                                    <span ng-show="FormCustomer.PhoneNumber.$error.required">
+                                                        Please Enter Phone Number
+                                                    </span>
+                                                </span>
+                                            </div>
+                                        </div>    
+                                        <div class="row responsive-sm">
+                                            <div class="col col-33">
+                                                <label for="">Currency</label>
+                                                <select class="formControl" name="Currency" ng-model="custModel.Currency">
+                                                    <option value="" disabled>Select Currency</option>
+                                                    <option value="{{o.CurrencyCode}}" ng-repeat="o in lstCurrency">{{o.CurrencyCode}}</option>
+                                                </select>
+                                            </div>                                            
+                                            <div class="col col-33">
+                                                <label for="">Note</label>
+                                                <textarea type="text" id="Note" class="formControl md-textarea" maxlength="600" ng-maxlength="600" rows="1" name="Note" placeholder="Note" ng-model="custModel.Note"></textarea>
+                                            </div>    
+                                            <div class="col col-33">
+                                                <label for="">Group</label>
+                                                <select class="formControl" name="CustGroup" ng-model="custModel.idGroup">
+                                                    <option value="" disabled>Select Group</option>
+                                                    <option value="{{o.id}}" ng-repeat="o in lstGroup">{{o.Name}}</option>
+                                                </select>
+                                            </div>
+                                        </div>    
+                                        <div class="row responsive-sm">
+                                            <div class="col col-33">
+                                                <label for="">Branch</label>
+                                                <select class="formControl" name="Branch" ng-model="custModel.idBranch">
+                                                    <option value="" disabled>Select Branch</option>
+                                                    <option value="{{o.id}}" ng-repeat="o in lstCustBranch">{{o.Name}}</option>
+                                                </select>
+                                            </div>    
+                                            <div class="col col-33">
+                                                <label for="PriceCat">Price Category</label>
+                                                <select class="formControl" name="PriceCat" ng-model="custModel.idPriceCategory">
+                                                    <option value="" disabled>Select Price Category</option>
+                                                    <option value="{{o.id}}" ng-repeat="o in lstPriceCat">{{o.Name}}</option>
+                                                </select>
+                                            </div>    
+                                            <div class="col col-33">
+                                                <label for="Location">Location</label>
+                                                <select class="formControl" name="Location" ng-model="custModel.idLocations">
+                                                    <option value="" disabled>Select Location</option>
+                                                    <option value="{{o.id}}" ng-repeat="o in lstLocation">{{o.Name}}</option>
+                                                </select>
+                                            </div>
+                                        </div>    
+                                        <div class="row responsive-sm">
+                                            <div class="col col-33" ng-if="ReferenceBy == 1">
+                                                <label for="">Reference By</label>
+                                                <input type="text" id="ReferenceByCode" class="formControl" maxlength="100" ng-maxlength="100" name="ReferenceByCode" placeholder="Customer Code" ng-model="custModel.ReferenceByCode" ng-disabled="IsEdit">
+                                            </div>
+                                        </div>    
+                                        <div class="row responsive-sm">
+                                            <div class="col">
+                                                <label for="IsDebitCreditControll" text-align="center">
+                                                    <input class="formControl_checkbox" ng-change="custModel.CreditLimit='';custModel.ExceedLimitType='';custModel.AdminPassword='';custModel.SuspendReason=''"
+                                                        type="checkbox" id="IsDebitCreditControll" ng-model="IsDebitCreditControll">
+                                                Debit Credit Controll
+                                                </label>
+                                            </div>
+                                        </div>    
+                                        <div class="row responsive-sm" ng-if="IsDebitCreditControll">
+                                            <div class="col col-33">
+                                                <label for="">Credit Limit *</label>
+                                                <input type="text" id="CreditLimit" class="formControl" name="CreditLimit" placeholder="Credit Limit" ng-model="custModel.CreditLimit" ng-required="true">
+                                                <span class="errorMsg text-center" ng-show="formsubmit && (FormCustomer.CreditLimit.$dirty || FormCustomer.CreditLimit.$invalid)">
+                                                    <span ng-show="FormCustomer.CreditLimit.$error.required">
+                                                        Please Enter Credit Limit
+                                                    </span>
+                                                </span>
+                                            </div>    
+                                            <div class="col col-33">
+                                                <label for="">Exceed Limit Type *</label>
+                                                <select class="formControl" name="Exceed" ng-model="custModel.ExceedLimitType" ng-required="true" ng-change="custModel.SuspendReason='';custModel.AdminPassword='';">
+                                                    <option value="" disabled>Select</option>
+                                                    <option value="Admin password">Admin Password</option>
+                                                    <option value="Suspend">Suspend</option>
+                                                </select>
+                                                <span class="errorMsg text-center" ng-show="formsubmit && (FormCustomer.Exceed.$dirty || FormCustomer.Exceed.$invalid)">
+                                                    <span ng-show="FormCustomer.Exceed.$error.required">
+                                                        Please Enter Exceed Limit Type
+                                                    </span>
+                                                </span>
+                                            </div>    
+                                            <div class="col col-33" ng-if="custModel.ExceedLimitType=='Suspend'">
+                                                <label for="">Suspend Reason</label>
+                                                <input type="text" id="SuspendReason" class="formControl" name="SuspendReason" placeholder="Suspend Reason" ng-model="custModel.SuspendReason">
+                                            </div>
+                                        </div>
+    
+                                        <div class="row responsive-sm">
+                                            <div class="col col-33">
+                                                <label for="FoundusOn">Foundus On</label>
+                                                <select class="formControl" name="FoundusOn" ng-model="custModel.FoundusOn">
+                                                    <option value="" disabled>Select</option>
+                                                    <option value="Facebook">Facebook</option>
+                                                    <option value="Twitter">Twitter</option>
+                                                    <option value="LinkedIn">LinkedIn</option>
+                                                    <option value="Google+">Google+</option>
+                                                    <option value="WhatsApp">WhatsApp</option>
+                                                    <option value="Other">Other</option>
+                                                </select>
+                                            </div>
+    
+                                            <div class="col col-33">
+                                                <label for="Status">Status</label>
+                                                <select class="formControl" name="FoundusOn" ng-model="custModel.Status" ng-change="ChangeStatus()">
+                                                    <option value="" disabled>Select</option>
+                                                    <option value="Solved">Solved</option>
+                                                    <option value="Not Solved">Not Solved</option>
+                                                </select>
+                                            </div>
+                                        </div>
+    
+                                        <div class="row responsive-sm" ng-if="custModel.Status == 'Not Solved'">
+                                            <div class="col col-33">
+                                                <label for="">Status Remark</label>
+                                                <textarea type="text" id="StatusRemark" ng-required="true" name="StatusRemark" class="formControl md-textarea" maxlength="600" ng-maxlength="600" rows="1" name="StatusRemark" placeholder="Status Remark" ng-model="custModel.StatusRemark"></textarea>
+                                                <span class="errorMsg text-center" ng-show="formsubmit && (FormCustomer.StatusRemark.$dirty || FormCustomer.StatusRemark.$invalid)">
+                                                    <span ng-show="FormCustomer.StatusRemark.$error.required">
+                                                        Please Enter Status Remark
+                                                    </span>
+                                                </span>
+                                            </div>
+                                        </div>
+    
+                                        <div class="row responsive-sm" ng-if="custModel.id==''">
+                                            <div class="col">
+                                                <label for="isAllowLogin">
+                                                    <input class="formControl_checkbox" ng-change="custModel.password='';custModel.ConfirmPassword='';"
+                                                        type="checkbox" id="isAllowLogin" ng-model="custModel.isAllowLogin">
+                                                    Is Allow Login
+                                                </label>
+                                            </div>
+                                        </div>
+    
+                                        <div class="row responsive-sm" ng-if="custModel.isAllowLogin && custModel.id == ''">
+                                            <div class="col col-33" ng-if="custModel.id==''">
+                                                <label for="">Password*</label>
+                                                <input type="password" name="password" class="formControl" ng-required="true" placeholder="Enter Password" maxlength="100" ng-maxlength="100" ng-model="custModel.password">
+                                                <span class="errorMsg text-center" ng-show="formsubmit && (FormCustomer.password.$dirty || FormCustomer.password.$invalid)">
+                                                    <span ng-show="FormCustomer.password.$error.required">
+                                                        Please Enter Password
+                                                    </span>
+                                                <span ng-show="FormCustomer.password.$error.maxlength">
+                                                        Maximum length is 100.
+                                                    </span>
+                                                </span>
+                                            </div>
+    
+                                            <div class="col col-33" ng-if="custModel.id==''">
+                                                <label for="">Confirm Password*</label>
+                                                <input type="password" name="Cpassword" class="formControl" ng-required="true" placeholder="Enter Confirm Password" ng-model="custModel.ConfirmPassword">
+                                                <span class="errorMsg text-center" ng-show="formsubmit && (FormCustomer.Cpassword.$dirty || FormCustomer.Cpassword.$invalid)">
+                                                    <span ng-show="FormCustomer.Cpassword.$error.required">
+                                                        Please Enter Confirm Password
+                                                    </span>
+                                                </span>
+                                            </div>
+                                        </div>
+    
+                                        <div class="row responsive-sm">
+                                            <div class="col">
+                                                <label for="Active">
+                                                    <input class="formControl_checkbox" type="checkbox" id="Active" ng-model="custModel.isActive">
+                                                    Active
+                                                </label>
+                                            </div>
+                                        </div>
+    
+                                        <div class="row responsive-sm" ng-if="IsMLM">
+                                            <div class="col">
+                                                <label for="IsDPCommission">
+                                                    <input class="formControl_checkbox" type="checkbox" id="Active" ng-model="custModel.IsDPCommission"
+                                                        ng-true-value="1" ng-false-value="0">
+                                                    Is DP Commission
+                                                </label>
+                                            </div>
+                                        </div>
+    
+                                        <div class="s20"></div>
+    
+                                        <div class="row">
+                                            <div class="col">
+                                                <button class="cBtn cBtn-green cBtn-block cBtn-shadow" ng-click="SaveCustomer(FormCustomer)" type="submit"><i class="ion-document-text"></i>
+                                                    Save</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </ion-content>
+            </ion-modal-view>
+        </script>
+
+    <script id="AddOrderModel.html" type="text/ng-template">
+        <ion-modal-view class="patternBg modelcss">
+                <!-- <ion-header-bar class="customPgHeader">
+                    <div class="col01">
+                        <span class="pgTitle">Order</span>
+                    </div>
+                    <div class="col02">
+                        <button class="cBtn cBtn-skyblue cBtn-block cBtn-shadow" ng-click="closeOrderrModel()" type="submit">
+                            <i class="ion-close-circled"></i>
+                            Cancel
+                        </button>
+                    </div>
+                </ion-header-bar> -->
+    
+                <ion-header-bar class="customPgHeader hide-show " style="background: #3d55b8; display: flex !important;">
+                        <div class="col01">
+                            <span class="pgTitle">Order</span>
+                        </div>
+                        <div class="col01" style="margin-left:5%">
+                            <button class="cBtn cBtn-skyblue cBtn-block cBtn-shadow" style="border-radius:0px" ng-click="closeOrderrModel()" type="submit">
+                                <i class="ion-close-circled"></i>
+                                Cancel
+                            </button>
+                        </div>
+                    </ion-header-bar>
+                    <ion-header-bar class="customPgHeader show-hide"  style="background: #3d55b8; display: flex !important;" >
+                            <div class="col01">
+                                <span class="pgTitle">Order</span>
+                            </div>
+                            <div class="col02">
+                                <button class="cBtn cBtn-skyblue cBtn-block cBtn-shadow" style="height:43px;" ng-click="closeOrderrModel()" type="submit">
+                                    <i class="ion-close-circled"></i>
+                                    Cancel
+                                </button>
+                            </div>
+                        </ion-header-bar>
+    
+                <ion-content>
+                    <div class="row" ng-if="SelectedTab > 0">
+                        <div class="md-form col-md-12" style="margin-left: auto;margin-right: auto;display: block;">
+                            <button ng-class="SelectedTab == 1?'cBtn cBtn-skyblue':'cBtn cBtn-green'"
+                                ng-click="ChangeTab(1)">HELD</button>
+                            <!-- <button ng-class="SelectedTab == 2?'cBtn cBtn-skyblue':'cBtn cBtn-green'"
+                                ng-click="ChangeTab(2)">ORDERED</button> -->
+                            <button ng-class="SelectedTab == 3?'cBtn cBtn-skyblue':'cBtn cBtn-green'"
+                                ng-click="ChangeTab(3)">PENDING</button>
+                            <button ng-class="SelectedTab == 4?'cBtn cBtn-skyblue':'cBtn cBtn-green'"
+                                ng-click="ChangeTab(4)">COMPLETE</button>
+                        </div>
+                    </div>
+    
+                    <span ng-if="SelectedTab==1">
+                        <div class="row responsive-sm">
+                            <div class="infoBox02" style="width:100%; overflow:scroll">
+                                <div class="cDataTable cData120" style="width:100%">
+                                    <table id="InvoiceTable" class="cell-border" width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th class="all">No</th>
+                                                <th>I/V No </th>
+                                                <th>Invoice Date</th>
+                                                <th>Customer Code</th>
+                                                <th>Customer Name</th>
+                                                <th>Description</th>
+                                                <th>Branch Code</th>
+                                                <th>Sub Total</th>
+                                                <th>Tax</th>
+                                                <th>Final Total</th>
+                                                <th class="all action120">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="o in lstStatusWiseorder">
+                                                <td align="center">{{$index + 1}}</td>
+                                                <td>{{o.DocNo}}</td>
+                                                <td>{{o.InvoiceDate | date:'yyyy-MM-dd'}}</td>
+                                                <td>{{o.CustomerCode}}</td>
+                                                <td>{{o.CustomerName || 'N/A'}}</td>
+                                                <td>{{o.Description || 'N/A'}}</td>
+                                                <td>{{o.BranchCode || 'N/A'}}</td>
+                                                <td>{{o.Total | number : 2 || 'N/A'}}</td>
+                                                <td>{{o.Tax | number : 2 || 'N/A'}}</td>
+                                                <td>{{o.FinalTotal | number : 2 || 'N/A'}}</td>
+                                                <td align="center">
+                                                    <button class='cBtn cBtn-green' ng-click="OpenModelInvoiceDetails(o)" >Detail
+                                                    </button>
+                                                    <button class='cBtn cBtn-red' ng-click="DeleteInvoice(o.id)">Delete
+                                                    </button>
+                                                    <button class='cBtn cBtn-skyblue' ng-click="CopyToModel(o.id)">Unhold
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </span>
+    
+                    <span ng-if="SelectedTab==3">
+                        <div class="row responsive-sm">
+                            <div class="infoBox02" style="width:100%; overflow:scroll">
+                                <div class="cDataTable cData120" style="width:100%">
+                                    <table id="InvoiceTable" class="cell-border" width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th class="all">No</th>
+                                                <th>I/V No </th>
+                                                <th>Invoice Date</th>
+                                                <th>Customer Code</th>
+                                                <th>Customer Name</th>
+                                                <th>Description</th>
+                                                <th>Branch Code</th>
+                                                <th>Sub Total</th>
+                                                <th>Tax</th>
+                                                <th>Final Total</th>
+                                                <th class="all action120">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="o in lstStatusWiseorder">
+                                                <td align="center">{{$index + 1}}</td>
+                                                <td>{{o.DocNo}}</td>
+                                                <td>{{o.InvoiceDate | date: 'yyyy-MM-dd'}}</td>
+                                                <td>{{o.CustomerCode}}</td>
+                                                <td>{{o.CustomerName || 'N/A'}}</td>
+                                                <td>{{o.Description || 'N/A'}}</td>
+                                                <td>{{o.BranchCode || 'N/A'}}</td>
+                                                <td>{{o.Total | number : 2 || 'N/A'}}</td>
+                                                <td>{{o.Tax | number : 2 || 'N/A'}}</td>
+                                                <td>{{o.FinalTotal | number : 2 || 'N/A'}}</td>
+                                                <td align="center">
+                                                    <button class='cBtn cBtn-green' ng-click="OpenModelInvoiceDetails(o)" >Detail
+                                                    </button>
+                                                    <button class='cBtn cBtn-skyblue' ng-click="CopyToModel(o.id)" >Pay
+                                                        </button>
+                                                    <button class='cBtn cBtn-blue' ng-click="UpdateSalesStatus(o.id, 'Complete')" >Complete
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </span>
+    
+                    <span ng-if="SelectedTab==4">
+                        <div class="row responsive-sm">
+                            <div class="infoBox02" style="width:100%; overflow:scroll">
+                                <div class="cDataTable cData120 complatedata" style="width:100%;">
+                                    <table id="InvoiceTable" class="cell-border" width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th class="all">No</th>
+                                                <th>I/V No </th>
+                                                <th>Invoice Date</th>
+                                                <th>Customer Code</th>
+                                                <th>Customer Name</th>
+                                                <th>Description</th>
+                                                <th>Branch Code</th>
+                                                <th>Sub Total</th>
+                                                <th>Tax</th>
+                                                <th>Final Total</th>
+                                                <th>Refund Amount</th>
+                                                <th class="all action120">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="o in lstStatusWiseorder">
+                                                <td align="center">{{$index + 1}}</td>
+                                                <td>{{o.DocNo}}</td>
+                                                <td>{{o.InvoiceDate | date:'yyyy-MM-dd'}}</td>
+                                                <td>{{o.CustomerCode}}</td>
+                                                <td>{{o.CustomerName || 'N/A'}}</td>
+                                                <td>{{o.Description || 'N/A'}}</td>
+                                                <td>{{o.BranchCode || 'N/A'}}</td>
+                                                <td>{{o.Total | number : 2 || 'N/A'}}</td>
+                                                <td>{{o.Tax  | number : 2 || 'N/A'}}</td>
+                                                <td>{{o.FinalTotal | number : 2 || 'N/A'}}</td>
+                                                <td>{{o.Refund | number : 2 || 'N/A'}}</td>
+                                                <td align="left">
+                                                    <button class='cBtn cBtn-green' ng-click="OpenModelInvoiceDetails(o)" >Detail
+                                                    </button>
+                                                    <button class='cBtn cBtn-blue' ng-click="PrintOrder(o.id)" >Print
+                                                    </button>
+                                                    <button class='cBtn cBtn-skyblue' ng-if="o.FinalTotal>0" ng-click="RefundInvoice(o.id)" >Refund
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </span>
+                </ion-content>
+            </ion-modal-view>
+        </script>
+
+    <!-- <script id="InvoiceDetails.html" type="text/ng-template">
+            <ion-modal-view class="patternBg">
+                <ion-header-bar class="customPgHeader">
+                    <div class="col01">
+                        <span class="pgTitle">Detail Invoice</span>
+                    </div>
+                    <div class="col02">
+                        <button class="cBtn cBtn-skyblue cBtn-block cBtn-shadow" ng-click="closeInvoiceDetailsModal()" type="submit">
+                            <i class="ion-close-circled"></i>
+                            Cancel
+                        </button>
+                    </div>
+                </ion-header-bar>
+    
+                <ion-content padding="true">
+                        <div class="container">
+                            <div class="s10"></div>
+                            <div class="row row-center">
+                                <div class="col 0">
+                                    <div><b>Customer Name : </b>{{displayOrderDetail.CustomerName}}</div>
+                                    <div><b>Customer Code : </b>{{ displayOrderDetail.CustomerCode}}</div>
+                                </div>
+                                <div class="col 0">
+                                    <div><b>Invoice Date : </b>{{displayOrderDetail.InvoiceDate | date:'yyyy-MM-dd'}}</div>
+                                </div>
+                            </div>
+                            <div class="s20"></div>
+                            <div class="row row-center">
+                                <div class="col" align="center" style="color: #42a3aa"><b>ITEM LIST</b>
+                                </div>
+                               
+                            </div>
+                            <div class="row responsive-sm">
+                                    <div class="infoBox02" style="width:100%">
+                                        <div class="cDataTable" style="width:100%">
+                                            <table id="InvoiceDetailTable" class="cell-border" width="100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="all">No</th>
+                                                        <th>Description</th>
+                                                        <th>Quantity</th>
+                                                        <th>Unit Price</th>
+                                                        <th>Total</th>
+                                                        <th>VAT</th>
+                                                        <th>Final Total</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr ng-repeat="o in LstInvoiceDetail">
+                                                        <td align="center">{{$index + 1}}</td>
+                                                        <td>{{o.Descriptions || 'N/A'}}</td>
+                                                        <td>{{o.Qty || 'N/A'}}</td>
+                                                        <td>{{o.Price || 'N/A'}}</td>
+                                                        <td>{{o.Total | number : 2 || 'N/A'}}</td>
+                                                        <td>{{o.Tax  | number : 2 || 'N/A'}}</td>
+                                                        <td>{{o.FinalTotal | number : 2 || 'N/A'}}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            <div class="s20"></div>
+                            <div class="row text-center" style="text-align: right;">
+                                <div class="col col-80">
+                                    <div><b>Total : </b></div>
+                                    <div><b>Tax : </b></div>
+                                    <div><b>Net Total : </b></div>
+                                </div>
+        
+                                <div class="col col-10" style="text-align=right;">
+                                    <div>{{displayOrderDetail.Total | number : 2}}</div>
+                                    <div>{{displayOrderDetail.Tax | number : 2 }}</div>
+                                    <div>{{displayOrderDetail.FinalTotal | number : 2}}</div>
+                                </div>
+                            </div>
+                    </ion-content>
+    
+            </ion-modal-view>
+        </script> -->
+
+    <script id="InvoiceDetails.html" type="text/ng-template">
+        <ion-modal-view class="patternBg">
+                <!-- <ion-header-bar class="customPgHeader">
+                    <div class="col01">
+                        <span class="pgTitle">Detail Invoice</span>
+                    </div>
+                    <div class="col02">
+                        <button class="cBtn cBtn-skyblue cBtn-block cBtn-shadow" ng-click="closeInvoiceDetailsModal()" type="submit">
+                            <i class="ion-close-circled"></i>
+                            Cancel
+                        </button>
+                    </div>
+                </ion-header-bar> -->
+    
+                <ion-header-bar class="customPgHeader hide-show " style="background: #3d55b8; display: flex !important;">
+                        <div class="col01">
+                            <span class="pgTitle">Invoice</span>
+                        </div>
+                        <div class="col01" style="margin-left:5%">
+                            <button class="cBtn cBtn-skyblue cBtn-block cBtn-shadow" style="border-radius:0px" ng-click="closeInvoiceDetailsModal()" type="submit">
+                                <i class="ion-close-circled"></i>
+                                Cancel
+                            </button>
+                        </div>
+                    </ion-header-bar>
+                    <ion-header-bar class="customPgHeader show-hide"  style="background: #3d55b8; display: flex !important;" >
+                            <div class="col01">
+                                <span class="pgTitle">Invoice</span>
+                            </div>
+                            <div class="col02">
+                                <button class="cBtn cBtn-skyblue cBtn-block cBtn-shadow" style="height:43px;" ng-click="closeInvoiceDetailsModal()" type="submit">
+                                    <i class="ion-close-circled"></i>
+                                    Cancel
+                                </button>
+                            </div>
+                        </ion-header-bar>
+    
+                <ion-content padding="true">
+                        <div class="container">
+                            <div class="s10"></div>
+                            <div class="row row-center hide-show">
+                                <div class="col 0">
+                                    <div><b>Customer Name : </b>{{displayOrderDetail.CustomerName}}</div>
+                                    <div><b>Customer Code : </b>{{ displayOrderDetail.CustomerCode}}</div>
+                                </div>
+                                <div class="col 0">
+                                    <div><b>Invoice Date : </b>{{displayOrderDetail.InvoiceDate | date:'yyyy-MM-dd'}}</div>
+                                </div>
+                            </div>
+                            <div class="row row-center show-hideFlex">
+                                    <div class="col 0">
+                                        <div><b>Customer Name : </b>{{displayOrderDetail.CustomerName}}</div>
+                                        <div><b>Customer Code : </b>{{ displayOrderDetail.CustomerCode}}</div>
+                                    </div>
+                                    <div class="col 0">
+                                        <div><b>Invoice Date : </b>{{displayOrderDetail.InvoiceDate | date:'yyyy-MM-dd'}}</div>
+                                    </div>
+                                </div>
+                            <div class="s20"></div>
+                            <div class="row row-center">
+                                <div class="col" align="center" style="color: #42a3aa"><b>ITEM LIST</b>
+                                </div>
+                               
+                            </div>
+                            <div class="row responsive-sm show-hide">
+                                    <div class="infoBox02" style="width:100% overflow:scroll">
+                                        <div class="cDataTable" style="width:102%; overflow-x:scroll;">
+                                            <table id="InvoiceDetailTable" class="cell-border scrolltableinvoice" width="100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="all">No</th>
+                                                        <th>Description</th>
+                                                        <th>Quantity</th>
+                                                        <th>Unit Price</th>
+                                                        <th>Total</th>
+                                                        <th>VAT</th>
+                                                        <th>Final Total</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr ng-repeat="o in LstInvoiceDetail">
+                                                        <td align="center">{{$index + 1}}</td>
+                                                        <td>{{o.Descriptions || 'N/A'}}</td>
+                                                        <td>{{o.Qty || 'N/A'}}</td>
+                                                        <td>{{o.Price || 'N/A'}}</td>
+                                                        <td>{{o.Total | number : 2 || 'N/A'}}</td>
+                                                        <td>{{o.Tax  | number : 2 || 'N/A'}}</td>
+                                                        <td>{{o.FinalTotal | number : 2 || 'N/A'}}</td>
+                                                    </tr>
+                                                   
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row responsive-sm hide-show">
+                                    <div class="infoBox02" style="width:100% overflow:scroll">
+                                        <div class="cDataTable" style="width:102%; overflow-x:scroll;">
+                                            <table id="InvoiceDetailTable" class="cell-border scrolltableinvoice" width="100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="all">No</th>
+                                                        <th>Description</th>
+                                                        <th>Quantity</th>
+                                                        <th>Unit Price</th>
+                                                        <th>Total</th>
+                                                        <th>VAT</th>
+                                                        <th>Final Total</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr ng-repeat="o in LstInvoiceDetail">
+                                                        <td align="center">{{$index + 1}}</td>
+                                                        <td>{{o.Descriptions || 'N/A'}}</td>
+                                                        <td>{{o.Qty || 'N/A'}}</td>
+                                                        <td>{{o.Price || 'N/A'}}</td>
+                                                        <td>{{o.Total | number : 2 || 'N/A'}}</td>
+                                                        <td>{{o.Tax  | number : 2 || 'N/A'}}</td>
+                                                        <td>{{o.FinalTotal | number : 2 || 'N/A'}}</td>
+                                                    </tr>
+                                                   
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            <div class="s20"></div>
+                            <div class="row text-center show-hideFlex" style="text-align: right;">
+                                <div class="col col-80">
+                                    <div><b>Total : </b></div>
+                                    <div><b>Tax : </b></div>
+                                    <div><b>Net Total : </b></div>
+                                </div>
+        
+                                <div class="col col-10" style="text-align:center;">
+                                    <div>{{displayOrderDetail.Total | number : 2}}</div>
+                                    <div>{{displayOrderDetail.Tax | number : 2 }}</div>
+                                    <div>{{displayOrderDetail.FinalTotal | number : 2}}</div>
+                                </div>
+                            </div>
+                            <div class="row text-center hide-showFlex" style="text-align: right;">
+                                <div class="col col-80">
+                                    <div><b>Total : </b></div>
+                                    <div><b>Tax : </b></div>
+                                    <div><b>Net Total : </b></div>
+                                </div>
+        
+                                <div class="col col-20" style="text-align=right;">
+                                    <div>{{displayOrderDetail.Total | number : 2}}</div>
+                                    <div>{{displayOrderDetail.Tax | number : 2 }}</div>
+                                    <div>{{displayOrderDetail.FinalTotal | number : 2}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </ion-content>
+            </ion-modal-view>
+    </script>
+
+    <script id="PrintnEmailModal.html" type="text/ng-template">
+        <ion-modal-view class="patternBg">
+            <ion-header-bar class="customPgHeader">
+                <div class="col01">
+                    <span class="pgTitle">Print and Email</span>
+                </div>
+                <div class="col02">
+                    <button class="cBtn cBtn-skyblue cBtn-block cBtn-shadow" ng-click="closePrintnEmailModal()" type="submit">
+                        <i class="ion-close-circled"></i>
+                        Cancel
+                    </button>
+                </div>
+            </ion-header-bar>
+
+            <ion-content padding="true">
+                <div class="row" style="text-align:center;">
+                    <div class="col"><h3> Send Receipt top</h3></div>
+                </div>
+                <div class="row" style="text-align:center; margin-top:30px">
+                    <div class="col" style="text-align:center">
+                        <button  ng-click=""  style="height: 150px;
+                        width: 150px;color:white; background-color:#42a3aa;font-size: xx-large;">
+                        <i class="icon ion-email"></i>
+                        Email
+                        </button>
+                    </div>
+                    <div class="col" style="text-align:center">
+                        <button  ng-click="PrintOrder(LatestInvoiceID);"  style="height: 150px;
+                            width: 150px;color:white; background-color:#42a3aa;font-size: xx-large;">
+                            <i class="icon ion-printer"></i>
+                            Print
+                        </button>
+                    </div>
+                    <div class="col" style="text-align:center">
+                        <button  ng-click=""  style="height: 150px;width: 150px;color:white; background-color:#42a3aa;font-size: xx-large;">
+                            <i class="icon ion-email" style="margin-right:10px"></i>
+                            +
+                            <i class="icon ion-printer" style="margin-left:10px"></i> Email and Print
+                        </button>
+                    </div>
+                </div>
+            </ion-content>
+        </ion-modal-view>
+    </script>
+</ion-view>
+
+<style>
+    .pgTitle {
+        font-weight: bold;
+    }
+
+    .intl-tel-input {
+        width: 100% !important;
+    }
+
+    .phonebox {
+        box-shadow: 0 0 16px rgba(0, 0, 0, 0.3);
+        -webkit-border-radius: 10px;
+        border-radius: 10px;
+    }
+
+    .phonebox .inputphone {
+        display: block;
+        width: 100%;
+        min-height: 75px;
+        text-align: left;
+        font-size: 1.2em;
+        letter-spacing: 2px;
+        appearance: none;
+        -webkit-appearance: none;
+    }
+
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    .userMenu1 {
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+    }
+
+    .userMenu_list1 {
+        background: #fff;
+        position: absolute;
+        top: 75px;
+        left: 0;
+        display: none;
+        width: 100%;
+        padding: 8px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
+        border-bottom: 5px solid #0e2376;
+    }
+
+    .userMenu_list1 li:last-child a {
+        border-bottom: 0px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .userMenu_list1 li a {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        display: block;
+        width: 100%;
+        padding: 8px 10px;
+        font-size: 0.9em;
+        color: #333;
+        font-weight: 400;
+        cursor: pointer;
+        position: relative;
+        z-index: 10;
+    }
+
+    .modelcss {
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        right: 0;
+    }
+
+    .list-group-item:hover {
+        color: #337ab7;
+        text-shadow: 0 0 1em #337ab7;
+        cursor: pointer;
+    }
+
+    .complatedata thead tr th {
+        padding: 20px 14px;
+    }
+
+
+    ::-webkit-scrollbar {
+        display: none;
+    }
+
+    .ulclass {
+        background: white;
+        margin-right: 10px;
+        padding: 0 10px;
+        border-radius: 8px;
+        border-right: 1px solid #a6a6a7;
+        border-bottom: 1px solid #a6a6a7;
+        border-left: 8px solid #334bab;
+        line-height: 25px;
+    }
+</style>

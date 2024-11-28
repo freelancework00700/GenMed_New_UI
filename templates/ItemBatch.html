@@ -1,0 +1,172 @@
+<ion-view class="patternBg">
+      <ion-content>
+            <div ng-if="IsList">
+                  <div class="container">
+                        <div class="row row-center">
+                              <div class="col">
+                                    <div class="searchBox">
+                                          <input type="text" ng-model="Searchmodel.Search" class="formControl"
+                                                ng-enter="FilterData()"
+                                                placeholder="Filter by ItemCode, batchnumber, etc.."
+                                                ng-model-options="{ debounce: 1500 }" ng-change="FilterData()">
+                                          <button type="button" class="cBtn cBtn-blue" ng-click="FilterData()">
+                                                <span>Search</span>
+                                          </button>
+                                          <a ng-click="Add()" class="cBtn cBtn-green cBtn-autoWidth d-flex items-center justify-center gap-2" 
+                                          ng-if="!IsGenmed">
+                                          <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                            </svg>
+                                                <span>Add Item Batch</span>
+                                          </a>
+                                    </div>
+                              </div>
+                        </div>
+                        <div class="row">
+                              <div class="col">
+                        <div class="cDataTable">
+                              <table id="ItemBatchTable" class="cell-border" width="100%">
+                                    <thead>
+                                          <tr>
+                                                <th class="all">
+                                                      No.
+                                                </th>
+                                                <th>ItemCode </th>
+                                                <th>Product Name </th>
+                                                <th>BatchNumber</th>
+                                                <th>
+                                                      ExpiryDate
+                                                </th>
+                                                <th>
+                                                      PurchaseRate
+                                                </th>
+                                                <th>
+                                                      SalesRate
+                                                </th>
+                                                <th>
+                                                      MRP
+                                                </th>
+                                                <th class="all">
+                                                      Action
+                                                </th>
+                                          </tr>
+                                    </thead>
+                              </table>
+                        </div>
+                        </div>
+                        </div>
+                  </div>
+            </div>
+            <div ng-if="!IsList">
+                  <div class="container">
+                        <form name="FormPendingList" class="cForm light">
+                              <div class="infoBox02">
+                                    <div class="container">
+                                          <div class="row responsive-sm">
+                                                <div class="col col-33">
+                                                      <label for="Description">Item Name*</label>
+                                                      <input ng-model="model.ItemName" class="formControl"
+                                                            name="ItemName" ng-change="GetAllItemSearch(model.ItemName)"
+                                                            ng-required="true">
+                                                      <div class="list12">
+                                                            <ul class="list-group mainfont ulclass"
+                                                                  style="padding: 0px 5px;font-size: 10px;max-height: 20em;overflow-y: auto;">
+                                                                  <li class="item"
+                                                                        style="border: 1px solid #a2a2a2;height: 0px;"
+                                                                        ng-click="AddItemCode(t1)"
+                                                                        ng-repeat="t1 in lstItemsSearch"
+                                                                        class="list-group-item mainfont">
+                                                                        {{t1.ItemName}}</li>
+                                                            </ul>
+                                                      </div>
+                                                      <span class="errorMsg text-center"
+                                                            ng-show="formsubmit && (FormPendingList.ItemName.$dirty || FormPendingList.ItemName.$invalid)">
+                                                            <span ng-show="FormPendingList.ItemName.$error.required">
+                                                                  Please Select ItemName
+                                                            </span>
+                                                      </span>
+                                                </div>
+                                                <div class="col col-33">
+                                                      <label for="BatchNumber">Batch Number</label>
+                                                      <input id="BatchNumber" ng-model="model.BatchNumber"
+                                                            name="BatchNumber" ng-disabled="EditFlg" ng-required="true"
+                                                            class="formControl">
+                                                      <span class="errorMsg text-center"
+                                                            ng-show="formsubmit && (FormPendingList.BatchNumber.$dirty || FormPendingList.BatchNumber.$invalid)">
+                                                            <span ng-show="FormPendingList.BatchNumber.$error.required">
+                                                                  Please Select BatchNumber
+                                                            </span>
+                                                      </span>
+                                                </div>
+                                                <div class="col col-33">
+                                                      <label for="ExpiryDate">Expiry Date*</label>
+                                                      <input ng-model="model.ExpiryDate" name="ExpiryDate"
+                                                            value="{{model.ExpiryDate | date: 'dd-MM-yyyy'}}"
+                                                            ng-required="true" class="formControl" date
+                                                            ion-datetime-picker>
+                                                      <span class="errorMsg text-center"
+                                                            ng-show="formsubmit && (FormPendingList.ExpiryDate.$dirty || FormPendingList.ExpiryDate.$invalid)">
+                                                            <span ng-show="FormPendingList.ExpiryDate.$error.required">
+                                                                  Please Select Expiry Date
+                                                            </span>
+                                                      </span>
+                                                </div>
+                                          </div>
+                                          <div class="row responsive-sm">
+                                                <div class="col col-33">
+                                                      <label for="Purchaserate">Purchase Rate</label>
+                                                      <input type="number" step="0.01" name="Purchaserate"
+                                                            ng-model="model.PurchaseRate" class="formControl">
+                                                </div>
+                                                <div class="col col-33">
+                                                      <label for="Salesrate">Sales Rate</label>
+                                                      <input type="number" step="0.01" name="Salesrate"
+                                                            ng-model="model.SalesRate" class="formControl">
+                                                </div>
+                                                <div class="col col-33">
+                                                      <label for="MRP">MRP*</label>
+                                                      <input type="number" step="0.01" name="MRP" ng-model="model.MRP"
+                                                            class="formControl" ng-required="true">
+                                                      <span class="errorMsg text-center"
+                                                            ng-show="formsubmit && (FormPendingList.MRP.$dirty || FormPendingList.MRP.$invalid)">
+                                                            <span ng-show="FormPendingList.MRP.$error.required">
+                                                                  Please Enter MRP
+                                                            </span>
+                                                      </span>
+                                                </div>
+                                          </div>
+                                          
+                                          <div class="row">
+                                                <div class="col">
+                                                      <button class="cBtn cBtn-green cBtn-block cBtn-shadow"
+                                                            ng-click="SaveItemBatch(FormPendingList)" type="submit"><i
+                                                                  class="ion-document-text"></i>
+                                                            Save
+                                                      </button>
+                                                </div>
+                                          </div>
+                                          <div class="s10"></div>
+                                    </div>
+                              </div>
+                  </div>
+
+
+
+                  
+                  </form>
+            </div>
+            </div>
+      </ion-content>
+
+      <style>
+            .list12 {
+                  position: fixed;
+                  z-index: 1;
+            }
+
+            .list12:hover {
+                  display: block;
+            }
+
+      </style>
+</ion-view>
